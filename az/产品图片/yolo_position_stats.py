@@ -27,6 +27,7 @@ DEFAULT_INPUT_DIR = Path("/Users/layla.zhang/测试用例/测试材料/az/产品
 DEFAULT_OUTPUT_FILE = Path(
     "/Users/layla.zhang/workspace/nullht-test/az/产品图片/yolo_position_stats.xlsx"
 )
+CONFIDENCE_THRESHOLD = 0.7
 SUPPORTED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tif", ".tiff", ".gif"}
 
 
@@ -143,14 +144,17 @@ def build_detail_row(folder_path: Path, image_path: Path, api_result: dict) -> d
     folder_name = folder_path.name
     detailed_id, task_id = split_folder_name(folder_name)
     detections = api_result.get("detections", [])
-    position_count = sum(1 for item in detections if item.get("pos"))
+    confident_detections = [
+        item for item in detections if float(item.get("may", 0)) >= CONFIDENCE_THRESHOLD
+    ]
+    position_count = len(confident_detections)
     return {
         "folder_name": folder_name,
         "detailed_id": detailed_id,
         "task_id": task_id,
         "page_no": extract_page_no(image_path),
         "position_count": position_count,
-        "detection_count": api_result.get("detection_count", len(detections)),
+        "detection_count": len(confident_detections),
         "status": "success",
         "error_message": "",
         "raw_result": json.dumps(api_result, ensure_ascii=False),
@@ -262,6 +266,22 @@ def normalize_count(value: Any) -> int | None:
         return None
 
 
+def calculate_page_metrics(expect_number: int, position_count: int) -> tuple[int, int, int]:
+    """Calculate TP, FP, and FN for one page.
+
+    Args:
+        expect_number: Expected detection count.
+        position_count: Actual detection count.
+
+    Returns:
+        A tuple of (tp, fp, fn).
+    """
+    true_positive = min(expect_number, position_count)
+    false_positive = max(position_count - expect_number, 0)
+    false_negative = max(expect_number - position_count, 0)
+    return true_positive, false_positive, false_negative
+
+
 def audit_position_counts(input_excel: Path, output_path: Path) -> tuple[int, int, int]:
     workbook = load_workbook(input_excel)
     if "明细" not in workbook.sheetnames:
@@ -281,6 +301,9 @@ def audit_position_counts(input_excel: Path, output_path: Path) -> tuple[int, in
 
     mismatch_rows: list[dict[str, Any]] = []
     summary_map: dict[str, dict[str, Any]] = {}
+    total_true_positive = 0
+    total_false_positive = 0
+    total_false_negative = 0
 
     for row in rows:
         folder_name = row[header_map["folder_name"]]
@@ -295,8 +318,18 @@ def audit_position_counts(input_excel: Path, output_path: Path) -> tuple[int, in
         if position_count is None and expect_number is None:
             continue
 
+        normalized_position_count = position_count or 0
+        normalized_expect_number = expect_number or 0
+        true_positive, false_positive, false_negative = calculate_page_metrics(
+            expect_number=normalized_expect_number,
+            position_count=normalized_position_count,
+        )
+        total_true_positive += true_positive
+        total_false_positive += false_positive
+        total_false_negative += false_negative
+
         if position_count != expect_number:
-            if (position_count or 0) > (expect_number or 0):
+            if normalized_position_count > normalized_expect_number:
                 failure_type = "误报"
             else:
                 failure_type = "漏报"
@@ -324,8 +357,8 @@ def audit_position_counts(input_excel: Path, output_path: Path) -> tuple[int, in
                 }
             summary_map[folder_name]["failed_page_count"] += 1
             summary_map[folder_name]["failed_page_nos"].append(page_no)
-            summary_map[folder_name]["expected_error_count"] += expect_number or 0
-            summary_map[folder_name]["actual_error_count"] += position_count or 0
+            summary_map[folder_name]["expected_error_count"] += normalized_expect_number
+            summary_map[folder_name]["actual_error_count"] += normalized_position_count
 
     summary_rows = sorted(summary_map.values(), key=lambda item: item["folder_name"])
     mismatch_rows.sort(key=lambda item: (item["folder_name"], int(item["page_no"])))
@@ -348,6 +381,17 @@ def audit_position_counts(input_excel: Path, output_path: Path) -> tuple[int, in
     total_file_count = len(total_file_names)
     pass_rate = 1 - (failed_page_count / total_page_count) if total_page_count else 0
     audit_pass_ratio = 1 - (mismatch_file_count / total_file_count) if total_file_count else 0
+    recall = (
+        total_true_positive / (total_true_positive + total_false_negative)
+        if (total_true_positive + total_false_negative)
+        else 0
+    )
+    precision = (
+        total_true_positive / (total_true_positive + total_false_positive)
+        if (total_true_positive + total_false_positive)
+        else 0
+    )
+    f1_score = (recall + precision) / 2 if (recall or precision) else 0
 
     result_sheet = workbook.create_sheet("审计结果")
     metric_headers = ["metric", "value"]
@@ -359,6 +403,12 @@ def audit_position_counts(input_excel: Path, output_path: Path) -> tuple[int, in
         ("总文件页数", total_page_count),
         ("不一致文件数", mismatch_file_count),
         ("失败页数", failed_page_count),
+        ("TP", total_true_positive),
+        ("FP", total_false_positive),
+        ("FN", total_false_negative),
+        ("召回率", recall),
+        ("精确率", precision),
+        ("F1score", f1_score),
         ("通过率", pass_rate),
         ("审核通过比例", audit_pass_ratio),
     ]
