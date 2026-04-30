@@ -22,9 +22,9 @@ from services.plan_polling_service import (
     mark_pending_metadata,
     poll_pending_case,
 )
-from utils.execution_record_writer import save_markdown_record
+from utils.execution_record_writer import MARKDOWN_RECORD_FILE, save_markdown_record
 from utils.logger import setup_logger
-from utils.result_writer import filter_cases, save_results
+from utils.result_writer import filter_cases, initialize_output_files, save_results
 
 
 def parse_args() -> argparse.Namespace:
@@ -170,6 +170,8 @@ def main() -> int:
     config_path = Path(args.config).expanduser().resolve()
     config = load_app_config(config_path)
     setup_logger(config.log_level)
+    initialize_output_files()
+    (OUTPUT_DIR / MARKDOWN_RECORD_FILE).write_text("", encoding="utf-8")
     doctor_rank, cases = build_cases(Path(args.data).expanduser().resolve())
     selected_cases = filter_cases(cases, args.case_id)
     if args.dry_run:

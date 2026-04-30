@@ -27,4 +27,5 @@ def setup_logger(level: str) -> None:
         format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
         backtrace=True,
         diagnose=True,
+        mode="w",
     )

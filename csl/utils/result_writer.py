@@ -9,6 +9,29 @@ from typing import Any, Dict, List, Optional
 from config.runtime_paths import OUTPUT_DIR
 from utils.execution_record_writer import build_summary
 
+RESULT_FILE_NAME = "csl_full_path_results.json"
+
+
+def initialize_output_files() -> None:
+    """初始化输出目录和统一结果文件。
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    output_file = OUTPUT_DIR / RESULT_FILE_NAME
+    output_file.write_text(
+        json.dumps(
+            {"summary": {"passed": 0, "failed": 0, "errors": 0, "pending": 0, "total": 0}, "results": []},
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
 
 def save_results(results: List[Dict[str, Any]]) -> Path:
     """保存 JSON 执行结果。
@@ -20,7 +43,7 @@ def save_results(results: List[Dict[str, Any]]) -> Path:
         Path: 输出文件路径。
     """
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    output_file = OUTPUT_DIR / "csl_full_path_results.json"
+    output_file = OUTPUT_DIR / RESULT_FILE_NAME
     output_file.write_text(
         json.dumps({"summary": build_summary(results), "results": results}, ensure_ascii=False, indent=2),
         encoding="utf-8",
