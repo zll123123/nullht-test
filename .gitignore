@@ -36,3 +36,8 @@ dist/
 *.pdf
 *.docx
 
+#tests文件
+tests/
+
+#输出文件
+output/

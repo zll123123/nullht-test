@@ -1,0 +1,23 @@
+cases:
+  - name: text_equal_pass
+    expected: "介绍 白蛋白"
+    actual: "介绍白蛋白"
+    passed: true
+  - name: text_equal_fail
+    expected: "白蛋白安全性"
+    actual: "晶体液复苏"
+    passed: false
+  - name: text_equal_ignore_braces_and_bullets
+    expected: "● 低白蛋白血症与危重症患者的不良预后密切相关1"
+    actual: "低白蛋白血症与危重症患者的不良预后密切相关{1}"
+    passed: true
+  - name: text_similarity_pass
+    expected: "人血白蛋白是血液制品，安全性可靠么？"
+    actual: "人血白蛋白作为血液制品，安全性是否可靠"
+    threshold: 0.75
+    passed: true
+  - name: text_similarity_fail
+    expected: "人血白蛋白安全性"
+    actual: "医保控费压力"
+    threshold: 0.8
+    passed: false

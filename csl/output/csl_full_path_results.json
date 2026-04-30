@@ -1,0 +1,672 @@
+{
+  "summary": {
+    "passed": 1,
+    "failed": 0,
+    "errors": 0,
+    "total": 1
+  },
+  "results": [
+    {
+      "case_id": "P012",
+      "scenario": "既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用",
+      "expected": {
+        "source_excel_row": 10,
+        "doctor_type": "白蛋白笃信者",
+        "doctor_grade": "使用",
+        "trans_info": "介绍人血白蛋白在危重症患者中早期使用。",
+        "support_info": "● 《2018 中国脓毒症/脓毒性休克急诊治疗指南》1：严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶液时，建议可以加用白蛋白\n● 《2016 SSC脓毒症与脓毒症休克管理国际指南》2：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白。\n● 研究显示，对心源性休克患者，与单用晶体液相比，在24小时内联合白蛋白（尽早联合）进行液体复苏可显著降低心源性休克患者的30天死亡率3",
+        "comm_literature_titles": "1. 中国医师协会急诊医师分会. 临床急诊杂志, 2018, 19(9), 567-588\n2. Rhodes A,et al. Intensive Care Med. 2017 Mar;43(3):304-377.\n3. Zhi-ye Zou, et al.Front Cardiovasc Med. 2022 May 27;9:879812.",
+        "comm_literature_summaries": "1. 2018 中国脓毒症/脓毒性休克急诊治疗指南推荐：在严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶 液时，建议可以加用白蛋白（弱推荐，低证据质量）\n2. 2016 SSC脓毒症与脓毒症休克管理国际指南推荐：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白\n3. 一项研究利用重症监护 IV (MIMIC-IV) 数据库分析心源性休克患者 24 小时内联合白蛋白复苏与 30 天死亡率的关系。将 1,332 例单用晶体液组与 254 例联合白蛋白组进行比较。结果：与单纯晶体液相比，24小时内联合白蛋白复苏与≥60岁心源性休克患者30天死亡率降低显著相关（HR=0.48, P＜0.001）。",
+        "focus_title": "长期用白蛋白，临床医生会受到药剂科或者医院管理部门的挑战。",
+        "focus_content": "● 人血白蛋白在肝病患者中长期使用除了有上述临床研究的证据支持外，还有权威指南的推荐，《2023年亚太肝病学会指南：肝病腹水的管理》1：顽固性腹水患者可考虑长期输注人血白蛋白",
+        "focus_literature_titles": "1. Virendra Singh, et al. Hepatology International (2023) 17:792‒826",
+        "focus_literature_summaries": "1. 2023年亚太肝病学会指南：肝病腹水的管理推荐，顽固性腹水患者可考虑长期输注人血白蛋白（弱推荐，低证据等级）",
+        "recommended_materials": null,
+        "visit_plan_digest": {
+          "department": "ICU",
+          "rank": "主任医师",
+          "type": "白蛋白笃信者",
+          "grade": "使用"
+        }
+      },
+      "focus_strategy": "F2_CUSTOM",
+      "focus_decisions": [
+        {
+          "planned_branch": "F2_CUSTOM",
+          "actual_branch": "F2_CUSTOM",
+          "answer": "不良反应",
+          "fixed_option_label": "A",
+          "fixed_option_text": "长期使用白蛋白可能面临药剂科或医院管理的合规性挑战",
+          "selected_option_label": "",
+          "selected_option_text": "",
+          "custom_input": "不良反应",
+          "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 长期使用白蛋白可能面临药剂科或医院管理的合规性挑战 B. 早期联合白蛋白在脓毒症休克患者中的循证依据强度 C. 心源性休克患者24小时内尽早联用白蛋白对30天死亡率的影响 D. 指南推荐“需要大量晶体液时加用白蛋白”的具体适用场景和启动时机[/OPTIONS][/QUESTION]"
+        }
+      ],
+      "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+      "steps": [
+        {
+          "question": "为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？",
+          "answer": "主任医师",
+          "response": {
+            "user_id": "c234df67de0989f781c9ad7e660c1b6f",
+            "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+            "message": [
+              "[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]"
+            ],
+            "extra_data": {},
+            "doctor_info": {},
+            "is_complete": false,
+            "can_stop": false,
+            "phase3_data": {},
+            "phase3_info": {},
+            "is_phase3": false
+          }
+        },
+        {
+          "question": "[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]",
+          "answer": "既往拜访过",
+          "response": {
+            "user_id": "c234df67de0989f781c9ad7e660c1b6f",
+            "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+            "message": [
+              "[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]"
+            ],
+            "extra_data": {},
+            "doctor_info": {},
+            "is_complete": false,
+            "can_stop": false,
+            "phase3_data": {},
+            "phase3_info": {},
+            "is_phase3": false
+          }
+        },
+        {
+          "question": "[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]",
+          "answer": "≥50%",
+          "response": {
+            "user_id": "c234df67de0989f781c9ad7e660c1b6f",
+            "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+            "message": [
+              "[QUESTION]您拜访的医生属于以下哪种类型？[OPTIONS]A. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例<70% B. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例≥70%[/OPTIONS][/QUESTION]"
+            ],
+            "extra_data": {},
+            "doctor_info": {},
+            "is_complete": false,
+            "can_stop": false,
+            "phase3_data": {},
+            "phase3_info": {},
+            "is_phase3": false
+          }
+        },
+        {
+          "question": "[QUESTION]您拜访的医生属于以下哪种类型？[OPTIONS]A. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例<70% B. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例≥70%[/OPTIONS][/QUESTION]",
+          "answer": "B",
+          "response": {
+            "user_id": "c234df67de0989f781c9ad7e660c1b6f",
+            "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+            "message": [
+              "[QUESTION]病人中，通常有多少会使用人血白蛋白进行容量治疗？[OPTIONS]A. <20% B. 20%~40% C. 40%~60% D. ＞60% E. ＞60%，同时会向其他医生主动推荐在这类患者中优先使用白蛋白[/OPTIONS][/QUESTION]"
+            ],
+            "extra_data": {},
+            "doctor_info": {},
+            "is_complete": false,
+            "can_stop": false,
+            "phase3_data": {},
+            "phase3_info": {},
+            "is_phase3": false
+          }
+        },
+        {
+          "question": "[QUESTION]病人中，通常有多少会使用人血白蛋白进行容量治疗？[OPTIONS]A. <20% B. 20%~40% C. 40%~60% D. ＞60% E. ＞60%，同时会向其他医生主动推荐在这类患者中优先使用白蛋白[/OPTIONS][/QUESTION]",
+          "answer": "C",
+          "response": {
+            "user_id": "c234df67de0989f781c9ad7e660c1b6f",
+            "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+            "message": [
+              "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 长期使用白蛋白可能面临药剂科或医院管理的合规性挑战 B. 早期联合白蛋白在脓毒症休克患者中的循证依据强度 C. 心源性休克患者24小时内尽早联用白蛋白对30天死亡率的影响 D. 指南推荐“需要大量晶体液时加用白蛋白”的具体适用场景和启动时机[/OPTIONS][/QUESTION]"
+            ],
+            "extra_data": {},
+            "doctor_info": {},
+            "is_complete": false,
+            "can_stop": false,
+            "phase3_data": {},
+            "phase3_info": {},
+            "is_phase3": false
+          }
+        },
+        {
+          "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 长期使用白蛋白可能面临药剂科或医院管理的合规性挑战 B. 早期联合白蛋白在脓毒症休克患者中的循证依据强度 C. 心源性休克患者24小时内尽早联用白蛋白对30天死亡率的影响 D. 指南推荐“需要大量晶体液时加用白蛋白”的具体适用场景和启动时机[/OPTIONS][/QUESTION]",
+          "answer": "不良反应",
+          "response": {
+            "user_id": "c234df67de0989f781c9ad7e660c1b6f",
+            "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+            "messages": [],
+            "message": [],
+            "extra_data": {},
+            "doctor_info": {
+              "familiarity": "既往拜访过",
+              "doctor_rank": "主任医师",
+              "department": "ICU",
+              "jett_beling_proportion": "A. ≥50%"
+            },
+            "is_complete": true,
+            "can_stop": false,
+            "phase3_data": {
+              "transinformation": "介绍人血白蛋白在危重症患者中早期使用。",
+              "support_info": "《2018 中国脓毒症/脓毒性休克急诊治疗指南》{1}：严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶液时，建议可以加用白蛋白\n            《2016 SSC脓毒症与脓毒症休克管理国际指南》{2}：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白。\n            研究显示，对心源性休克患者，与单用晶体液相比，在24小时内联合白蛋白（尽早联合）进行液体复苏可显著降低心源性休克患者的30天死亡率{3}",
+              "comm_suggest_evidence": [
+                {
+                  "title": "1. 中国医师协会急诊医师分会. 临床急诊杂志, 2018, 19(9), 567-588",
+                  "research_results": "1. 2018 中国脓毒症/脓毒性休克急诊治疗指南推荐：在严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶 液时，建议可以加用白蛋白（弱推荐，低证据质量）"
+                },
+                {
+                  "title": "2. Rhodes A,et al. Intensive Care Med. 2017 Mar;43(3):304-377.",
+                  "research_results": "2. 2016 SSC脓毒症与脓毒症休克管理国际指南推荐：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白"
+                },
+                {
+                  "title": "3. Zhi-ye Zou, et al.Front Cardiovasc Med. 2022 May 27;9:879812.",
+                  "research_results": "3. 一项研究利用重症监护 IV (MIMIC-IV) 数据库分析心源性休克患者 24 小时内联合白蛋白复苏与 30 天死亡率的关系。将 1,332 例单用晶体液组与 254 例联合白蛋白组进行比较。结果：与单纯晶体液相比，24小时内联合白蛋白复苏与≥60岁心源性休克患者30天死亡率降低显著相关（HR=0.48, P＜0.001）。"
+                }
+              ],
+              "focus_point": {
+                "title": "不良反应情况",
+                "content": "人血白蛋白在肝病患者中长期使用除了有上述临床研究的证据支持外，还有权威指南的推荐，《2023年亚太肝病学会指南：肝病腹水的管理》{1}：顽固性腹水患者可考虑长期输注人血白蛋白",
+                "evidence": [
+                  {
+                    "title": "1. Virendra Singh, et al. Hepatology International (2023) 17:792‒826",
+                    "research_results": "1. 2023年亚太肝病学会指南：肝病腹水的管理推荐，顽固性腹水患者可考虑长期输注人血白蛋白（弱推荐，低证据等级）"
+                  }
+                ],
+                "need_generate": true
+              }
+            },
+            "phase3_info": {
+              "doctor_type": "白蛋白笃信者",
+              "drug_use_graded": "使用"
+            },
+            "is_phase3": true
+          }
+        }
+      ],
+      "final_data": {
+        "user_id": "c234df67de0989f781c9ad7e660c1b6f",
+        "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+        "messages": [],
+        "message": [],
+        "extra_data": {},
+        "doctor_info": {
+          "familiarity": "既往拜访过",
+          "doctor_rank": "主任医师",
+          "department": "ICU",
+          "jett_beling_proportion": "A. ≥50%"
+        },
+        "is_complete": true,
+        "can_stop": false,
+        "phase3_data": {
+          "transinformation": "介绍人血白蛋白在危重症患者中早期使用。",
+          "support_info": "《2018 中国脓毒症/脓毒性休克急诊治疗指南》{1}：严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶液时，建议可以加用白蛋白\n            《2016 SSC脓毒症与脓毒症休克管理国际指南》{2}：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白。\n            研究显示，对心源性休克患者，与单用晶体液相比，在24小时内联合白蛋白（尽早联合）进行液体复苏可显著降低心源性休克患者的30天死亡率{3}",
+          "comm_suggest_evidence": [
+            {
+              "title": "1. 中国医师协会急诊医师分会. 临床急诊杂志, 2018, 19(9), 567-588",
+              "research_results": "1. 2018 中国脓毒症/脓毒性休克急诊治疗指南推荐：在严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶 液时，建议可以加用白蛋白（弱推荐，低证据质量）"
+            },
+            {
+              "title": "2. Rhodes A,et al. Intensive Care Med. 2017 Mar;43(3):304-377.",
+              "research_results": "2. 2016 SSC脓毒症与脓毒症休克管理国际指南推荐：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白"
+            },
+            {
+              "title": "3. Zhi-ye Zou, et al.Front Cardiovasc Med. 2022 May 27;9:879812.",
+              "research_results": "3. 一项研究利用重症监护 IV (MIMIC-IV) 数据库分析心源性休克患者 24 小时内联合白蛋白复苏与 30 天死亡率的关系。将 1,332 例单用晶体液组与 254 例联合白蛋白组进行比较。结果：与单纯晶体液相比，24小时内联合白蛋白复苏与≥60岁心源性休克患者30天死亡率降低显著相关（HR=0.48, P＜0.001）。"
+            }
+          ],
+          "focus_point": {
+            "title": "不良反应情况",
+            "content": "人血白蛋白在肝病患者中长期使用除了有上述临床研究的证据支持外，还有权威指南的推荐，《2023年亚太肝病学会指南：肝病腹水的管理》{1}：顽固性腹水患者可考虑长期输注人血白蛋白",
+            "evidence": [
+              {
+                "title": "1. Virendra Singh, et al. Hepatology International (2023) 17:792‒826",
+                "research_results": "1. 2023年亚太肝病学会指南：肝病腹水的管理推荐，顽固性腹水患者可考虑长期输注人血白蛋白（弱推荐，低证据等级）"
+              }
+            ],
+            "need_generate": true
+          }
+        },
+        "phase3_info": {
+          "doctor_type": "白蛋白笃信者",
+          "drug_use_graded": "使用"
+        },
+        "is_phase3": true
+      },
+      "visit_plan": {
+        "literatures": [
+          {
+            "id": "08185186d3ec6eaa2b74b0be2c1538fa",
+            "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
+            "type": "INNER",
+            "chunk_ids": [],
+            "file_name": null,
+            "research_summary": "在严重脓毒症患者液体复苏中，该研究显示人血白蛋白相比羟乙基淀粉显著降低肾脏替代治疗风险（RR=1.35，P=0.04），且不增加肾损伤风险，为容量复苏安全性提供了直接对比证据。",
+            "file_key": "92fca00cad9674414d7882c518635033"
+          },
+          {
+            "id": "e8ae87bb3367889ca7eaf1b62c43550e",
+            "title": "8_中国医师协会急诊医师分会_临床急诊杂志_2018_19(9)_567-588.pdf",
+            "type": "INNER",
+            "chunk_ids": [],
+            "file_name": null,
+            "research_summary": "该研究通过Meta分析明确显示羟乙基淀粉显著增加脓毒症患者死亡及连续性肾脏替代治疗风险，并基于循证证据强推荐使用人血白蛋白替代羟乙基淀粉，为临床决策提供了高证据等级支持。",
+            "file_key": "a93964071af3c21592cb30971bd259b4"
+          },
+          {
+            "id": "ad71d30d7e88f9fb182aa22c7ac0facf",
+            "title": "2015 中国严重脓毒症／脓毒性休克治疗指南(2014)-中华内科杂志-中华医学会重症医学分会.pdf",
+            "type": "INNER",
+            "chunk_ids": [],
+            "file_name": null,
+            "research_summary": "该指南基于SAFE研究结果明确不建议使用羟乙基淀粉，并推荐人血白蛋白作为严重脓毒症患者液体复苏的安全选择，为临床实践提供了权威性指导依据。",
+            "file_key": "254eb830738b91f9efde58a887faf0e8"
+          }
+        ],
+        "user_id": null,
+        "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+        "visit_plan_digest": {
+          "notion": "该主任医师作为白蛋白笃信者，当前处于'使用'阶段（Alb≥30g/L容量治疗患者白蛋白使用率40%~60%），已关注到人血白蛋白在急症容量复苏中的应用价值，但存在对不良反应的显性关注。",
+          "doctorInfo": {
+            "department": "ICU",
+            "type": "白蛋白笃信者",
+            "grade": "使用",
+            "rank": "主任医师"
+          },
+          "goal": "围绕'危重症患者早期使用人血白蛋白'核心信息，推动医生从'使用'向'偏好'进阶；'偏好'阶段意味着在不考虑政策或费用因素时，对大多数容量治疗患者主动选择白蛋白。",
+          "strategy": "以安全性优势为切入点，通过对比羟乙基淀粉的肾损伤风险数据，衔接指南推荐的早期联合使用场景，推动医生在急症容量复苏中更主动选择白蛋白。"
+        },
+        "comm_suggest": {
+          "literatures": [
+            {
+              "id": null,
+              "title": "1. 中国医师协会急诊医师分会. 临床急诊杂志, 2018, 19(9), 567-588",
+              "type": "CSL",
+              "chunk_ids": null,
+              "file_name": null,
+              "research_summary": "1. 2018 中国脓毒症/脓毒性休克急诊治疗指南推荐：在严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶 液时，建议可以加用白蛋白（弱推荐，低证据质量）",
+              "file_key": null
+            },
+            {
+              "id": null,
+              "title": "2. Rhodes A,et al. Intensive Care Med. 2017 Mar;43(3):304-377.",
+              "type": "CSL",
+              "chunk_ids": null,
+              "file_name": null,
+              "research_summary": "2. 2016 SSC脓毒症与脓毒症休克管理国际指南推荐：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白",
+              "file_key": null
+            },
+            {
+              "id": null,
+              "title": "3. Zhi-ye Zou, et al.Front Cardiovasc Med. 2022 May 27;9:879812.",
+              "type": "CSL",
+              "chunk_ids": null,
+              "file_name": null,
+              "research_summary": "3. 一项研究利用重症监护 IV (MIMIC-IV) 数据库分析心源性休克患者 24 小时内联合白蛋白复苏与 30 天死亡率的关系。将 1,332 例单用晶体液组与 254 例联合白蛋白组进行比较。结果：与单纯晶体液相比，24小时内联合白蛋白复苏与≥60岁心源性休克患者30天死亡率降低显著相关（HR=0.48, P＜0.001）。",
+              "file_key": null
+            }
+          ],
+          "transitional_info": [
+            "介绍人血白蛋白在危重症患者中早期使用。"
+          ],
+          "support_info": "《2018 中国脓毒症/脓毒性休克急诊治疗指南》{1}：严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶液时，建议可以加用白蛋白\n            《2016 SSC脓毒症与脓毒症休克管理国际指南》{2}：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白。\n            研究显示，对心源性休克患者，与单用晶体液相比，在24小时内联合白蛋白（尽早联合）进行液体复苏可显著降低心源性休克患者的30天死亡率{3}"
+        },
+        "focus_point": {
+          "items": [
+            {
+              "title": "人血白蛋白不增加肾损伤风险且安全性明确",
+              "content": "与羟乙基淀粉相比，人血白蛋白在脓毒症患者液体复苏中展现出更优的肾脏安全性。研究显示使用羟乙基淀粉的严重脓毒症患者肾脏替代治疗风险增加35%（RR=1.35），而人血白蛋白不影响凝血功能且不增加肾损伤风险，其安全性已被《中国脓毒症/脓毒性休克急诊治疗指南》明确推荐。{40918245b18e21c99793f66a10d1517a}{75a4485f2c0669f76f4644fafe445c81}{8d98778e94d070848ae2abb7b2e25eec}"
+            },
+            {
+              "title": "人血白蛋白显著降低脓毒症休克患者死亡风险",
+              "content": "荟萃分析显示人血白蛋白可显著降低脓毒性休克患者90天死亡风险达19%（P=0.03），该结论得到多中心RCT研究支持。与晶体液相比，早期联合白蛋白进行液体复苏能更有效改善血流动力学指标，且安全性数据与生理盐水相当，符合国际指南对危重症患者液体管理的推荐。{b914dd471cc9c13c032306ea1e31bef8}{2666a625b95e1489d7ed72bea3e5cae8}{07e42ff5caac054e4c4600a5d7da86f5}"
+            },
+            {
+              "title": "高浓度白蛋白可减少液体过负荷相关并发症",
+              "content": "20%人血白蛋白相比低浓度制剂能以更少输液量达到等效扩容效果，显著降低48小时累积液体平衡（P<0.001）。研究显示使用20%白蛋白可减少钠、氯等电解质输入，降低ARDS患者急性肾损伤发生风险（r=-0.68，P<0.01），有助于规避晶体液过量导致的容量相关不良反应。{d8399acb5410a5599dec773db6cf2dc6}{eb51f13edc80eacfb423e72c8bceee66}{e63c0f812d131fcee482e22e267f1811}"
+            }
+          ],
+          "literatures": [
+            {
+              "id": "08185186d3ec6eaa2b74b0be2c1538fa",
+              "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
+              "type": "INNER",
+              "chunk_ids": [
+                "40918245b18e21c99793f66a10d1517a",
+                "75a4485f2c0669f76f4644fafe445c81",
+                "b914dd471cc9c13c032306ea1e31bef8"
+              ],
+              "file_name": null,
+              "research_summary": null,
+              "file_key": "92fca00cad9674414d7882c518635033"
+            },
+            {
+              "id": "e8ae87bb3367889ca7eaf1b62c43550e",
+              "title": "8_中国医师协会急诊医师分会_临床急诊杂志_2018_19(9)_567-588.pdf",
+              "type": "INNER",
+              "chunk_ids": [
+                "8d98778e94d070848ae2abb7b2e25eec",
+                "07e42ff5caac054e4c4600a5d7da86f5"
+              ],
+              "file_name": null,
+              "research_summary": null,
+              "file_key": "a93964071af3c21592cb30971bd259b4"
+            },
+            {
+              "id": "ad71d30d7e88f9fb182aa22c7ac0facf",
+              "title": "2015 中国严重脓毒症／脓毒性休克治疗指南(2014)-中华内科杂志-中华医学会重症医学分会.pdf",
+              "type": "INNER",
+              "chunk_ids": [
+                "2666a625b95e1489d7ed72bea3e5cae8"
+              ],
+              "file_name": null,
+              "research_summary": null,
+              "file_key": "254eb830738b91f9efde58a887faf0e8"
+            },
+            {
+              "id": "634e50aff29c41665848f2becdfc9628",
+              "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+              "type": "INNER",
+              "chunk_ids": [
+                "d8399acb5410a5599dec773db6cf2dc6",
+                "eb51f13edc80eacfb423e72c8bceee66"
+              ],
+              "file_name": null,
+              "research_summary": null,
+              "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+            },
+            {
+              "id": "e10eec6a1579a62dbefaa968dab52c67",
+              "title": "专家幻灯-重症患者ARDS的防治策略-CHN-ALB-0398.pdf",
+              "type": "INNER",
+              "chunk_ids": [
+                "e63c0f812d131fcee482e22e267f1811"
+              ],
+              "file_name": null,
+              "research_summary": null,
+              "file_key": "3515bc844a755b44468237aa1994c4ac"
+            }
+          ]
+        },
+        "phase3_flag": true
+      },
+      "stop_data": {
+        "is_complete": false,
+        "can_stop": false,
+        "is_phase3": false
+      },
+      "detail_data": {
+        "count": 0,
+        "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+        "visit_plan": {
+          "literatures": [
+            {
+              "id": "08185186d3ec6eaa2b74b0be2c1538fa",
+              "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
+              "type": "INNER",
+              "chunk_ids": [],
+              "file_name": null,
+              "research_summary": "在严重脓毒症患者液体复苏中，该研究显示人血白蛋白相比羟乙基淀粉显著降低肾脏替代治疗风险（RR=1.35，P=0.04），且不增加肾损伤风险，为容量复苏安全性提供了直接对比证据。",
+              "file_key": "92fca00cad9674414d7882c518635033"
+            },
+            {
+              "id": "e8ae87bb3367889ca7eaf1b62c43550e",
+              "title": "8_中国医师协会急诊医师分会_临床急诊杂志_2018_19(9)_567-588.pdf",
+              "type": "INNER",
+              "chunk_ids": [],
+              "file_name": null,
+              "research_summary": "该研究通过Meta分析明确显示羟乙基淀粉显著增加脓毒症患者死亡及连续性肾脏替代治疗风险，并基于循证证据强推荐使用人血白蛋白替代羟乙基淀粉，为临床决策提供了高证据等级支持。",
+              "file_key": "a93964071af3c21592cb30971bd259b4"
+            },
+            {
+              "id": "ad71d30d7e88f9fb182aa22c7ac0facf",
+              "title": "2015 中国严重脓毒症／脓毒性休克治疗指南(2014)-中华内科杂志-中华医学会重症医学分会.pdf",
+              "type": "INNER",
+              "chunk_ids": [],
+              "file_name": null,
+              "research_summary": "该指南基于SAFE研究结果明确不建议使用羟乙基淀粉，并推荐人血白蛋白作为严重脓毒症患者液体复苏的安全选择，为临床实践提供了权威性指导依据。",
+              "file_key": "254eb830738b91f9efde58a887faf0e8"
+            }
+          ],
+          "user_id": null,
+          "session_id": "7faaa840-d529-4dae-bdeb-949ea974c0a3",
+          "visit_plan_digest": {
+            "notion": "该主任医师作为白蛋白笃信者，当前处于'使用'阶段（Alb≥30g/L容量治疗患者白蛋白使用率40%~60%），已关注到人血白蛋白在急症容量复苏中的应用价值，但存在对不良反应的显性关注。",
+            "doctorInfo": {
+              "department": "ICU",
+              "type": "白蛋白笃信者",
+              "grade": "使用",
+              "rank": "主任医师"
+            },
+            "goal": "围绕'危重症患者早期使用人血白蛋白'核心信息，推动医生从'使用'向'偏好'进阶；'偏好'阶段意味着在不考虑政策或费用因素时，对大多数容量治疗患者主动选择白蛋白。",
+            "strategy": "以安全性优势为切入点，通过对比羟乙基淀粉的肾损伤风险数据，衔接指南推荐的早期联合使用场景，推动医生在急症容量复苏中更主动选择白蛋白。"
+          },
+          "comm_suggest": {
+            "literatures": [
+              {
+                "id": null,
+                "title": "1. 中国医师协会急诊医师分会. 临床急诊杂志, 2018, 19(9), 567-588",
+                "type": "CSL",
+                "chunk_ids": null,
+                "file_name": null,
+                "research_summary": "1. 2018 中国脓毒症/脓毒性休克急诊治疗指南推荐：在严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶 液时，建议可以加用白蛋白（弱推荐，低证据质量）",
+                "file_key": null
+              },
+              {
+                "id": null,
+                "title": "2. Rhodes A,et al. Intensive Care Med. 2017 Mar;43(3):304-377.",
+                "type": "CSL",
+                "chunk_ids": null,
+                "file_name": null,
+                "research_summary": "2. 2016 SSC脓毒症与脓毒症休克管理国际指南推荐：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白",
+                "file_key": null
+              },
+              {
+                "id": null,
+                "title": "3. Zhi-ye Zou, et al.Front Cardiovasc Med. 2022 May 27;9:879812.",
+                "type": "CSL",
+                "chunk_ids": null,
+                "file_name": null,
+                "research_summary": "3. 一项研究利用重症监护 IV (MIMIC-IV) 数据库分析心源性休克患者 24 小时内联合白蛋白复苏与 30 天死亡率的关系。将 1,332 例单用晶体液组与 254 例联合白蛋白组进行比较。结果：与单纯晶体液相比，24小时内联合白蛋白复苏与≥60岁心源性休克患者30天死亡率降低显著相关（HR=0.48, P＜0.001）。",
+                "file_key": null
+              }
+            ],
+            "transitional_info": [
+              "介绍人血白蛋白在危重症患者中早期使用。"
+            ],
+            "support_info": "《2018 中国脓毒症/脓毒性休克急诊治疗指南》{1}：严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶液时，建议可以加用白蛋白\n            《2016 SSC脓毒症与脓毒症休克管理国际指南》{2}：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白。\n            研究显示，对心源性休克患者，与单用晶体液相比，在24小时内联合白蛋白（尽早联合）进行液体复苏可显著降低心源性休克患者的30天死亡率{3}"
+          },
+          "focus_point": {
+            "items": [
+              {
+                "title": "人血白蛋白不增加肾损伤风险且安全性明确",
+                "content": "与羟乙基淀粉相比，人血白蛋白在脓毒症患者液体复苏中展现出更优的肾脏安全性。研究显示使用羟乙基淀粉的严重脓毒症患者肾脏替代治疗风险增加35%（RR=1.35），而人血白蛋白不影响凝血功能且不增加肾损伤风险，其安全性已被《中国脓毒症/脓毒性休克急诊治疗指南》明确推荐。{40918245b18e21c99793f66a10d1517a}{75a4485f2c0669f76f4644fafe445c81}{8d98778e94d070848ae2abb7b2e25eec}"
+              },
+              {
+                "title": "人血白蛋白显著降低脓毒症休克患者死亡风险",
+                "content": "荟萃分析显示人血白蛋白可显著降低脓毒性休克患者90天死亡风险达19%（P=0.03），该结论得到多中心RCT研究支持。与晶体液相比，早期联合白蛋白进行液体复苏能更有效改善血流动力学指标，且安全性数据与生理盐水相当，符合国际指南对危重症患者液体管理的推荐。{b914dd471cc9c13c032306ea1e31bef8}{2666a625b95e1489d7ed72bea3e5cae8}{07e42ff5caac054e4c4600a5d7da86f5}"
+              },
+              {
+                "title": "高浓度白蛋白可减少液体过负荷相关并发症",
+                "content": "20%人血白蛋白相比低浓度制剂能以更少输液量达到等效扩容效果，显著降低48小时累积液体平衡（P<0.001）。研究显示使用20%白蛋白可减少钠、氯等电解质输入，降低ARDS患者急性肾损伤发生风险（r=-0.68，P<0.01），有助于规避晶体液过量导致的容量相关不良反应。{d8399acb5410a5599dec773db6cf2dc6}{eb51f13edc80eacfb423e72c8bceee66}{e63c0f812d131fcee482e22e267f1811}"
+              }
+            ],
+            "literatures": [
+              {
+                "id": "08185186d3ec6eaa2b74b0be2c1538fa",
+                "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
+                "type": "INNER",
+                "chunk_ids": [
+                  "40918245b18e21c99793f66a10d1517a",
+                  "75a4485f2c0669f76f4644fafe445c81",
+                  "b914dd471cc9c13c032306ea1e31bef8"
+                ],
+                "file_name": null,
+                "research_summary": null,
+                "file_key": "92fca00cad9674414d7882c518635033"
+              },
+              {
+                "id": "e8ae87bb3367889ca7eaf1b62c43550e",
+                "title": "8_中国医师协会急诊医师分会_临床急诊杂志_2018_19(9)_567-588.pdf",
+                "type": "INNER",
+                "chunk_ids": [
+                  "8d98778e94d070848ae2abb7b2e25eec",
+                  "07e42ff5caac054e4c4600a5d7da86f5"
+                ],
+                "file_name": null,
+                "research_summary": null,
+                "file_key": "a93964071af3c21592cb30971bd259b4"
+              },
+              {
+                "id": "ad71d30d7e88f9fb182aa22c7ac0facf",
+                "title": "2015 中国严重脓毒症／脓毒性休克治疗指南(2014)-中华内科杂志-中华医学会重症医学分会.pdf",
+                "type": "INNER",
+                "chunk_ids": [
+                  "2666a625b95e1489d7ed72bea3e5cae8"
+                ],
+                "file_name": null,
+                "research_summary": null,
+                "file_key": "254eb830738b91f9efde58a887faf0e8"
+              },
+              {
+                "id": "634e50aff29c41665848f2becdfc9628",
+                "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+                "type": "INNER",
+                "chunk_ids": [
+                  "d8399acb5410a5599dec773db6cf2dc6",
+                  "eb51f13edc80eacfb423e72c8bceee66"
+                ],
+                "file_name": null,
+                "research_summary": null,
+                "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+              },
+              {
+                "id": "e10eec6a1579a62dbefaa968dab52c67",
+                "title": "专家幻灯-重症患者ARDS的防治策略-CHN-ALB-0398.pdf",
+                "type": "INNER",
+                "chunk_ids": [
+                  "e63c0f812d131fcee482e22e267f1811"
+                ],
+                "file_name": null,
+                "research_summary": null,
+                "file_key": "3515bc844a755b44468237aa1994c4ac"
+              }
+            ]
+          },
+          "phase3_flag": true
+        }
+      },
+      "validation": {
+        "passed": true,
+        "total_checks": 14,
+        "passed_checks": 14,
+        "failed_fields": [],
+        "checks": [
+          {
+            "field_name": "doctor_type",
+            "expected": "白蛋白笃信者",
+            "actual": "白蛋白笃信者",
+            "passed": true,
+            "match_mode": "exact"
+          },
+          {
+            "field_name": "doctor_grade",
+            "expected": "使用",
+            "actual": "使用",
+            "passed": true,
+            "match_mode": "exact"
+          },
+          {
+            "field_name": "trans_info",
+            "expected": "介绍人血白蛋白在危重症患者中早期使用。",
+            "actual": "介绍人血白蛋白在危重症患者中早期使用。",
+            "passed": true,
+            "match_mode": "exact"
+          },
+          {
+            "field_name": "support_info",
+            "expected": "● 《2018 中国脓毒症/脓毒性休克急诊治疗指南》1：严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶液时，建议可以加用白蛋白\n● 《2016 SSC脓毒症与脓毒症休克管理国际指南》2：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白。\n● 研究显示，对心源性休克患者，与单用晶体液相比，在24小时内联合白蛋白（尽早联合）进行液体复苏可显著降低心源性休克患者的30天死亡率3",
+            "actual": "《2018 中国脓毒症/脓毒性休克急诊治疗指南》{1}：严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶液时，建议可以加用白蛋白\n            《2016 SSC脓毒症与脓毒症休克管理国际指南》{2}：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白。\n            研究显示，对心源性休克患者，与单用晶体液相比，在24小时内联合白蛋白（尽早联合）进行液体复苏可显著降低心源性休克患者的30天死亡率{3}",
+            "passed": true,
+            "match_mode": "exact"
+          },
+          {
+            "field_name": "comm_literature_titles",
+            "expected": "1. 中国医师协会急诊医师分会. 临床急诊杂志, 2018, 19(9), 567-588\n2. Rhodes A,et al. Intensive Care Med. 2017 Mar;43(3):304-377.\n3. Zhi-ye Zou, et al.Front Cardiovasc Med. 2022 May 27;9:879812.",
+            "actual": "1. 中国医师协会急诊医师分会. 临床急诊杂志, 2018, 19(9), 567-588\n2. Rhodes A,et al. Intensive Care Med. 2017 Mar;43(3):304-377.\n3. Zhi-ye Zou, et al.Front Cardiovasc Med. 2022 May 27;9:879812.",
+            "passed": true,
+            "match_mode": "contains"
+          },
+          {
+            "field_name": "comm_literature_summaries",
+            "expected": "1. 2018 中国脓毒症/脓毒性休克急诊治疗指南推荐：在严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶 液时，建议可以加用白蛋白（弱推荐，低证据质量）\n2. 2016 SSC脓毒症与脓毒症休克管理国际指南推荐：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白\n3. 一项研究利用重症监护 IV (MIMIC-IV) 数据库分析心源性休克患者 24 小时内联合白蛋白复苏与 30 天死亡率的关系。将 1,332 例单用晶体液组与 254 例联合白蛋白组进行比较。结果：与单纯晶体液相比，24小时内联合白蛋白复苏与≥60岁心源性休克患者30天死亡率降低显著相关（HR=0.48, P＜0.001）。",
+            "actual": "1. 2018 中国脓毒症/脓毒性休克急诊治疗指南推荐：在严重脓毒症与脓毒性休克患者在早期复苏及随后的容量替代治疗阶段，当需要大量的晶体溶 液时，建议可以加用白蛋白（弱推荐，低证据质量）\n2. 2016 SSC脓毒症与脓毒症休克管理国际指南推荐：当脓毒症休克患者需要大量晶体液时，推荐额外补充人血白蛋白\n3. 一项研究利用重症监护 IV (MIMIC-IV) 数据库分析心源性休克患者 24 小时内联合白蛋白复苏与 30 天死亡率的关系。将 1,332 例单用晶体液组与 254 例联合白蛋白组进行比较。结果：与单纯晶体液相比，24小时内联合白蛋白复苏与≥60岁心源性休克患者30天死亡率降低显著相关（HR=0.48, P＜0.001）。",
+            "passed": true,
+            "match_mode": "contains"
+          },
+          {
+            "field_name": "digest.department",
+            "expected": "ICU",
+            "actual": "ICU",
+            "passed": true,
+            "match_mode": "exact"
+          },
+          {
+            "field_name": "digest.rank",
+            "expected": "主任医师",
+            "actual": "主任医师",
+            "passed": true,
+            "match_mode": "exact"
+          },
+          {
+            "field_name": "digest.type",
+            "expected": "白蛋白笃信者",
+            "actual": "白蛋白笃信者",
+            "passed": true,
+            "match_mode": "exact"
+          },
+          {
+            "field_name": "digest.grade",
+            "expected": "使用",
+            "actual": "使用",
+            "passed": true,
+            "match_mode": "exact"
+          },
+          {
+            "field_name": "focus_branch",
+            "expected": "F2_CUSTOM",
+            "actual": "F2_CUSTOM",
+            "passed": true,
+            "match_mode": "exact"
+          },
+          {
+            "field_name": "focus_title.non_empty",
+            "expected": "非空",
+            "actual": "人血白蛋白不增加肾损伤风险且安全性明确\n人血白蛋白显著降低脓毒症休克患者死亡风险\n高浓度白蛋白可减少液体过负荷相关并发症",
+            "passed": true,
+            "match_mode": "not_empty"
+          },
+          {
+            "field_name": "focus_content.non_empty",
+            "expected": "非空",
+            "actual": "与羟乙基淀粉相比，人血白蛋白在脓毒症患者液体复苏中展现出更优的肾脏安全性。研究显示使用羟乙基淀粉的严重脓毒症患者肾脏替代治疗风险增加35%（RR=1.35），而人血白蛋白不影响凝血功能且不增加肾损伤风险，其安全性已被《中国脓毒症/脓毒性休克急诊治疗指南》明确推荐。{40918245b18e21c99793f66a10d1517a}{75a4485f2c0669f76f4644fafe445c81}{8d98778e94d070848ae2abb7b2e25eec}\n荟萃分析显示人血白蛋白可显著降低脓毒性休克患者90天死亡风险达19%（P=0.03），该结论得到多中心RCT研究支持。与晶体液相比，早期联合白蛋白进行液体复苏能更有效改善血流动力学指标，且安全性数据与生理盐水相当，符合国际指南对危重症患者液体管理的推荐。{b914dd471cc9c13c032306ea1e31bef8}{2666a625b95e1489d7ed72bea3e5cae8}{07e42ff5caac054e4c4600a5d7da86f5}\n20%人血白蛋白相比低浓度制剂能以更少输液量达到等效扩容效果，显著降低48小时累积液体平衡（P<0.001）。研究显示使用20%白蛋白可减少钠、氯等电解质输入，降低ARDS患者急性肾损伤发生风险（r=-0.68，P<0.01），有助于规避晶体液过量导致的容量相关不良反应。{d8399acb5410a5599dec773db6cf2dc6}{eb51f13edc80eacfb423e72c8bceee66}{e63c0f812d131fcee482e22e267f1811}",
+            "passed": true,
+            "match_mode": "not_empty"
+          },
+          {
+            "field_name": "focus_title.not_fixed",
+            "expected": "不包含:长期用白蛋白，临床医生会受到药剂科或者医院管理部门的挑战。",
+            "actual": "人血白蛋白不增加肾损伤风险且安全性明确\n人血白蛋白显著降低脓毒症休克患者死亡风险\n高浓度白蛋白可减少液体过负荷相关并发症",
+            "passed": true,
+            "match_mode": "not_contains"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+cases:
+  - name: normalize_same
+    expected: "介绍 白蛋白"
+    actual: "介绍白蛋白"
+  - name: normalize_bullets
+    expected: "● 杰特贝林"
+    actual: "杰特贝林"

@@ -1,0 +1,7 @@
+doctor_rank: "主任医师"
+cases:
+  - case_id: "P900"
+    scenario: "优先使用 YAML 里的 expected"
+    answers: ["A"]
+    expected:
+      doctor_type: "来自YAML"

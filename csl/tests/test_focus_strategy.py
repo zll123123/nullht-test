@@ -1,0 +1,182 @@
+from pathlib import Path
+import random
+from typing import Any, Dict, List, Optional
+
+from config.app_config import AppConfig
+from config.constants import (
+    DEFAULT_INVALID_FOCUS_INPUT,
+    FOCUS_BRANCH_F1,
+    FOCUS_BRANCH_F2_CUSTOM,
+    FOCUS_BRANCH_F2_OPTION,
+    FOCUS_BRANCH_F3,
+)
+from services.case_loader import CaseConfig, FocusStrategy
+from services.focus_service import choose_focus_answer, extract_focus_options
+from services.validation_service import build_validation_checks
+from utils.yaml_loader import load_yaml_file
+
+DATA_FILE = Path(__file__).parent / "data" / "test_focus_strategy.yaml"
+
+
+def build_test_config() -> AppConfig:
+    """构建测试使用的运行配置。
+
+    Args:
+        None
+
+    Returns:
+        AppConfig: 测试配置对象。
+    """
+    return AppConfig(
+        base_url="http://localhost",
+        start_path="/start",
+        message_path="/message",
+        stop_path="/stop",
+        detail_path="/detail",
+        timeout_seconds=30,
+        detail_poll_wait_seconds=0,
+        detail_poll_interval_seconds=1,
+        verify_ssl=False,
+        default_focus_answer="A",
+        log_level="INFO",
+        accept="application/json, text/plain, */*",
+        accept_language="zh-CN,zh;q=0.9",
+        origin="http://localhost",
+        referer="http://localhost/page",
+        user_agent="pytest-agent",
+        token="",
+        cookie="",
+    )
+
+
+def build_test_case(
+    branch: str,
+    custom_focus_pool: Optional[List[str]] = None,
+) -> CaseConfig:
+    """构建测试使用的 case。
+
+    Args:
+        branch: 关注点分支。
+        custom_focus_pool: 自定义关注点池。
+
+    Returns:
+        CaseConfig: 测试 case。
+    """
+    data = load_yaml_file(DATA_FILE)
+    return CaseConfig(
+        case_id="P999",
+        scenario="测试关注点策略",
+        answers=["既往拜访过"],
+        expected={
+            "doctor_type": data["doctor_info"]["type"],
+            "doctor_grade": data["doctor_info"]["grade"],
+            "trans_info": data["trans_info"],
+            "support_info": data["support_info"],
+            "focus_title": data["expected_focus_title"],
+            "visit_plan_digest": data["doctor_info"],
+        },
+        focus_strategy=FocusStrategy(
+            branch=branch,
+            custom_focus_pool=custom_focus_pool or [],
+            invalid_input=DEFAULT_INVALID_FOCUS_INPUT,
+        ),
+    )
+
+
+def test_extract_focus_options() -> None:
+    data = load_yaml_file(DATA_FILE)
+
+    options = extract_focus_options(data["question"])
+
+    assert [option["label"] for option in options] == ["A", "B", "C", "D"]
+    assert options[1]["text"] == data["expected_focus_title"]
+
+
+def test_extract_focus_options_inline_question() -> None:
+    question = (
+        "[QUESTION]此次拜访，您预计医生可能的关注点是什么？"
+        "[OPTIONS]A. 人血白蛋白作为血液制品，安全性是否可靠？ "
+        "B. 白蛋白的多重生理功能有哪些临床意义？ "
+        "C. 低白蛋白血症对ICU患者预后的影响究竟有多严重？ "
+        "D. 纠正低白蛋白血症是否能切实改善患者死亡率？[/OPTIONS][/QUESTION]"
+    )
+
+    options = extract_focus_options(question)
+
+    assert [option["label"] for option in options] == ["A", "B", "C", "D"]
+    assert options[0]["text"] == "人血白蛋白作为血液制品，安全性是否可靠？"
+
+
+def test_choose_focus_answer_by_branch() -> None:
+    data = load_yaml_file(DATA_FILE)
+    config = build_test_config()
+
+    f1_answer, f1_decision = choose_focus_answer(
+        data["question"],
+        build_test_case(FOCUS_BRANCH_F1),
+        config,
+        random.Random(7),
+    )
+    f2_option_answer, f2_option_decision = choose_focus_answer(
+        data["question"],
+        build_test_case(FOCUS_BRANCH_F2_OPTION),
+        config,
+        random.Random(7),
+    )
+    f2_custom_answer, f2_custom_decision = choose_focus_answer(
+        data["question"],
+        build_test_case(FOCUS_BRANCH_F2_CUSTOM, data["custom_focus_pool"]),
+        config,
+        random.Random(7),
+    )
+    f3_answer, f3_decision = choose_focus_answer(
+        data["question"],
+        build_test_case(FOCUS_BRANCH_F3),
+        config,
+        random.Random(7),
+    )
+
+    assert f1_answer == "B"
+    assert f1_decision is not None and f1_decision.actual_branch == FOCUS_BRANCH_F1
+    assert f2_option_answer in {"A", "C", "D"}
+    assert f2_option_decision is not None and f2_option_decision.actual_branch == FOCUS_BRANCH_F2_OPTION
+    assert f2_custom_answer in data["custom_focus_pool"]
+    assert f2_custom_decision is not None and f2_custom_decision.actual_branch == FOCUS_BRANCH_F2_CUSTOM
+    assert f3_answer == DEFAULT_INVALID_FOCUS_INPUT
+    assert f3_decision is not None and f3_decision.actual_branch == FOCUS_BRANCH_F3
+
+
+def test_build_validation_checks_for_f2_custom() -> None:
+    data = load_yaml_file(DATA_FILE)
+    case = build_test_case(FOCUS_BRANCH_F2_CUSTOM, data["custom_focus_pool"])
+    final_data: Dict[str, Any] = {}
+    visit_plan: Dict[str, Any] = {
+        "visit_plan_digest": {"doctorInfo": data["doctor_info"]},
+        "comm_suggest": {
+            "transitional_info": [data["trans_info"]],
+            "support_info": data["support_info"],
+        },
+        "focus_point": {
+            "items": [
+                {
+                    "title": data["dynamic_focus_title"],
+                    "content": data["dynamic_focus_content"],
+                }
+            ]
+        },
+    }
+    focus_decisions: List[Dict[str, str]] = [
+        {
+            "planned_branch": FOCUS_BRANCH_F2_CUSTOM,
+            "actual_branch": FOCUS_BRANCH_F2_CUSTOM,
+            "custom_input": "医保政策",
+        }
+    ]
+
+    checks = build_validation_checks(case, final_data, visit_plan, focus_decisions)
+    check_map = {check.field_name: check for check in checks}
+
+    assert "focus_title" not in check_map
+    assert check_map["focus_title.not_fixed"].passed is True
+    assert check_map["focus_title.non_empty"].passed is True
+    assert "focus_custom_input" not in check_map
