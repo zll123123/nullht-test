@@ -22,14 +22,17 @@ def build_summary(results: List[Dict[str, Any]]) -> Dict[str, int]:
     passed = 0
     failed = 0
     errors = 0
+    pending = 0
     for item in results:
         if item.get("error"):
             errors += 1
+        elif item.get("status") == "PENDING_PLAN":
+            pending += 1
         elif (item.get("validation") or {}).get("passed"):
             passed += 1
         else:
             failed += 1
-    return {"passed": passed, "failed": failed, "errors": errors, "total": len(results)}
+    return {"passed": passed, "failed": failed, "errors": errors, "pending": pending, "total": len(results)}
 
 
 def format_json_block(data: Any) -> str:
@@ -95,6 +98,7 @@ def build_case_record_lines(case_result: Dict[str, Any]) -> List[str]:
     lines = [
         f"## {case_result.get('case_id', '')}",
         f"- 场景：{case_result.get('scenario', '')}",
+        f"- 状态：{case_result.get('status', 'UNKNOWN')}",
     ]
     if case_result.get("error"):
         lines.append(f"- 执行异常：{case_result.get('error')}")
@@ -142,6 +146,7 @@ def save_markdown_record(output_dir: Path, results: List[Dict[str, Any]]) -> Pat
         f"- 通过：{summary['passed']}",
         f"- 失败：{summary['failed']}",
         f"- 异常：{summary['errors']}",
+        f"- 待补全：{summary['pending']}",
         "",
     ]
     for case_result in results:

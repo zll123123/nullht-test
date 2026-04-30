@@ -6,7 +6,6 @@ import random
 from typing import Any, Dict, List, Optional
 
 from clients.chat_client import (
-    fetch_visit_plan_detail,
     normalize_message,
     send_message,
     start_conversation,
@@ -15,7 +14,6 @@ from clients.chat_client import (
 from config.app_config import AppConfig
 from services.case_loader import CaseConfig, FocusDecision
 from services.focus_service import choose_fallback_answer, choose_focus_answer, is_focus_question
-from services.validation_service import build_validation_result, extract_visit_plan
 
 
 def run_conversation_steps(
@@ -66,19 +64,17 @@ def run_conversation_steps(
         "steps": steps,
         "final_data": final_data,
         "stop_data": stop_conversation(session, config, session_id),
-        "detail_data": fetch_visit_plan_detail(session, config, session_id),
         "focus_decisions": focus_decisions,
     }
 
-
-def run_case(
+def build_pending_case_result(
     session: Any,
     config: AppConfig,
     doctor_rank: str,
     case: CaseConfig,
     rng: random.Random,
 ) -> Dict[str, Any]:
-    """执行单个用例并返回断言结果。
+    """执行单个用例并生成待补全结果。
 
     Args:
         session: 请求会话。
@@ -88,23 +84,27 @@ def run_case(
         rng: 随机数生成器。
 
     Returns:
-        Dict[str, Any]: 执行结果。
+        Dict[str, Any]: 待补全结果。
     """
-    conversation_result = run_conversation_steps(session, config, doctor_rank, case, rng)
-    final_data = conversation_result["final_data"]
-    visit_plan = extract_visit_plan(final_data, conversation_result["detail_data"])
-    focus_decisions = conversation_result.get("focus_decisions") or []
+    conversation_result = run_conversation_steps(
+        session=session,
+        config=config,
+        doctor_rank=doctor_rank,
+        case=case,
+        rng=rng,
+    )
     return {
         "case_id": case.case_id,
         "scenario": case.scenario,
         "expected": case.expected,
         "focus_strategy": case.focus_strategy.branch if case.focus_strategy else "",
-        "focus_decisions": focus_decisions,
+        "focus_decisions": conversation_result.get("focus_decisions") or [],
         "session_id": conversation_result["session_id"],
         "steps": conversation_result["steps"],
-        "final_data": final_data,
-        "visit_plan": visit_plan,
+        "final_data": conversation_result["final_data"],
+        "visit_plan": {},
         "stop_data": conversation_result["stop_data"],
-        "detail_data": conversation_result["detail_data"],
-        "validation": build_validation_result(case, final_data, visit_plan, focus_decisions),
+        "detail_data": {},
+        "validation": {},
+        "status": "PENDING_PLAN",
     }

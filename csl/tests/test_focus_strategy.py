@@ -177,6 +177,7 @@ def test_build_validation_checks_for_f2_custom() -> None:
     check_map = {check.field_name: check for check in checks}
 
     assert "focus_title" not in check_map
-    assert check_map["focus_title.not_fixed"].passed is True
     assert check_map["focus_title.non_empty"].passed is True
+    assert check_map["focus_content.non_empty"].passed is True
+    assert "focus_title.not_fixed" not in check_map
     assert "focus_custom_input" not in check_map

@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import requests
 from loguru import logger
@@ -163,8 +162,8 @@ def is_visit_plan_ready(detail_data: Dict[str, Any]) -> bool:
     return isinstance(visit_plan, dict) and bool(visit_plan)
 
 
-def fetch_visit_plan_detail(session: Session, config: AppConfig, session_id: str) -> Dict[str, Any]:
-    """轮询获取拜访计划详情。
+def fetch_visit_plan_detail_once(session: Session, config: AppConfig, session_id: str) -> Dict[str, Any]:
+    """单次获取拜访计划详情。
 
     Args:
         session: 请求会话。
@@ -172,27 +171,18 @@ def fetch_visit_plan_detail(session: Session, config: AppConfig, session_id: str
         session_id: 会话 ID。
 
     Returns:
-        Dict[str, Any]: 详情数据。
+        Dict[str, Any]: 详情数据；未生成完成时返回空字典。
     """
     if not config.detail_path:
         return {}
     detail_path = f"{config.detail_path.rstrip('/')}/{session_id}"
-    deadline = time.time() + max(config.detail_poll_wait_seconds, 0)
-    last_error: Optional[Exception] = None
-    while True:
-        try:
-            detail_data = (get_json(session, config, detail_path)).get("data") or {}
-            if is_visit_plan_ready(detail_data):
-                return detail_data
-        except requests.HTTPError as exc:
-            last_error = exc
-            status_code = exc.response.status_code if exc.response is not None else 0
-            if status_code != 400:
-                raise
-        if time.time() >= deadline:
-            break
-        logger.info("拜访计划尚未生成完成，{} 秒后重试详情接口。", config.detail_poll_interval_seconds)
-        time.sleep(max(config.detail_poll_interval_seconds, 1))
-    if last_error is not None:
-        raise last_error
-    return {}
+    try:
+        detail_data = (get_json(session, config, detail_path)).get("data") or {}
+    except Exception as exc:
+        response = getattr(exc, "response", None)
+        status_code = response.status_code if response is not None else 0
+        if status_code == 400:
+            logger.info("会话 {} 的拜访计划尚未生成完成。", session_id)
+            return {}
+        raise
+    return detail_data if is_visit_plan_ready(detail_data) else {}

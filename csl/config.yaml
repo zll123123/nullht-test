@@ -4,8 +4,8 @@ message_path: "/csl-medical-chatbot/api/sale/chat/message"
 stop_path: "/csl-medical-chatbot/api/sale/chat/stop"
 detail_path: "/csl-medical-chatbot/api/sale/chat/history"
 timeout_seconds: 30
-detail_poll_wait_seconds: 240
-detail_poll_interval_seconds: 15
+detail_poll_wait_seconds: 600
+detail_poll_interval_seconds: 60
 verify_ssl: true
 default_focus_answer: "A"
 log_level: "INFO"

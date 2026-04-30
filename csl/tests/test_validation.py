@@ -2,7 +2,7 @@ from pathlib import Path
 from config.constants import MATCH_CONTAINS
 from services.case_loader import build_cases
 from services.validation_service import build_check, collapse_text
-from utils.execution_record_writer import build_case_record_lines
+from utils.execution_record_writer import build_case_record_lines, build_summary
 from utils.yaml_loader import load_yaml_file
 
 CASE_DATA_FILE = Path(__file__).parent / "data" / "test_case_priority.yaml"
@@ -49,6 +49,7 @@ def test_build_case_record_lines() -> None:
         {
             "case_id": "P001",
             "scenario": "示例场景",
+            "status": "DONE",
             "session_id": "session-1",
             "focus_strategy": "F1",
             "focus_decisions": [{"actual_branch": "F1"}],
@@ -63,3 +64,20 @@ def test_build_case_record_lines() -> None:
     assert "测试回答：测试回答1" in joined
     assert "最终拜访计划" in joined
     assert "断言结果" in joined
+    assert "状态：DONE" in joined
+
+
+def test_build_summary_with_pending() -> None:
+    summary = build_summary(
+        [
+            {"status": "PENDING_PLAN", "validation": {}},
+            {"status": "DONE", "validation": {"passed": True}},
+            {"status": "DONE", "validation": {"passed": False}},
+            {"error": "boom"},
+        ]
+    )
+
+    assert summary["pending"] == 1
+    assert summary["passed"] == 1
+    assert summary["failed"] == 1
+    assert summary["errors"] == 1
