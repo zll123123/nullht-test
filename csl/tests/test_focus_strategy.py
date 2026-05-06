@@ -11,6 +11,7 @@ from config.constants import (
     FOCUS_BRANCH_F3,
 )
 from services.case_loader import CaseConfig, FocusStrategy
+from services.case_loader import build_focus_strategy
 from services.focus_service import choose_focus_answer, extract_focus_options
 from services.validation_service import build_validation_checks
 from utils.yaml_loader import load_yaml_file
@@ -79,6 +80,7 @@ def build_test_case(
             branch=branch,
             custom_focus_pool=custom_focus_pool or [],
             invalid_input=DEFAULT_INVALID_FOCUS_INPUT,
+            fixed_option_label="",
         ),
     )
 
@@ -181,3 +183,64 @@ def test_build_validation_checks_for_f2_custom() -> None:
     assert check_map["focus_content.non_empty"].passed is True
     assert "focus_title.not_fixed" not in check_map
     assert "focus_custom_input" not in check_map
+
+
+def test_choose_focus_answer_for_non_focus_question_with_options() -> None:
+    """验证非关注点选项题也可以走通用兜底。"""
+    config = build_test_config()
+    case = CaseConfig(
+        case_id="P998",
+        scenario="原始 AI 问询路径",
+        answers=["首次拜访"],
+        expected={},
+        focus_strategy=None,
+    )
+    question = (
+        "[QUESTION]针对医生可能认为“治疗目标不适用”的情况，你计划如何回应或调整沟通策略？"
+        "[OPTIONS]A. 准备其他适应症证据 B. 准备具体患者案例 C. 询问医生具体原因[/OPTIONS][/QUESTION]"
+    )
+
+    answer, decision = choose_focus_answer(question, case, config, random.Random(7))
+
+    assert answer in {"A", "B", "C"}
+    assert decision is None
+
+
+def test_build_focus_strategy_skip_when_no_fixed_focus() -> None:
+    """验证无固定关注点预期时不默认生成 F1 策略。"""
+    strategy = build_focus_strategy(
+        {
+            "case_id": "P014",
+            "expected": {
+                "focus_title": None,
+                "focus_content": None,
+            },
+        }
+    )
+
+    assert strategy is None
+
+
+def test_choose_focus_answer_prefer_fixed_option_label() -> None:
+    """验证 F1 分支可优先使用显式固定选项标签。"""
+    data = load_yaml_file(DATA_FILE)
+    config = build_test_config()
+    case = CaseConfig(
+        case_id="P997",
+        scenario="显式固定关注点选项",
+        answers=["既往拜访过"],
+        expected={"focus_title": "一个不会命中选项A的标题"},
+        focus_strategy=FocusStrategy(
+            branch=FOCUS_BRANCH_F1,
+            custom_focus_pool=[],
+            invalid_input=DEFAULT_INVALID_FOCUS_INPUT,
+            fixed_option_label="A",
+        ),
+    )
+
+    answer, decision = choose_focus_answer(data["question"], case, config, random.Random(7))
+
+    assert answer == "A"
+    assert decision is not None
+    assert decision.fixed_option_label == "A"
+    assert decision.actual_branch == FOCUS_BRANCH_F1

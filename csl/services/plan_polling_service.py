@@ -74,6 +74,13 @@ def finalize_case_result(case: CaseConfig, case_result: Dict[str, Any], detail_d
     case_result["visit_plan"] = visit_plan
     case_result["validation"] = build_validation_result(case, final_data, visit_plan, focus_decisions)
     case_result["status"] = DONE_STATUS
+    if case_result["validation"].get("passed"):
+        case_result["result_type"] = "通过"
+        case_result["failure_reason"] = ""
+    else:
+        failed_fields = case_result["validation"].get("failed_fields") or []
+        case_result["result_type"] = "断言失败"
+        case_result["failure_reason"] = f"断言失败字段: {', '.join(str(field) for field in failed_fields)}"
     case_result.pop("next_poll_at", None)
     case_result.pop("poll_deadline_at", None)
 
@@ -89,7 +96,9 @@ def mark_plan_error(case_result: Dict[str, Any], message: str) -> None:
         None
     """
     case_result["status"] = ERROR_STATUS
+    case_result["result_type"] = "执行失败"
     case_result["error"] = message
+    case_result["failure_reason"] = message
     case_result.pop("next_poll_at", None)
     case_result.pop("poll_deadline_at", None)
 

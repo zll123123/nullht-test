@@ -24,7 +24,7 @@ def build_summary(results: List[Dict[str, Any]]) -> Dict[str, int]:
     errors = 0
     pending = 0
     for item in results:
-        if item.get("error"):
+        if item.get("status") in {"EXECUTION_FAILED", "PLAN_ERROR"} or item.get("error"):
             errors += 1
         elif item.get("status") == "PENDING_PLAN":
             pending += 1
@@ -61,8 +61,36 @@ def build_step_lines(steps: List[Dict[str, Any]]) -> List[str]:
         lines.append(f"### Step {index}")
         lines.append(f"- 系统提问：{step.get('question', '')}")
         lines.append(f"- 测试回答：{step.get('answer', '')}")
-        lines.append("- 系统响应：")
-        lines.append(format_json_block(step.get("response") or {}))
+    return lines
+
+
+def build_failed_case_summary_lines(results: List[Dict[str, Any]]) -> List[str]:
+    """构建失败与异常 case 汇总。
+
+    Args:
+        results: 全部 case 结果。
+
+    Returns:
+        List[str]: Markdown 行列表。
+    """
+    failed_cases = [
+        item
+        for item in results
+        if not (item.get("result_type") == "通过" and (item.get("validation") or {}).get("passed") is True)
+    ]
+    lines = [f"- 未通过 case 数：{len(failed_cases)}"]
+    if not failed_cases:
+        lines.append("- 未通过 case：无")
+        return lines
+    lines.append("- 未通过 case 列表：")
+    for item in failed_cases:
+        validation = item.get("validation") or {}
+        failed_fields = validation.get("failed_fields") or []
+        lines.append(
+            f"  - {item.get('case_id', '')} | {item.get('result_type', '未分类')} | 失败字段: "
+            f"{', '.join(str(field) for field in failed_fields) if failed_fields else '无'} | 原因: "
+            f"{item.get('failure_reason', '') or item.get('error', '') or '无'}"
+        )
     return lines
 
 
@@ -99,7 +127,10 @@ def build_case_record_lines(case_result: Dict[str, Any]) -> List[str]:
         f"## {case_result.get('case_id', '')}",
         f"- 场景：{case_result.get('scenario', '')}",
         f"- 状态：{case_result.get('status', 'UNKNOWN')}",
+        f"- 结果分类：{case_result.get('result_type', '') or '未分类'}",
     ]
+    if case_result.get("failure_reason"):
+        lines.append(f"- 未通过原因：{case_result.get('failure_reason')}")
     if case_result.get("error"):
         lines.append(f"- 执行异常：{case_result.get('error')}")
         return lines
@@ -117,8 +148,6 @@ def build_case_record_lines(case_result: Dict[str, Any]) -> List[str]:
         [
             "### 最终拜访计划",
             format_json_block(case_result.get("visit_plan") or {}),
-            "### 详情接口返回",
-            format_json_block(case_result.get("detail_data") or {}),
             "### 断言结果",
         ]
     )
@@ -147,6 +176,7 @@ def save_markdown_record(output_dir: Path, results: List[Dict[str, Any]]) -> Pat
         f"- 失败：{summary['failed']}",
         f"- 异常：{summary['errors']}",
         f"- 待补全：{summary['pending']}",
+        *build_failed_case_summary_lines(results),
         "",
     ]
     for case_result in results:

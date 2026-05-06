@@ -2,6 +2,7 @@
 
 MATCH_EXACT = "exact"
 MATCH_CONTAINS = "contains"
+MATCH_LIST_EXACT = "list_exact"
 MATCH_NOT_CONTAINS = "not_contains"
 MATCH_NOT_EMPTY = "not_empty"
 

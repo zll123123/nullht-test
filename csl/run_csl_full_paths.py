@@ -27,6 +27,26 @@ from utils.logger import setup_logger
 from utils.result_writer import filter_cases, initialize_output_files, save_results
 
 
+def build_execution_error_result(case: CaseConfig, error_message: str) -> dict:
+    """构建执行失败结果。
+
+    Args:
+        case: 当前用例。
+        error_message: 失败原因。
+
+    Returns:
+        dict: 执行失败结果。
+    """
+    return {
+        "case_id": case.case_id,
+        "scenario": case.scenario,
+        "status": "EXECUTION_FAILED",
+        "result_type": "执行失败",
+        "error": error_message,
+        "failure_reason": error_message,
+    }
+
+
 def parse_args() -> argparse.Namespace:
     """解析命令行参数。
 
@@ -72,7 +92,7 @@ def execute_cases(selected_cases: List[CaseConfig], doctor_rank: str, config: Ap
             flush_outputs(results)
         except Exception as exc:
             logger.exception("{} 执行失败: {}", case.case_id, exc)
-            results.append({"case_id": case.case_id, "scenario": case.scenario, "error": str(exc)})
+            results.append(build_execution_error_result(case, str(exc)))
             flush_outputs(results)
     drain_pending_results(session, config, results, case_index)
     return 0

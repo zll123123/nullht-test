@@ -36,3 +36,51 @@ def test_assert_text_contains() -> None:
     )
 
     assert result.passed is True
+
+
+def test_assert_text_contains_ignore_format_marks() -> None:
+    """验证包含断言可忽略项目符号、引用标记和空白差异。"""
+    expected = (
+        "● 无论是否是重症患者，人工胶体的这些安全隐患都始终存在，长期使用更是不利于患者的综合获益。\n"
+        "● 《2021 SSC脓毒症与脓毒症休克管理国际指南》1：对成人脓毒症或脓毒性休克患者，不推荐使用羟乙基淀粉进行复苏；"
+        "对成人脓毒症或脓毒性休克患者，不推荐使用明胶进行复苏\n"
+        "● 近年来国际上卫生组织的建议越来越倾向于限制人工胶体的使用，这也反映了他们对人工胶体安全性的担忧。"
+    )
+    actual = (
+        "无论是否是重症患者，人工胶体的这些安全隐患都始终存在，长期使用更是不利于患者的综合获益。\n"
+        "《2021 SSC脓毒症与脓毒症休克管理国际指南》{1} 对成人脓毒症或脓毒性休克患者，不推荐使用羟乙基淀粉进行复苏；"
+        "对成人脓毒症或脓毒性休克患者，不推荐使用明胶进行复苏\n"
+        "    近年来国际上卫生组织的建议越来越倾向于限制人工胶体的使用，这也反映了他们对人工胶体安全性的担忧。"
+    )
+
+    result = CommonAssertion.assert_text_contains(expected, actual)
+
+    assert result.passed is True
+
+
+def test_assert_text_list_exact_ignore_number_noise() -> None:
+    """验证文献列表可忽略编号噪音后逐条匹配。"""
+    expected = (
+        "1. . Caironi et al. N Engl J Med 2014; 370: 1412‒21\n"
+        "2. Jean-Louis Vincent, et al. Crit Care Med. 2004 Oct;3 (10):2029-38.\n"
+        "3. Dubois et al. Crit Care Med 2006 34: 2536-40"
+    )
+    actual = (
+        "1. Caironi et al. N Engl J Med 2014; 370: 1412‒21\n"
+        "2. Jean-Louis Vincent, et al. Crit Care Med. 2004 Oct;3 (10):2029-38.\n"
+        "3. Dubois et al. Crit Care Med 2006 34: 2536-40"
+    )
+
+    result = CommonAssertion.assert_text_list_exact(expected, actual)
+
+    assert result.passed is True
+
+
+def test_assert_text_contains_ignore_tail_references() -> None:
+    """验证行尾引用编号不影响包含断言。"""
+    expected = "未显著增加严重脓毒症患者肾功能障碍风险（p=0.9206）1,2"
+    actual = "未显著增加严重脓毒症患者肾功能障碍风险（p=0.9206）{1}{2}"
+
+    result = CommonAssertion.assert_text_contains(expected, actual)
+
+    assert result.passed is True

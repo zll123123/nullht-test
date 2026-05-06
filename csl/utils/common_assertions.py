@@ -3,16 +3,24 @@
 from __future__ import annotations
 
 import re
+import unicodedata
 from dataclasses import dataclass
 from difflib import SequenceMatcher
 from typing import Any
 
 
-TEXT_CLEAN_PATTERN = re.compile(r"[\s●▶•{}]")
+LIST_MARK_PATTERN = re.compile(r"[●▶•▪▫◦·]")
+BRACKET_REFERENCE_PATTERN = re.compile(r"[\{\[\(]\s*\d+(?:\s*[-,，]\s*\d+)*\s*[\}\]\)]")
+TAIL_REFERENCE_PATTERN = re.compile(r"(?<=[）)])\s*\d+(?:\s*[-,，]\s*\d+)*")
+INLINE_REFERENCE_PATTERN = re.compile(
+    r"(?<=[\u4e00-\u9fff》）)])\s*\d+(?:\s*[-,，]\s*\d+)*\s*(?=[\u4e00-\u9fff；;，,。]|$)"
+)
+WHITESPACE_PATTERN = re.compile(r"\s+")
 FULL_WIDTH_SPACE = "　"
 EQUAL_ASSERTION_TYPE = "text_equal"
 SIMILARITY_ASSERTION_TYPE = "text_similarity"
 CONTAINS_ASSERTION_TYPE = "text_contains"
+LIST_EXACT_ASSERTION_TYPE = "text_list_exact"
 DEFAULT_SIMILARITY_THRESHOLD = 0.8
 
 
@@ -43,9 +51,14 @@ class CommonAssertion:
         """
         if value is None:
             return ""
-        text = str(value).strip()
-        text = TEXT_CLEAN_PATTERN.sub("", text)
-        return text.replace(FULL_WIDTH_SPACE, "")
+        text = unicodedata.normalize("NFKC", str(value).strip())
+        text = text.replace(FULL_WIDTH_SPACE, " ")
+        text = LIST_MARK_PATTERN.sub("", text)
+        text = BRACKET_REFERENCE_PATTERN.sub("", text)
+        text = TAIL_REFERENCE_PATTERN.sub("", text)
+        text = INLINE_REFERENCE_PATTERN.sub("", text)
+        text = WHITESPACE_PATTERN.sub("", text)
+        return text
 
     @classmethod
     def calculate_similarity(
@@ -148,7 +161,23 @@ class CommonAssertion:
             str: 归一化后的文本。
         """
         text = cls.normalize_text(value)
-        return re.sub(r"^\d+\.+", "", text)
+        return re.sub(r"^(?:(?:\d+|[.．、:\-])+)+", "", text)
+
+    @classmethod
+    def split_normalized_lines(cls, value: Any) -> list[str]:
+        """按行拆分并归一化列表文本。
+
+        Args:
+            value: 原始文本。
+
+        Returns:
+            list[str]: 归一化后的非空列表项。
+        """
+        return [
+            cls.normalize_list_item_text(line)
+            for line in str(value or "").splitlines()
+            if cls.normalize_list_item_text(line)
+        ]
 
     @classmethod
     def assert_text_contains(
@@ -185,9 +214,47 @@ class CommonAssertion:
             any(expected_line in actual_line for actual_line in actual_lines)
             for expected_line in expected_lines
         )
+        if not passed and expected_lines and actual_lines:
+            passed = all(
+                any(
+                    expected_line in actual_line
+                    or actual_line in expected_line
+                    or SequenceMatcher(None, expected_line, actual_line).ratio() >= 0.9
+                    for actual_line in actual_lines
+                )
+                for expected_line in expected_lines
+            )
         message = "文本包含匹配成功" if passed else "文本包含匹配失败"
         return AssertionResult(
             assertion_type=CONTAINS_ASSERTION_TYPE,
+            expected=str(expected or ""),
+            actual=str(actual or ""),
+            passed=passed,
+            similarity_score=1.0 if passed else 0.0,
+            message=message,
+        )
+
+    @classmethod
+    def assert_text_list_exact(
+        cls,
+        expected: Any,
+        actual: Any,
+    ) -> AssertionResult:
+        """执行按条目归一化后的列表相等断言。
+
+        Args:
+            expected: 期望列表文本。
+            actual: 实际列表文本。
+
+        Returns:
+            AssertionResult: 断言结果。
+        """
+        expected_lines = cls.split_normalized_lines(expected)
+        actual_lines = cls.split_normalized_lines(actual)
+        passed = expected_lines == actual_lines
+        message = "列表逐条匹配成功" if passed else "列表逐条匹配失败"
+        return AssertionResult(
+            assertion_type=LIST_EXACT_ASSERTION_TYPE,
             expected=str(expected or ""),
             actual=str(actual or ""),
             passed=passed,

@@ -48,7 +48,7 @@ def is_focus_question(question: str) -> bool:
 
 
 def choose_fallback_answer(question: str, config: AppConfig, rng: random.Random) -> str:
-    """为关注点问题选择兜底回答。
+    """为未预设问题选择兜底回答。
 
     Args:
         question: 当前问题文本。
@@ -58,9 +58,13 @@ def choose_fallback_answer(question: str, config: AppConfig, rng: random.Random)
     Returns:
         str: 回答内容。
     """
-    if not is_focus_question(question):
-        raise RuntimeError(f"没有预设答案，且当前问题不是关注点问题: {question}")
-    return rng.choice(["A", "B", "C", "D"]) if "[OPTIONS]" in question else config.default_focus_answer
+    if "[OPTIONS]" in question:
+        options = extract_focus_options(question)
+        if options:
+            return rng.choice(options)["label"]
+    if is_focus_question(question):
+        return config.default_focus_answer
+    return config.default_focus_answer
 
 
 def extract_focus_options(question: str) -> List[Dict[str, str]]:
@@ -175,7 +179,11 @@ def choose_focus_answer(
         return choose_fallback_answer(question, config, rng), None
     strategy = case.focus_strategy
     options = extract_focus_options(question)
-    fixed_option = find_fixed_focus_option(options, str(case.expected.get("focus_title") or ""))
+    fixed_option = None
+    if strategy.fixed_option_label:
+        fixed_option = find_option_by_label(options, strategy.fixed_option_label)
+    if fixed_option is None:
+        fixed_option = find_fixed_focus_option(options, str(case.expected.get("focus_title") or ""))
     answer = config.default_focus_answer
     custom_input = ""
     if strategy.branch == FOCUS_BRANCH_F1 and fixed_option:

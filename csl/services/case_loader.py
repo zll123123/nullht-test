@@ -17,6 +17,7 @@ class FocusStrategy:
     branch: str
     custom_focus_pool: List[str]
     invalid_input: str
+    fixed_option_label: str
 
 
 @dataclass
@@ -89,6 +90,8 @@ def build_focus_strategy(item: Dict[str, Any]) -> Optional[FocusStrategy]:
     """
     expected = item.get("expected") or {}
     raw_strategy = item.get("focus_strategy") or {}
+    if not raw_strategy and not expected.get("focus_title") and not expected.get("focus_content"):
+        return None
     if not raw_strategy and expected.get("route_type"):
         return None
     branch = normalize_focus_branch(str(raw_strategy.get("branch") or FOCUS_BRANCH_F1))
@@ -96,9 +99,15 @@ def build_focus_strategy(item: Dict[str, Any]) -> Optional[FocusStrategy]:
         raise ValueError(f"{item.get('case_id', '')} 的关注点分支非法: {branch}")
     custom_focus_pool = [str(value) for value in raw_strategy.get("custom_focus_pool") or []]
     invalid_input = str(raw_strategy.get("invalid_input") or DEFAULT_INVALID_FOCUS_INPUT)
+    fixed_option_label = str(raw_strategy.get("fixed_option_label") or "").strip().upper()
     if branch == FOCUS_BRANCH_F2_CUSTOM and not custom_focus_pool:
         raise ValueError(f"{item.get('case_id', '')} 的 F2 自定义关注点池不能为空")
-    return FocusStrategy(branch=branch, custom_focus_pool=custom_focus_pool, invalid_input=invalid_input)
+    return FocusStrategy(
+        branch=branch,
+        custom_focus_pool=custom_focus_pool,
+        invalid_input=invalid_input,
+        fixed_option_label=fixed_option_label,
+    )
 
 
 def build_cases(data_file: Path) -> Tuple[str, List[CaseConfig]]:

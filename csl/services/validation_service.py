@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from config.constants import MATCH_CONTAINS, MATCH_EXACT, MATCH_NOT_CONTAINS, MATCH_NOT_EMPTY, FOCUS_BRANCH_F1, FOCUS_BRANCH_F3
+from config.constants import MATCH_CONTAINS, MATCH_EXACT, MATCH_LIST_EXACT, MATCH_NOT_CONTAINS, MATCH_NOT_EMPTY, FOCUS_BRANCH_F1, FOCUS_BRANCH_F3
 from services.case_loader import CaseConfig
 from utils.common_assertions import CommonAssertion
 
@@ -80,6 +80,8 @@ def build_check(field_name: str, expected: Any, actual: Any, match_mode: str = M
         return None
     if match_mode == MATCH_CONTAINS:
         passed = CommonAssertion.assert_text_contains(expected, actual).passed
+    elif match_mode == MATCH_LIST_EXACT:
+        passed = CommonAssertion.assert_text_list_exact(expected, actual).passed
     else:
         passed = CommonAssertion.assert_text_equal(expected, actual).passed
     return ValidationCheck(field_name, str(expected), str(actual or ""), passed, match_mode)
@@ -174,7 +176,7 @@ def build_focus_validation_checks(
         return [
             build_check("focus_title", expected.get("focus_title"), actual_title, MATCH_CONTAINS),
             build_check("focus_content", expected.get("focus_content"), actual_content, MATCH_CONTAINS),
-            build_check("focus_literature_titles", expected.get("focus_literature_titles"), get_focus_literature_titles(visit_plan), MATCH_CONTAINS),
+            build_check("focus_literature_titles", expected.get("focus_literature_titles"), get_focus_literature_titles(visit_plan), MATCH_LIST_EXACT),
             build_check("focus_literature_summaries", expected.get("focus_literature_summaries"), get_focus_literature_summaries(visit_plan), MATCH_CONTAINS),
         ]
     checks: List[Optional[ValidationCheck]] = [
@@ -198,8 +200,8 @@ def build_validation_checks(
         build_check("doctor_type", expected.get("doctor_type"), digest.get("type")),
         build_check("doctor_grade", expected.get("doctor_grade"), digest.get("grade")),
         build_check("trans_info", expected.get("trans_info"), get_transitional_info(visit_plan)),
-        build_check("support_info", expected.get("support_info"), (visit_plan.get("comm_suggest") or {}).get("support_info")),
-        build_check("comm_literature_titles", expected.get("comm_literature_titles"), get_comm_literature_titles(visit_plan), MATCH_CONTAINS),
+        build_check("support_info", expected.get("support_info"), (visit_plan.get("comm_suggest") or {}).get("support_info"), MATCH_CONTAINS),
+        build_check("comm_literature_titles", expected.get("comm_literature_titles"), get_comm_literature_titles(visit_plan), MATCH_LIST_EXACT),
         build_check("comm_literature_summaries", expected.get("comm_literature_summaries"), get_comm_literature_summaries(visit_plan), MATCH_CONTAINS),
         build_check("recommended_materials", expected.get("recommended_materials"), get_recommended_materials(visit_plan), MATCH_CONTAINS),
         build_check("digest.department", (expected.get("visit_plan_digest") or {}).get("department"), digest.get("department")),
