@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-from config.runtime_paths import DEV_ENV_FILE, ENV_FILE
+from config.runtime_paths import DEV_ENV_FILE, ENV_FILE, LLM_CONFIG_FILE
 from utils.yaml_loader import load_yaml_file
 
 
@@ -32,6 +32,11 @@ class AppConfig:
     user_agent: str
     token: str
     cookie: str
+    llm_enabled: bool
+    llm_base_url: str
+    llm_model: str
+    llm_api_key: str
+    llm_timeout_seconds: int
 
 
 def load_dotenv_file(env_path: Path) -> None:
@@ -79,6 +84,7 @@ def load_app_config(config_path: Path) -> AppConfig:
         AppConfig: 运行配置对象。
     """
     config_data = load_yaml_file(config_path)
+    llm_config_data = load_yaml_file(LLM_CONFIG_FILE) if LLM_CONFIG_FILE.exists() else {}
     return AppConfig(
         base_url=os.getenv("CSL_BASE_URL", str(config_data["base_url"])).rstrip("/"),
         start_path=os.getenv("CSL_START_PATH", str(config_data["start_path"])),
@@ -111,4 +117,24 @@ def load_app_config(config_path: Path) -> AppConfig:
         ),
         token=os.getenv("CSL_BEARER_TOKEN", ""),
         cookie=os.getenv("CSL_COOKIE", ""),
+        llm_enabled=os.getenv(
+            "CSL_LLM_ENABLED",
+            str(llm_config_data.get("llm_enabled", False)),
+        ).lower()
+        == "true",
+        llm_base_url=os.getenv(
+            "CSL_LLM_BASE_URL",
+            str(llm_config_data.get("llm_base_url", "")).rstrip("/"),
+        ),
+        llm_model=os.getenv(
+            "CSL_LLM_MODEL",
+            str(llm_config_data.get("llm_model", "")),
+        ),
+        llm_api_key=os.getenv("CSL_LLM_API_KEY", ""),
+        llm_timeout_seconds=int(
+            os.getenv(
+                "CSL_LLM_TIMEOUT_SECONDS",
+                llm_config_data.get("llm_timeout_seconds", 30),
+            )
+        ),
     )

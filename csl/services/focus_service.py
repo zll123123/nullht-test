@@ -15,6 +15,7 @@ from config.constants import (
     FOCUS_BRANCH_F3,
 )
 from services.case_loader import CaseConfig, FocusDecision
+from services.focus_match_service import match_focus_option_by_llm
 from utils.common_assertions import CommonAssertion
 
 OPTIONS_BLOCK_PATTERN = re.compile(r"\[OPTIONS\](.*?)\[/OPTIONS\]", re.IGNORECASE | re.DOTALL)
@@ -182,6 +183,10 @@ def choose_focus_answer(
     fixed_option = None
     if strategy.fixed_option_label:
         fixed_option = find_option_by_label(options, strategy.fixed_option_label)
+    if fixed_option is None:
+        llm_match_result = match_focus_option_by_llm(config, question, str(case.expected.get("focus_title") or ""))
+        if llm_match_result and llm_match_result.get("is_match_focus_point") is True:
+            fixed_option = find_option_by_label(options, str(llm_match_result.get("option_letter") or ""))
     if fixed_option is None:
         fixed_option = find_fixed_focus_option(options, str(case.expected.get("focus_title") or ""))
     answer = config.default_focus_answer

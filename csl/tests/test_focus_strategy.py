@@ -47,6 +47,11 @@ def build_test_config() -> AppConfig:
         user_agent="pytest-agent",
         token="",
         cookie="",
+        llm_enabled=False,
+        llm_base_url="",
+        llm_model="",
+        llm_api_key="",
+        llm_timeout_seconds=30,
     )
 
 
@@ -243,4 +248,41 @@ def test_choose_focus_answer_prefer_fixed_option_label() -> None:
     assert answer == "A"
     assert decision is not None
     assert decision.fixed_option_label == "A"
+    assert decision.actual_branch == FOCUS_BRANCH_F1
+
+
+def test_choose_focus_answer_prefer_llm_match(monkeypatch) -> None:
+    """验证开启 LLM 匹配时优先使用模型给出的选项。"""
+    data = load_yaml_file(DATA_FILE)
+    config = build_test_config()
+    config.llm_enabled = True
+    config.llm_base_url = "https://mock-llm.test"
+    config.llm_model = "mock-model"
+    config.llm_api_key = "mock-key"
+    case = CaseConfig(
+        case_id="P996",
+        scenario="LLM 固定关注点匹配",
+        answers=["既往拜访过"],
+        expected={"focus_title": "主要还是价格太贵，现在DRG医保控费用是主要指标"},
+        focus_strategy=FocusStrategy(
+            branch=FOCUS_BRANCH_F1,
+            custom_focus_pool=[],
+            invalid_input=DEFAULT_INVALID_FOCUS_INPUT,
+            fixed_option_label="",
+        ),
+    )
+
+    monkeypatch.setattr(
+        "services.focus_service.match_focus_option_by_llm",
+        lambda config, question, focus_point: {
+            "option_letter": "A",
+            "focus_text": "白蛋白价格较高，是否具有成本效益？",
+            "is_match_focus_point": True,
+        },
+    )
+
+    answer, decision = choose_focus_answer(data["question"], case, config, random.Random(7))
+
+    assert answer == "A"
+    assert decision is not None
     assert decision.actual_branch == FOCUS_BRANCH_F1
