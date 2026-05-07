@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 from clients.chat_client import (
@@ -16,13 +17,36 @@ from services.case_loader import CaseConfig, FocusDecision
 from services.focus_service import choose_fallback_answer, choose_focus_answer, is_focus_question
 
 
+@dataclass
+class ConversationExecutionResult:
+    """单个对话用例的执行结果。"""
+
+    session_id: str
+    steps: List[Dict[str, Any]]
+    final_data: Dict[str, Any]
+    stop_data: Dict[str, Any]
+    focus_decisions: List[Dict[str, Any]]
+
+
+def can_stop_conversation(final_data: Dict[str, Any]) -> bool:
+    """判断当前会话是否允许调用停止接口。
+
+    Args:
+        final_data: 最后一轮消息接口返回的 data。
+
+    Returns:
+        bool: 是否允许停止会话。
+    """
+    return bool(final_data.get("can_stop"))
+
+
 def run_conversation_steps(
     session: Any,
     config: AppConfig,
     doctor_rank: str,
     case: CaseConfig,
     rng: random.Random,
-) -> Dict[str, Any]:
+) -> ConversationExecutionResult:
     """执行单个 case 的完整对话流程。
 
     Args:
@@ -33,7 +57,7 @@ def run_conversation_steps(
         rng: 随机数生成器。
 
     Returns:
-        Dict[str, Any]: 原始执行结果。
+        ConversationExecutionResult: 原始执行结果。
     """
     start_data = start_conversation(session, config)
     session_id = str(start_data["session_id"])
@@ -59,13 +83,16 @@ def run_conversation_steps(
         question = normalize_message(final_data)
         if not question:
             raise RuntimeError(f"{case.case_id} 未完成，但没有后续问题。")
-    return {
-        "session_id": session_id,
-        "steps": steps,
-        "final_data": final_data,
-        "stop_data": stop_conversation(session, config, session_id),
-        "focus_decisions": focus_decisions,
-    }
+    stop_data: Dict[str, Any] = {}
+    if can_stop_conversation(final_data):
+        stop_data = stop_conversation(session, config, session_id)
+    return ConversationExecutionResult(
+        session_id=session_id,
+        steps=steps,
+        final_data=final_data,
+        stop_data=stop_data,
+        focus_decisions=focus_decisions,
+    )
 
 def build_pending_case_result(
     session: Any,
@@ -98,12 +125,12 @@ def build_pending_case_result(
         "scenario": case.scenario,
         "expected": case.expected,
         "focus_strategy": case.focus_strategy.branch if case.focus_strategy else "",
-        "focus_decisions": conversation_result.get("focus_decisions") or [],
-        "session_id": conversation_result["session_id"],
-        "steps": conversation_result["steps"],
-        "final_data": conversation_result["final_data"],
+        "focus_decisions": conversation_result.focus_decisions,
+        "session_id": conversation_result.session_id,
+        "steps": conversation_result.steps,
+        "final_data": conversation_result.final_data,
         "visit_plan": {},
-        "stop_data": conversation_result["stop_data"],
+        "stop_data": conversation_result.stop_data,
         "detail_data": {},
         "validation": {},
         "status": "PENDING_PLAN",
