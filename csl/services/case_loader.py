@@ -2,69 +2,12 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from config.constants import DEFAULT_INVALID_FOCUS_INPUT, FOCUS_BRANCHES, FOCUS_BRANCH_F1, FOCUS_BRANCH_F2_CUSTOM
+from models.case_model import CaseCollection, CaseConfig, FocusDecision, FocusStrategy
 from utils.yaml_loader import load_yaml_file
-
-
-@dataclass
-class FocusStrategy:
-    """关注点问题作答策略。"""
-
-    branch: str
-    custom_focus_pool: List[str]
-    invalid_input: str
-    fixed_option_label: str
-
-
-@dataclass
-class FocusDecision:
-    """关注点问题实际执行结果。"""
-
-    planned_branch: str
-    actual_branch: str
-    answer: str
-    fixed_option_label: str
-    fixed_option_text: str
-    selected_option_label: str
-    selected_option_text: str
-    custom_input: str
-    question: str
-
-    def to_dict(self) -> Dict[str, Any]:
-        """转换为字典。
-
-        Args:
-            self: 当前实例。
-
-        Returns:
-            Dict[str, Any]: 可序列化字典。
-        """
-        return {
-            "planned_branch": self.planned_branch,
-            "actual_branch": self.actual_branch,
-            "answer": self.answer,
-            "fixed_option_label": self.fixed_option_label,
-            "fixed_option_text": self.fixed_option_text,
-            "selected_option_label": self.selected_option_label,
-            "selected_option_text": self.selected_option_text,
-            "custom_input": self.custom_input,
-            "question": self.question,
-        }
-
-
-@dataclass
-class CaseConfig:
-    """对话用例配置。"""
-
-    case_id: str
-    scenario: str
-    answers: List[str]
-    expected: Dict[str, Any]
-    focus_strategy: Optional[FocusStrategy]
 
 
 def normalize_focus_branch(branch: str) -> str:
@@ -110,17 +53,18 @@ def build_focus_strategy(item: Dict[str, Any]) -> Optional[FocusStrategy]:
     )
 
 
-def build_cases(data_file: Path) -> Tuple[str, List[CaseConfig]]:
+def build_cases(data_file: Path) -> CaseCollection:
     """加载并构建 case 列表。
 
     Args:
         data_file: case YAML 路径。
 
     Returns:
-        Tuple[str, List[CaseConfig]]: 医生职称和 case 列表。
+        CaseCollection: 医生职称、冒烟用例和 case 列表。
     """
     data = load_yaml_file(data_file)
     doctor_rank = str(data["doctor_rank"])
+    smoke_case_ids = [str(case_id) for case_id in data.get("smoke_case_ids") or []]
     cases: List[CaseConfig] = []
     for item in data.get("cases") or []:
         case_id = str(item.get("case_id", ""))
@@ -137,4 +81,18 @@ def build_cases(data_file: Path) -> Tuple[str, List[CaseConfig]]:
                 focus_strategy=build_focus_strategy(item),
             )
         )
-    return doctor_rank, cases
+    return CaseCollection(
+        doctor_rank=doctor_rank,
+        smoke_case_ids=smoke_case_ids,
+        cases=cases,
+    )
+
+
+__all__ = [
+    "FocusStrategy",
+    "FocusDecision",
+    "CaseConfig",
+    "CaseCollection",
+    "build_focus_strategy",
+    "build_cases",
+]

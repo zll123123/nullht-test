@@ -1,4 +1,9 @@
 doctor_rank: 主任医师
+smoke_case_ids:
+- P009
+- P012
+- P028
+- P029
 cases:
 - case_id: P001
   scenario: 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道

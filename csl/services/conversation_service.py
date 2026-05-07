@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 from clients.chat_client import (
@@ -13,19 +12,9 @@ from clients.chat_client import (
     stop_conversation,
 )
 from config.app_config import AppConfig
-from services.case_loader import CaseConfig, FocusDecision
+from models.case_model import CaseConfig, FocusDecision
+from models.result_model import CaseExecutionResult, ConversationExecutionResult, ConversationStep
 from services.focus_service import choose_fallback_answer, choose_focus_answer, is_focus_question
-
-
-@dataclass
-class ConversationExecutionResult:
-    """单个对话用例的执行结果。"""
-
-    session_id: str
-    steps: List[Dict[str, Any]]
-    final_data: Dict[str, Any]
-    stop_data: Dict[str, Any]
-    focus_decisions: List[Dict[str, Any]]
 
 
 def can_stop_conversation(final_data: Dict[str, Any]) -> bool:
@@ -62,8 +51,8 @@ def run_conversation_steps(
     start_data = start_conversation(session, config)
     session_id = str(start_data["session_id"])
     planned_answers = [doctor_rank, *case.answers]
-    steps: List[Dict[str, Any]] = []
-    focus_decisions: List[Dict[str, Any]] = []
+    steps: List[ConversationStep] = []
+    focus_decisions: List[FocusDecision] = []
     question = (start_data.get("message") or [""])[-1]
     final_data: Dict[str, Any] = start_data
     while True:
@@ -75,9 +64,9 @@ def run_conversation_steps(
         else:
             answer = choose_fallback_answer(str(question), config, rng)
         final_data = send_message(session, config, session_id, answer)
-        steps.append({"question": question, "answer": answer, "response": final_data})
+        steps.append(ConversationStep(question=question, answer=answer, response=final_data))
         if focus_decision is not None:
-            focus_decisions.append(focus_decision.to_dict())
+            focus_decisions.append(focus_decision)
         if final_data.get("is_complete"):
             break
         question = normalize_message(final_data)
@@ -100,7 +89,7 @@ def build_pending_case_result(
     doctor_rank: str,
     case: CaseConfig,
     rng: random.Random,
-) -> Dict[str, Any]:
+) -> CaseExecutionResult:
     """执行单个用例并生成待补全结果。
 
     Args:
@@ -111,7 +100,7 @@ def build_pending_case_result(
         rng: 随机数生成器。
 
     Returns:
-        Dict[str, Any]: 待补全结果。
+        CaseExecutionResult: 待补全结果。
     """
     conversation_result = run_conversation_steps(
         session=session,
@@ -120,18 +109,18 @@ def build_pending_case_result(
         case=case,
         rng=rng,
     )
-    return {
-        "case_id": case.case_id,
-        "scenario": case.scenario,
-        "expected": case.expected,
-        "focus_strategy": case.focus_strategy.branch if case.focus_strategy else "",
-        "focus_decisions": conversation_result.focus_decisions,
-        "session_id": conversation_result.session_id,
-        "steps": conversation_result.steps,
-        "final_data": conversation_result.final_data,
-        "visit_plan": {},
-        "stop_data": conversation_result.stop_data,
-        "detail_data": {},
-        "validation": {},
-        "status": "PENDING_PLAN",
-    }
+    return CaseExecutionResult(
+        case_id=case.case_id,
+        scenario=case.scenario,
+        expected=case.expected,
+        focus_strategy=case.focus_strategy.branch if case.focus_strategy else "",
+        focus_decisions=conversation_result.focus_decisions,
+        session_id=conversation_result.session_id,
+        steps=conversation_result.steps,
+        final_data=conversation_result.final_data,
+        visit_plan={},
+        stop_data=conversation_result.stop_data,
+        detail_data={},
+        validation=None,
+        status="PENDING_PLAN",
+    )

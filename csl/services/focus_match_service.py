@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from clients.focus_match_client import call_focus_match_llm
+from clients.llm_client import call_focus_match_llm
 from config.app_config import AppConfig
 
 FOCUS_MATCH_PROMPT_TEMPLATE = """# 角色定义

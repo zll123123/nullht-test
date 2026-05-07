@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-from config.runtime_paths import DEV_ENV_FILE, ENV_FILE, LLM_CONFIG_FILE
+from config.settings import DEV_ENV_FILE, ENV_FILE, LLM_CONFIG_FILE
 from utils.yaml_loader import load_yaml_file
 
 

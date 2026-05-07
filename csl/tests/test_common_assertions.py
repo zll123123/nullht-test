@@ -1,5 +1,5 @@
 from pathlib import Path
-from utils.common_assertions import CommonAssertion
+from validators.assertions import CommonAssertion
 from utils.yaml_loader import load_yaml_file
 
 DATA_FILE = Path(__file__).parent / "data" / "test_common_assertions.yaml"

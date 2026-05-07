@@ -10,9 +10,10 @@ from config.constants import (
     FOCUS_BRANCH_F2_OPTION,
     FOCUS_BRANCH_F3,
 )
-from services.case_loader import CaseConfig, FocusStrategy
+from models.case_model import CaseConfig, FocusStrategy
+from models.case_model import FocusDecision
 from services.case_loader import build_focus_strategy
-from services.focus_service import choose_focus_answer, extract_focus_options
+from services.focus_service import FocusService, choose_focus_answer
 from services.validation_service import build_validation_checks
 from utils.yaml_loader import load_yaml_file
 
@@ -93,7 +94,7 @@ def build_test_case(
 def test_extract_focus_options() -> None:
     data = load_yaml_file(DATA_FILE)
 
-    options = extract_focus_options(data["question"])
+    options = FocusService.extract_focus_options(data["question"])
 
     assert [option["label"] for option in options] == ["A", "B", "C", "D"]
     assert options[1]["text"] == data["expected_focus_title"]
@@ -108,7 +109,7 @@ def test_extract_focus_options_inline_question() -> None:
         "D. 纠正低白蛋白血症是否能切实改善患者死亡率？[/OPTIONS][/QUESTION]"
     )
 
-    options = extract_focus_options(question)
+    options = FocusService.extract_focus_options(question)
 
     assert [option["label"] for option in options] == ["A", "B", "C", "D"]
     assert options[0]["text"] == "人血白蛋白作为血液制品，安全性是否可靠？"
@@ -153,6 +154,19 @@ def test_choose_focus_answer_by_branch() -> None:
     assert f3_decision is not None and f3_decision.actual_branch == FOCUS_BRANCH_F3
 
 
+def test_match_fixed_option() -> None:
+    """验证固定关注点选项匹配。"""
+    data = load_yaml_file(DATA_FILE)
+    config = build_test_config()
+    case = build_test_case(FOCUS_BRANCH_F1)
+    options = FocusService.extract_focus_options(data["question"])
+
+    fixed_option = FocusService.match_fixed_option(options, case, config, data["question"])
+
+    assert fixed_option is not None
+    assert fixed_option["label"] == "B"
+
+
 def test_build_validation_checks_for_f2_custom() -> None:
     data = load_yaml_file(DATA_FILE)
     case = build_test_case(FOCUS_BRANCH_F2_CUSTOM, data["custom_focus_pool"])
@@ -172,12 +186,18 @@ def test_build_validation_checks_for_f2_custom() -> None:
             ]
         },
     }
-    focus_decisions: List[Dict[str, str]] = [
-        {
-            "planned_branch": FOCUS_BRANCH_F2_CUSTOM,
-            "actual_branch": FOCUS_BRANCH_F2_CUSTOM,
-            "custom_input": "医保政策",
-        }
+    focus_decisions: List[FocusDecision] = [
+        FocusDecision(
+            planned_branch=FOCUS_BRANCH_F2_CUSTOM,
+            actual_branch=FOCUS_BRANCH_F2_CUSTOM,
+            answer="医保政策",
+            fixed_option_label="",
+            fixed_option_text="",
+            selected_option_label="",
+            selected_option_text="",
+            custom_input="医保政策",
+            question="",
+        )
     ]
 
     checks = build_validation_checks(case, final_data, visit_plan, focus_decisions)

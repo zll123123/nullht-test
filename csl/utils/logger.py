@@ -6,7 +6,7 @@ import sys
 
 from loguru import logger
 
-from config.runtime_paths import LOG_DIR, LOG_FILE
+from config.settings import LOG_DIR, LOG_FILE
 
 
 def setup_logger(level: str) -> None:

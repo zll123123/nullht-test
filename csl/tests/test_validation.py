@@ -1,9 +1,13 @@
 from pathlib import Path
 from config.constants import MATCH_CONTAINS, MATCH_LIST_EXACT
+from models.case_model import FocusDecision
+from models.result_model import CaseExecutionResult, ConversationStep
 from services.case_loader import build_cases
 from services.validation_service import build_check, collapse_text
-from utils.execution_record_writer import build_case_record_lines, build_failed_case_summary_lines, build_summary
+from reporters.json_reporter import filter_cases
+from reporters.markdown_reporter import build_case_record_lines, build_failed_case_summary_lines, build_summary
 from utils.yaml_loader import load_yaml_file
+from validators.assertion_models import ValidationResult
 
 CASE_DATA_FILE = Path(__file__).parent / "data" / "test_case_priority.yaml"
 
@@ -46,9 +50,37 @@ def test_build_check_list_exact_match() -> None:
     assert check.passed is True
 
 
+def test_validation_result_to_dict() -> None:
+    validation = ValidationResult(
+        passed=False,
+        total_checks=2,
+        passed_checks=1,
+        failed_fields=["focus_title"],
+        checks=[],
+    )
+
+    data = validation.to_dict()
+
+    assert data["passed"] is False
+    assert data["total_checks"] == 2
+    assert data["passed_checks"] == 1
+    assert data["failed_fields"] == ["focus_title"]
+
+
 def test_build_cases_prefer_yaml_expected() -> None:
-    _, cases = build_cases(CASE_DATA_FILE)
-    assert cases[0].expected["doctor_type"] == "来自YAML"
+    case_collection = build_cases(CASE_DATA_FILE)
+    assert case_collection.cases[0].expected["doctor_type"] == "来自YAML"
+
+
+def test_build_cases_load_smoke_case_ids() -> None:
+    case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
+    assert case_collection.smoke_case_ids == ["P009", "P012", "P028", "P029"]
+
+
+def test_filter_cases_with_smoke_case_ids() -> None:
+    case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
+    filtered_cases = filter_cases(case_collection.cases, case_id=None, smoke_case_ids=["P009", "P029"])
+    assert [case.case_id for case in filtered_cases] == ["P009", "P029"]
 
 def test_load_yaml_file() -> None:
     data = load_yaml_file(CASE_DATA_FILE)
@@ -57,18 +89,33 @@ def test_load_yaml_file() -> None:
 
 def test_build_case_record_lines() -> None:
     lines = build_case_record_lines(
-        {
-            "case_id": "P001",
-            "scenario": "示例场景",
-            "status": "DONE",
-            "session_id": "session-1",
-            "focus_strategy": "F1",
-            "focus_decisions": [{"actual_branch": "F1"}],
-            "steps": [{"question": "系统提问1", "answer": "测试回答1", "response": {"message": "收到"}}],
-            "visit_plan": {"visit_plan_digest": {"goal": "推进使用"}},
-            "detail_data": {"visit_plan": {"session_id": "session-1"}},
-            "validation": {"passed": True, "passed_checks": 2, "total_checks": 2, "failed_fields": [], "checks": []},
-        }
+        CaseExecutionResult(
+            case_id="P001",
+            scenario="示例场景",
+            expected={},
+            focus_strategy="F1",
+            focus_decisions=[
+                FocusDecision(
+                    planned_branch="F1",
+                    actual_branch="F1",
+                    answer="A",
+                    fixed_option_label="A",
+                    fixed_option_text="",
+                    selected_option_label="A",
+                    selected_option_text="",
+                    custom_input="",
+                    question="",
+                )
+            ],
+            session_id="session-1",
+            steps=[ConversationStep(question="系统提问1", answer="测试回答1", response={"message": "收到"})],
+            final_data={},
+            visit_plan={"visit_plan_digest": {"goal": "推进使用"}},
+            stop_data={},
+            detail_data={"visit_plan": {"session_id": "session-1"}},
+            validation=ValidationResult(passed=True, passed_checks=2, total_checks=2, failed_fields=[], checks=[]),
+            status="DONE",
+        )
     )
     joined = "\n".join(lines)
     assert "系统提问：系统提问1" in joined
@@ -83,29 +130,83 @@ def test_build_case_record_lines() -> None:
 def test_build_summary_with_pending() -> None:
     summary = build_summary(
         [
-            {"status": "PENDING_PLAN", "validation": {}},
-            {"status": "DONE", "validation": {"passed": True}},
-            {"status": "DONE", "validation": {"passed": False}},
-            {"error": "boom"},
+            CaseExecutionResult("P001", "a", {}, "", [], "", [], {}, {}, {}, {}, None, "PENDING_PLAN"),
+            CaseExecutionResult(
+                "P002",
+                "b",
+                {},
+                "",
+                [],
+                "",
+                [],
+                {},
+                {},
+                {},
+                {},
+                ValidationResult(True, 1, 1, [], []),
+                "DONE",
+            ),
+            CaseExecutionResult(
+                "P003",
+                "c",
+                {},
+                "",
+                [],
+                "",
+                [],
+                {},
+                {},
+                {},
+                {},
+                ValidationResult(False, 1, 0, ["x"], []),
+                "DONE",
+            ),
+            CaseExecutionResult("P004", "d", {}, "", [], "", [], {}, {}, {}, {}, None, "DONE", error="boom"),
         ]
     )
 
-    assert summary["pending"] == 1
-    assert summary["passed"] == 1
-    assert summary["failed"] == 1
-    assert summary["errors"] == 1
+    assert summary.pending == 1
+    assert summary.passed == 1
+    assert summary.failed == 1
+    assert summary.errors == 1
 
 
 def test_build_failed_case_summary_lines() -> None:
     lines = build_failed_case_summary_lines(
         [
-            {"case_id": "P001", "result_type": "通过", "validation": {"passed": True}},
-            {
-                "case_id": "P009",
-                "result_type": "断言失败",
-                "failure_reason": "断言失败字段: focus_title, focus_content",
-                "validation": {"passed": False, "failed_fields": ["focus_title", "focus_content"]},
-            },
+            CaseExecutionResult(
+                "P001",
+                "a",
+                {},
+                "",
+                [],
+                "",
+                [],
+                {},
+                {},
+                {},
+                {},
+                ValidationResult(True, 1, 1, [], []),
+                "DONE",
+                result_type="通过",
+            ),
+            CaseExecutionResult(
+                "P009",
+                "b",
+                {},
+                "",
+                [],
+                "",
+                [],
+                {},
+                {},
+                {},
+                {},
+                ValidationResult(False, 2, 0, ["focus_title", "focus_content"], []),
+                "DONE",
+                result_type="断言失败",
+                failure_reason="断言失败字段: focus_title, focus_content",
+            ),
         ]
     )
 
