@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "AI预审 FileId 导出",
+  "version": "0.1.0",
+  "description": "在 AI 预审文件审核列表页导出当前查询结果的 file_id，并支持一键复制。",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://dev-v3-az-mlr.nullht.com/*",
+    "https://dev-api-v3-az-mlr.nullht.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "导出 fileId",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://dev-v3-az-mlr.nullht.com/file-audit-list*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

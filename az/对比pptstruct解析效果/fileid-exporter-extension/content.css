@@ -1,0 +1,134 @@
+.fileid-exporter-entry {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  pointer-events: none;
+  position: fixed;
+  right: 18px;
+  top: 96px;
+  z-index: 2147483000;
+}
+
+.fileid-exporter-entry * {
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.fileid-exporter-panel {
+  background: rgba(255, 253, 254, 0.98);
+  border: 1px solid rgba(143, 0, 85, 0.14);
+  border-radius: 18px;
+  box-shadow: 0 22px 60px rgba(59, 16, 39, 0.16);
+  max-width: 320px;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateX(12px);
+  transition: opacity 140ms ease, transform 140ms ease;
+  visibility: hidden;
+  width: 0;
+}
+
+.fileid-exporter-panel.is-open {
+  opacity: 1;
+  transform: translateX(0);
+  visibility: visible;
+  width: 320px;
+}
+
+.fileid-exporter-panel-inner {
+  padding: 14px;
+}
+
+.fileid-exporter-panel-title {
+  color: #7c004b;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.fileid-exporter-panel-desc {
+  color: #725664;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.fileid-exporter-panel-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.fileid-exporter-panel-button,
+.fileid-exporter-panel-secondary {
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 12px;
+}
+
+.fileid-exporter-panel-button {
+  background: #8d0057;
+  border: 1px solid #8d0057;
+  color: #fff;
+  flex: 1;
+}
+
+.fileid-exporter-panel-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.fileid-exporter-panel-secondary {
+  background: #fff;
+  border: 1px solid #dcc5d3;
+  color: #6f5160;
+}
+
+.fileid-exporter-status {
+  color: #8d0057;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 10px;
+  min-height: 18px;
+}
+
+.fileid-exporter-handle {
+  align-items: center;
+  background: linear-gradient(180deg, #8d0057, #69003d);
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 16px 36px rgba(84, 10, 49, 0.22);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  min-height: 104px;
+  padding: 12px 8px;
+  width: 42px;
+}
+
+.fileid-exporter-handle:hover {
+  filter: brightness(1.03);
+}
+
+.fileid-exporter-handle-text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.15;
+  text-align: center;
+  writing-mode: vertical-rl;
+}
+
+.fileid-exporter-handle-arrow {
+  font-size: 12px;
+  line-height: 1;
+  transition: transform 140ms ease;
+}
+
+.fileid-exporter-handle.is-open .fileid-exporter-handle-arrow {
+  transform: rotate(180deg);
+}

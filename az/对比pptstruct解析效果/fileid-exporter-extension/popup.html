@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>导出 fileId</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header class="popup-header">
+        <h1 class="popup-title">导出 fileId</h1>
+        <p class="popup-desc">在当前文件审核列表页提取查询结果中的 file_id。</p>
+      </header>
+
+      <section class="popup-actions">
+        <button id="exportButton" class="popup-primary" type="button">导出当前页</button>
+        <button id="copyButton" class="popup-secondary" type="button" disabled>一键复制</button>
+      </section>
+
+      <p id="status" class="popup-status"></p>
+
+      <section class="popup-summary" id="summary" hidden>
+        <span id="taskCount" class="popup-chip">任务 0</span>
+        <span id="successCount" class="popup-chip">成功 0</span>
+        <span id="failedCount" class="popup-chip">失败 0</span>
+        <span id="fileCount" class="popup-chip">fileId 0</span>
+      </section>
+
+      <textarea id="result" class="popup-textarea" readonly placeholder="导出结果会显示在这里"></textarea>
+
+      <section id="errors" class="popup-errors" hidden></section>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+  </html>
