@@ -16,7 +16,7 @@
 3. 点击“加载已解压的扩展程序”
 4. 选择当前目录：
 
-`/Users/layla.zhang/workspace/nullht-test/az/对比pptstruct解析效果/fileid-exporter-extension`
+`/Users/layla.zhang/workspace/nullht-test/az/对比pptstruct解析效果/browser-plugin-fileid-exporter`
 
 ## 使用方式
 

@@ -14,24 +14,16 @@ from openpyxl import load_workbook
 DEFAULT_BASE_URL = "https://dev-api-v3-az-mlr.nullht.com"
 DEFAULT_LIST_PATH = "/api/audit/management/list"
 DEFAULT_DETAIL_PATH = "/api/audit/management/detail"
-<<<<<<< HEAD
-DEFAULT_COOKIE = "acw_tc=65859a8117768449866044408ecdfc24e8492e4fba52def90885e51aef2080"
-DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("新ppt解析-测试case-uat.xlsx")
+DEFAULT_COOKIE = "acw_tc=65859a8117782338948823001ecdd84a9033d1b3213a43dd5480b194094817"
+DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("ppt解析测试case.xlsx")
 DEFAULT_LOG_PATH = Path(__file__).resolve().with_name("fill_audit_excel_from_api.log")
-DEFAULT_BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIyZmY5ZjY0ZmYwYmZmY2I0MzhkNmQ0MWViZDA4ZTQ5MyIsImRldmljZVR5cGUiOiJERUYiLCJlZmYiOjE3NzY4NTMwNjY3OTksInJuU3RyIjoiUU5hdDl3OURmS3E1U3pXZkRFTFhjRUYwUzdPZTE3Sk0ifQ.SIvKIDSpWEYfn5goz_9q9tX4mY6Rp_v--Ir9NIU30Iw"
+DEFAULT_BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIyZmY5ZjY0ZmYwYmZmY2I0MzhkNmQ0MWViZDA4ZTQ5MyIsImRldmljZVR5cGUiOiJERUYiLCJlZmYiOjE3NzgzODQyMDc2NDcsInJuU3RyIjoiR09qeVNUc3F3aENrV2thZlUzaEdZUUZTY3A3cDZOeVoifQ.jCqonRBvyIlUmaVIbSv8cShPpHONmL8mfJm6iMWBlCg"
 TIMEOUT_SECONDS = 60
 TASK_ID_HEADER = "任务编号"
 FILE_NAME_HEADER = "文件名称"
 PAGE_NUMBER_HEADER = "报错页码"
 POINT_NAME_HEADER = "报错审核点"
-REASON_HEADER = "审核错误摘要"
-=======
-DEFAULT_COOKIE = "acw_tc=65859a8117767939047432241ece10cbbe6c8df7b6521d2132dd0aba97e07f"
-DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("audit_result.xlsx")
-DEFAULT_LOG_PATH = Path(__file__).resolve().with_name("fill_audit_excel_from_api.log")
-DEFAULT_BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIyZmY5ZjY0ZmYwYmZmY2I0MzhkNmQ0MWViZDA4ZTQ5MyIsImRldmljZVR5cGUiOiJERUYiLCJlZmYiOjE3NzY4NTMwNjY3OTksInJuU3RyIjoiUU5hdDl3OURmS3E1U3pXZkRFTFhjRUYwUzdPZTE3Sk0ifQ.SIvKIDSpWEYfn5goz_9q9tX4mY6Rp_v--Ir9NIU30Iw"
-TIMEOUT_SECONDS = 60
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
+REASON_HEADER = "错误原因摘要"
 
 COMMON_HEADERS = {
     "Accept": "application/json, text/plain, */*",
@@ -51,29 +43,17 @@ COMMON_HEADERS = {
     "sec-ch-ua-platform": '"macOS"',
 }
 
-<<<<<<< HEAD
-RUNTIME_CONFIG: Dict[str, Any] = {
-    "bearer_token": DEFAULT_BEARER_TOKEN,
-    "cookie": DEFAULT_COOKIE,
-    "base_url": DEFAULT_BASE_URL,
-    "sheet_name": None,
-}
-=======
 RUNTIME_CONFIG: Dict[str, Any] = {}
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="根据 Excel 中的任务编号调用审核管理接口，并将接口结果回填到 Excel。")
     parser.add_argument("--sheet-name", help="可选，指定工作表名称；默认使用 active sheet")
-<<<<<<< HEAD
-=======
     parser.add_argument(
         "--keep-existing-rows",
         action="store_true",
         help="默认会删除第 2 行之后的旧数据并重写；传入该参数后将只追加，不删除旧数据",
     )
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
     return parser.parse_args()
 
 
@@ -84,21 +64,27 @@ def configure_logger() -> None:
 
 
 def build_headers(token: str, cookie: str) -> Dict[str, str]:
-<<<<<<< HEAD
-    normalized_token = token.strip()
-    if normalized_token.startswith("Bearer "):
-        normalized_token = normalized_token[len("Bearer "):].strip()
+    authorization = token.strip()
+    if not authorization.lower().startswith("bearer "):
+        authorization = f"Bearer {authorization}"
     return {
         **COMMON_HEADERS,
-        "Authorization": f"Bearer {normalized_token}",
-=======
-    return {
-        **COMMON_HEADERS,
-        "Authorization": f"Bearer {token}",
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
+        "Authorization": authorization,
         "Content-Type": "application/json",
         "Cookie": cookie,
     }
+
+
+def init_runtime_config(sheet_name: Optional[str] = None, keep_existing_rows: bool = False) -> None:
+    RUNTIME_CONFIG.update(
+        {
+            "bearer_token": DEFAULT_BEARER_TOKEN,
+            "cookie": DEFAULT_COOKIE,
+            "base_url": DEFAULT_BASE_URL,
+            "sheet_name": sheet_name,
+            "keep_existing_rows": keep_existing_rows,
+        }
+    )
 
 
 def mask_token(token: str) -> str:
@@ -126,11 +112,10 @@ def post_json(session: requests.Session, url: str, payload: Dict[str, Any], head
     return response.json()
 
 
-<<<<<<< HEAD
 def normalize_header(value: Any) -> str:
     if value is None:
         return ""
-    return str(value).strip().lower()
+    return str(value).strip()
 
 
 def find_required_columns(sheet) -> Dict[str, int]:
@@ -138,7 +123,7 @@ def find_required_columns(sheet) -> Dict[str, int]:
     for column_index in range(1, sheet.max_column + 1):
         header_map[normalize_header(sheet.cell(1, column_index).value)] = column_index
 
-    required = {
+    required_headers = {
         "task_id": TASK_ID_HEADER,
         "file_name": FILE_NAME_HEADER,
         "page_number": PAGE_NUMBER_HEADER,
@@ -146,33 +131,20 @@ def find_required_columns(sheet) -> Dict[str, int]:
         "reason": REASON_HEADER,
     }
     columns: Dict[str, int] = {}
-    for key, header in required.items():
-        column_index = header_map.get(normalize_header(header))
+    for key, header in required_headers.items():
+        column_index = header_map.get(header)
         if not column_index:
             raise AssertionError(f"Excel 缺少表头: {header}")
         columns[key] = column_index
     return columns
 
 
-def load_seed_rows(sheet, task_id_column: int, file_name_column: int) -> List[Tuple[int, str, str]]:
-    rows: List[Tuple[int, str, str]] = []
-    for row_index in range(2, sheet.max_row + 1):
-        task_id = sheet.cell(row_index, task_id_column).value
-        file_name = sheet.cell(row_index, file_name_column).value
-        if not task_id:
-            continue
-        task_id = str(task_id).strip()
-        rows.append((row_index, task_id, "" if file_name is None else str(file_name)))
-    return rows
-
-
-=======
-def load_seed_rows(sheet) -> List[Tuple[str, str]]:
+def load_seed_rows(sheet, column_map: Dict[str, int]) -> List[Tuple[str, str]]:
     rows: List[Tuple[str, str]] = []
     seen: Set[str] = set()
     for row_index in range(2, sheet.max_row + 1):
-        task_id = sheet.cell(row_index, 1).value
-        file_name = sheet.cell(row_index, 2).value
+        task_id = sheet.cell(row_index, column_map["task_id"]).value
+        file_name = sheet.cell(row_index, column_map["file_name"]).value
         if not task_id:
             continue
         task_id = str(task_id).strip()
@@ -188,7 +160,6 @@ def clear_data_rows(sheet) -> None:
         sheet.delete_rows(2, sheet.max_row - 1)
 
 
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
 def fetch_list_row(session: requests.Session, base_url: str, task_id: str, headers: Dict[str, str]) -> Optional[Dict[str, Any]]:
     response = post_json(
         session,
@@ -256,62 +227,27 @@ def expand_findings(task_id: str, file_name: str, detail: Dict[str, Any]) -> Lis
     return rows
 
 
-<<<<<<< HEAD
-def write_finding_to_row(sheet, row_index: int, column_map: Dict[str, int], finding: Dict[str, Any]) -> None:
-    sheet.cell(row_index, column_map["task_id"]).value = finding["task_id"]
-    sheet.cell(row_index, column_map["file_name"]).value = finding["file_name"]
-    sheet.cell(row_index, column_map["page_number"]).value = finding["page_number"]
-    sheet.cell(row_index, column_map["point_name"]).value = finding["point_name"]
-    sheet.cell(row_index, column_map["reason"]).value = finding["reason"]
-
-
-def write_findings_for_task(sheet, row_index: int, column_map: Dict[str, int], findings: List[Dict[str, Any]]) -> int:
-    if not findings:
-        findings = [
-            {
-                "page_number": "无",
-                "point_name": "无",
-                "reason": "未返回错误明细",
-            }
-        ]
-
-    write_finding_to_row(sheet, row_index, column_map, findings[0])
-
-    inserted_rows = 0
-    for finding in findings[1:]:
-        insert_at = row_index + inserted_rows + 1
-        sheet.insert_rows(insert_at)
-        write_finding_to_row(sheet, insert_at, column_map, finding)
-        inserted_rows += 1
-    return len(findings)
-
-
-def test_fill_audit_excel_from_api() -> None:
-=======
-def write_rows(sheet, rows: List[Dict[str, Any]], keep_existing_rows: bool) -> None:
+def write_rows(sheet, rows: List[Dict[str, Any]], column_map: Dict[str, int], keep_existing_rows: bool) -> None:
     start_row = sheet.max_row + 1 if keep_existing_rows and sheet.max_row >= 2 else 2
     for index, row in enumerate(rows, start=start_row):
-        sheet.cell(index, 1).value = row["task_id"]
-        sheet.cell(index, 2).value = row["file_name"]
-        sheet.cell(index, 3).value = row["page_number"]
-        sheet.cell(index, 4).value = row["point_name"]
-        sheet.cell(index, 5).value = row["reason"]
+        sheet.cell(index, column_map["task_id"]).value = row["task_id"]
+        sheet.cell(index, column_map["file_name"]).value = row["file_name"]
+        sheet.cell(index, column_map["page_number"]).value = row["page_number"]
+        sheet.cell(index, column_map["point_name"]).value = row["point_name"]
+        sheet.cell(index, column_map["reason"]).value = row["reason"]
 
 
 def test_fill_audit_excel_from_api() -> None:
-    assert RUNTIME_CONFIG, "未初始化运行参数，请使用 python 脚本方式启动。"
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
+    if not RUNTIME_CONFIG:
+        configure_logger()
+        init_runtime_config()
     assert DEFAULT_BEARER_TOKEN.strip(), "请先在代码常量 DEFAULT_BEARER_TOKEN 中配置 token。"
 
     excel_path = DEFAULT_EXCEL_PATH.expanduser().resolve()
     workbook = load_workbook(excel_path)
     sheet = workbook[RUNTIME_CONFIG["sheet_name"]] if RUNTIME_CONFIG["sheet_name"] else workbook.active
-<<<<<<< HEAD
     column_map = find_required_columns(sheet)
-    seed_rows = load_seed_rows(sheet, column_map["task_id"], column_map["file_name"])
-=======
-    seed_rows = load_seed_rows(sheet)
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
+    seed_rows = load_seed_rows(sheet, column_map)
     headers = build_headers(RUNTIME_CONFIG["bearer_token"], RUNTIME_CONFIG["cookie"])
     session = requests.Session()
 
@@ -319,15 +255,6 @@ def test_fill_audit_excel_from_api() -> None:
     logger.info(f"日志路径: {DEFAULT_LOG_PATH}")
     logger.info(f"待处理任务数: {len(seed_rows)}")
 
-<<<<<<< HEAD
-    updated_rows = 0
-    row_results: List[Tuple[int, List[Dict[str, Any]]]] = []
-    for row_index, task_id, file_name in seed_rows:
-        try:
-            list_row = fetch_list_row(session, RUNTIME_CONFIG["base_url"], task_id, headers)
-            if not list_row:
-                findings = [
-=======
     if not RUNTIME_CONFIG["keep_existing_rows"]:
         clear_data_rows(sheet)
 
@@ -337,7 +264,6 @@ def test_fill_audit_excel_from_api() -> None:
             list_row = fetch_list_row(session, RUNTIME_CONFIG["base_url"], task_id, headers)
             if not list_row:
                 output_rows.append(
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
                     {
                         "task_id": task_id,
                         "file_name": file_name,
@@ -345,21 +271,12 @@ def test_fill_audit_excel_from_api() -> None:
                         "point_name": "未查询到审核记录",
                         "reason": "未查询到审核记录",
                     }
-<<<<<<< HEAD
-                ]
-            else:
-                detail = fetch_detail(session, RUNTIME_CONFIG["base_url"], list_row["id"], headers)
-                findings = expand_findings(task_id, file_name, detail)
-        except Exception as exc:
-            findings = [
-=======
                 )
                 continue
             detail = fetch_detail(session, RUNTIME_CONFIG["base_url"], list_row["id"], headers)
             output_rows.extend(expand_findings(task_id, file_name, detail))
         except Exception as exc:
             output_rows.append(
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
                 {
                     "task_id": task_id,
                     "file_name": file_name,
@@ -367,45 +284,20 @@ def test_fill_audit_excel_from_api() -> None:
                     "point_name": f"处理失败: {exc}",
                     "reason": f"处理失败: {exc}",
                 }
-<<<<<<< HEAD
-            ]
-        row_results.append((row_index, findings))
-
-    for row_index, findings in reversed(row_results):
-        updated_rows += write_findings_for_task(sheet, row_index, column_map, findings)
-
-    workbook.save(excel_path)
-
-    logger.info(f"Excel 已更新: {excel_path}")
-    logger.info(f"写入记录数: {updated_rows}")
-=======
             )
 
     output_rows.sort(key=lambda item: (item["task_id"], str(item["page_number"]), item["point_name"]))
-    write_rows(sheet, output_rows, RUNTIME_CONFIG["keep_existing_rows"])
+    write_rows(sheet, output_rows, column_map, RUNTIME_CONFIG["keep_existing_rows"])
     workbook.save(excel_path)
 
     logger.info(f"Excel 已更新: {excel_path}")
     logger.info(f"写入记录数: {len(output_rows)}")
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
 
 
 def main() -> int:
     args = parse_args()
     configure_logger()
-<<<<<<< HEAD
-    RUNTIME_CONFIG["sheet_name"] = args.sheet_name
-=======
-    RUNTIME_CONFIG.update(
-        {
-            "bearer_token": DEFAULT_BEARER_TOKEN,
-            "cookie": DEFAULT_COOKIE,
-            "base_url": DEFAULT_BASE_URL,
-            "sheet_name": args.sheet_name,
-            "keep_existing_rows": args.keep_existing_rows,
-        }
-    )
->>>>>>> 81cd2cebdc210178499d453638cca3cf255aaddc
+    init_runtime_config(args.sheet_name, args.keep_existing_rows)
     return pytest.main(["-s", __file__])
 
 
