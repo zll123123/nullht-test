@@ -49,6 +49,12 @@ TMP_CROP_DIR = Path(
         "/Users/layla.zhang/workspace/nullht-test/az/产品图片/tmp",
     )
 )
+TMP_PADDING_CROP_DIR = Path(
+    os.getenv(
+        "PRODUCT_IMAGE_TMP_PADDING_DIR",
+        "/Users/layla.zhang/workspace/nullht-test/az/产品图片/tmp_padding",
+    )
+)
 LLM_SCORE_THRESHOLD = 80
 SUPPORTED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tif", ".tiff", ".gif"}
 _reference_image_cache: dict[str, list[str]] = {}
@@ -61,6 +67,8 @@ COMPRESS_ATTEMPTS = 6
 INITIAL_RESIZE_SCALE = 0.95
 COMPRESS_STEP = 0.08
 MAX_IMAGE_EDGE = 2048
+MIN_PADDING_SIDE = 150
+OVERLAP_THRESHOLD = 0.9
 
 
 def parse_args() -> argparse.Namespace:
@@ -69,17 +77,13 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--mode",
-        default="generate",
+        default="all",
         choices=[
-            "generate",
-            "audit",
-            "rerun",
-            "rerun-rate-limit",
-            "rerun-large-image",
-            "rerun-from-raw",
-            "rerun-retryable",
+            "all",
+            "llm",
+            "llm-abnormal",
         ],
-        help="generate: 生成新统计表；audit: 重算审计；rerun: 重跑 YOLO+LLM 并覆盖现有 Excel 结果列；rerun-rate-limit: 串行重跑限流页；rerun-large-image: 串行重跑图片过大页；rerun-from-raw: 基于现有raw_result重跑裁剪和LLM；rerun-retryable: 串行重跑限流页和图片过大页",
+        help="all: 全部重新执行 YOLO+LLM；llm: 基于现有 raw_result 全量重跑 LLM；llm-abnormal: 仅重跑 LLM 返回异常的页",
     )
     parser.add_argument(
         "--input-dir",
@@ -89,11 +93,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--input-excel",
         default=str(DEFAULT_RESULT_EXCEL),
-        help="audit 模式下输入的已完善 Excel 路径",
+        help="结果 Excel 路径，llm 和 llm-abnormal 模式会基于该文件中的 raw_result 重跑",
     )
     parser.add_argument(
         "--output",
-        help="输出路径。generate 和 audit 模式默认值不同",
+        help="输出 Excel 路径，默认回写到 input-excel 指定文件",
     )
     parser.add_argument(
         "--api-url",
@@ -140,9 +144,7 @@ def parse_args() -> argparse.Namespace:
 def get_output_path(args: argparse.Namespace) -> Path:
     if args.output:
         return Path(args.output).expanduser()
-    if args.mode in {"audit", "rerun", "generate"}:
-        return Path(args.input_excel).expanduser()
-    return DEFAULT_RESULT_EXCEL
+    return Path(args.input_excel).expanduser()
 
 
 def extract_page_no(image_path: Path) -> int:
@@ -339,6 +341,80 @@ def load_large_image_pages(input_excel: Path) -> list[tuple[str, int]]:
     return pages
 
 
+def is_llm_result_normal(llm_result: str) -> bool:
+    """判断 llm_result 字段是否为正常返回。"""
+    if not llm_result.strip():
+        return False
+    try:
+        parsed = json.loads(llm_result)
+    except json.JSONDecodeError:
+        return False
+    if not isinstance(parsed, list):
+        return False
+    return all(isinstance(item, str) and item.strip() for item in parsed)
+
+
+def load_llm_abnormal_pages(input_excel: Path) -> list[tuple[str, int]]:
+    """读取 Excel 中仅需重跑 LLM 的异常页。"""
+    workbook = load_workbook(input_excel, read_only=True)
+    if "明细" not in workbook.sheetnames:
+        return []
+    detail_sheet = workbook["明细"]
+    rows = detail_sheet.iter_rows(values_only=True)
+    headers = next(rows, None)
+    if not headers:
+        return []
+    header_map = {str(header): index for index, header in enumerate(headers) if header is not None}
+    required_headers = ["folder_name", "page_no", "raw_result"]
+    if any(header not in header_map for header in required_headers):
+        return []
+
+    abnormal_patterns = (
+        "缺少 choices",
+        "message.content",
+        "throttling_error",
+        "ratelimiterror",
+        "you exceeded your current quota",
+        "\"code\": \"429\"",
+        "\"code\":\"429\"",
+        "'code': '429'",
+        "limit_requests",
+        "file size is too large",
+        "image too large",
+        "payload too large",
+        "connection refused",
+        "read timed out",
+        "remote disconnected",
+    )
+    pages: list[tuple[str, int]] = []
+    seen: set[tuple[str, int]] = set()
+    for row in rows:
+        folder_name = row[header_map["folder_name"]]
+        page_no = normalize_count(row[header_map["page_no"]])
+        raw_result = row[header_map["raw_result"]]
+        if folder_name in (None, "") or page_no is None or raw_result in (None, ""):
+            continue
+
+        status = ""
+        error_message = ""
+        llm_result = ""
+        if "status" in header_map and row[header_map["status"]] not in (None, ""):
+            status = str(row[header_map["status"]]).lower()
+        if "error_message" in header_map and row[header_map["error_message"]] not in (None, ""):
+            error_message = str(row[header_map["error_message"]])
+        if "llm_result" in header_map and row[header_map["llm_result"]] not in (None, ""):
+            llm_result = str(row[header_map["llm_result"]])
+
+        key = (str(folder_name), page_no)
+        combined_text = "\n".join([status, error_message, llm_result]).lower()
+        has_abnormal_pattern = any(pattern.lower() in combined_text for pattern in abnormal_patterns)
+        if status == "failed" or has_abnormal_pattern or not is_llm_result_normal(llm_result):
+            if key not in seen:
+                seen.add(key)
+                pages.append(key)
+    return pages
+
+
 def iter_task_folders(root_dir: Path) -> list[Path]:
     if not root_dir.is_dir():
         raise FileNotFoundError(f"输入目录不存在：{root_dir}")
@@ -367,12 +443,12 @@ def iter_images(folder_path: Path) -> list[Path]:
 def find_page_image(input_dir: Path, folder_name: str, page_no: int) -> Path | None:
     """按文件夹名和页码定位原始页图。
 
-    Args:
+    参数:
         input_dir: 测试材料根目录。
         folder_name: 任务文件夹名。
         page_no: 页码。
 
-    Returns:
+    返回:
         命中的图片路径，未找到则返回 None。
     """
     folder_path = input_dir / folder_name
@@ -491,11 +567,11 @@ def get_padded_box(
 ) -> tuple[int, int, int, int] | None:
     """按 Java 逻辑计算带 padding 的裁剪框。
 
-    Args:
+    参数:
         image: 原图对象。
         pos: 检测框坐标 [x1, y1, x2, y2]。
 
-    Returns:
+    返回:
         扩框后的坐标，非法时返回 None。
     """
     if len(pos) < 4:
@@ -509,7 +585,9 @@ def get_padded_box(
     if width <= 0 or height <= 0:
         return None
 
-    pad = max(width, height) // 2
+    pad_width = max(width, (MIN_PADDING_SIDE - width) // 2)
+    pad_height = max(height, (MIN_PADDING_SIDE - height) // 2)
+    pad = max(pad_width, pad_height)
     x1 = max(0, x1 - pad)
     y1 = max(0, y1 - pad)
     x2 = min(image.width, x2 + pad)
@@ -543,10 +621,10 @@ def crop_region(image_path: Path, pos: list[Any]) -> str | None:
 def detect_image_format(image_bytes: bytes) -> str:
     """识别图片格式。
 
-    Args:
+    参数:
         image_bytes: 图片二进制内容。
 
-    Returns:
+    返回:
         图片格式名。
     """
     if len(image_bytes) >= 12:
@@ -570,11 +648,11 @@ def detect_image_format(image_bytes: bytes) -> str:
 def normalize_image_mode_for_format(image: Image.Image, image_format: str) -> Image.Image:
     """按目标格式规范化图片模式。
 
-    Args:
+    参数:
         image: Pillow 图片对象。
         image_format: 目标格式。
 
-    Returns:
+    返回:
         可用于保存的图片对象。
     """
     if image_format.lower() == "jpeg" and image.mode not in {"RGB", "L"}:
@@ -608,12 +686,12 @@ def limit_image_edge(image: Image.Image, max_edge: int = MAX_IMAGE_EDGE) -> Imag
 def save_image_bytes(image: Image.Image, image_format: str, quality: int) -> bytes:
     """将图片压缩为指定格式字节。
 
-    Args:
+    参数:
         image: Pillow 图片对象。
         image_format: 输出格式。
         quality: 压缩质量，0-100。
 
-    Returns:
+    返回:
         压缩后的二进制内容。
     """
     buffer = io.BytesIO()
@@ -641,11 +719,11 @@ def save_image_bytes(image: Image.Image, image_format: str, quality: int) -> byt
 def compress_image_bytes(image_bytes: bytes, max_base64_size: int = LLM_MAX_IMAGE_BYTES) -> tuple[bytes, str]:
     """压缩图片字节，尽量对齐 Java 的多轮压缩逻辑。
 
-    Args:
+    参数:
         image_bytes: 原始图片二进制内容。
         max_base64_size: 压缩后允许的最大 base64 长度。
 
-    Returns:
+    返回:
         压缩后的图片字节和格式。
     """
     encoded_length = len(base64.b64encode(image_bytes))
@@ -679,21 +757,50 @@ def compress_image_bytes(image_bytes: bytes, max_base64_size: int = LLM_MAX_IMAG
     return best_bytes, image_format
 
 
-def crop_region_bytes(image_path: Path, pos: list[Any]) -> tuple[bytes, str] | None:
+def get_exact_box(
+    image: Image.Image,
+    pos: list[Any],
+) -> tuple[int, int, int, int] | None:
+    """计算原始检测框坐标，不扩展 padding。
+
+    参数:
+        image: 原图对象。
+        pos: 检测框坐标 `[x1, y1, x2, y2]`。
+
+    返回:
+        原始检测框坐标；非法时返回 None。
+    """
+    if len(pos) < 4:
+        return None
+    x1 = max(0, int(float(pos[0])))
+    y1 = max(0, int(float(pos[1])))
+    x2 = min(image.width, int(float(pos[2])))
+    y2 = min(image.height, int(float(pos[3])))
+    if x2 <= x1 or y2 <= y1:
+        return None
+    return x1, y1, x2, y2
+
+
+def crop_region_bytes(
+    image_path: Path,
+    pos: list[Any],
+    use_padding: bool,
+) -> tuple[bytes, str] | None:
     """裁剪检测区域并返回图片字节。
 
-    Args:
+    参数:
         image_path: 原图路径。
         pos: 检测框坐标。
+        use_padding: 是否按扩展框裁剪。
 
-    Returns:
+    返回:
         图片字节和 mime type，失败时返回 None。
     """
     with Image.open(image_path) as image:
-        padded_box = get_padded_box(image, pos)
-        if padded_box is None:
+        crop_box = get_padded_box(image, pos) if use_padding else get_exact_box(image, pos)
+        if crop_box is None:
             return None
-        x1, y1, x2, y2 = padded_box
+        x1, y1, x2, y2 = crop_box
         cropped = image.crop((x1, y1, x2, y2))
         buffer = io.BytesIO()
         cropped.save(buffer, format="PNG")
@@ -705,25 +812,27 @@ def save_cropped_region(
     detection: dict[str, Any],
     detection_index: int,
     output_dir: Path,
+    use_padding: bool,
 ) -> str | None:
     """保存裁剪后的检测区域图片。
 
-    Args:
+    参数:
         image_path: 原始图片路径。
         detection: 单个检测结果。
         detection_index: 当前页内同次处理的检测序号，从 1 开始。
         output_dir: 裁剪图根目录。
+        use_padding: 是否按扩展框裁剪。
 
-    Returns:
+    返回:
         保存后的图片路径字符串，失败时返回 None。
     """
     pos = detection.get("pos", [])
     cls = str(detection.get("cls", "")).strip() or "unknown"
     with Image.open(image_path) as image:
-        padded_box = get_padded_box(image, pos)
-        if padded_box is None:
+        crop_box = get_padded_box(image, pos) if use_padding else get_exact_box(image, pos)
+        if crop_box is None:
             return None
-        x1, y1, x2, y2 = padded_box
+        x1, y1, x2, y2 = crop_box
         cropped = image.crop((x1, y1, x2, y2))
         cls_dir = output_dir / cls
         cls_dir.mkdir(parents=True, exist_ok=True)
@@ -740,6 +849,7 @@ def verify_detections_with_multimodal(
     llm_model: str,
     llm_score_threshold: int,
     crop_output_dir: Path,
+    padding_crop_output_dir: Path,
 ) -> list[dict[str, Any]]:
     """用多模态模型二次过滤 YOLO 检测结果。
 
@@ -749,7 +859,8 @@ def verify_detections_with_multimodal(
         reference_dir: 参考图片根目录。
         llm_model: 多模态模型名称。
         llm_score_threshold: 允许通过的最低相似度分数。
-        crop_output_dir: 裁剪图输出目录。
+        crop_output_dir: 原始裁剪图输出目录。
+        padding_crop_output_dir: 扩展裁剪图输出目录。
 
     返回:
         通过多模态校验后的检测结果列表。
@@ -761,17 +872,45 @@ def verify_detections_with_multimodal(
             detection=detection,
             detection_index=index,
             output_dir=crop_output_dir,
+            use_padding=False,
+        )
+        padding_crop_path = save_cropped_region(
+            image_path=image_path,
+            detection=detection,
+            detection_index=index,
+            output_dir=padding_crop_output_dir,
+            use_padding=True,
         )
         if crop_path:
             detection["crop_path"] = crop_path
-        crop_payload = crop_region_bytes(image_path, detection.get("pos", []))
-        if not crop_payload:
+        if padding_crop_path:
+            detection["padding_crop_path"] = padding_crop_path
+        crop_payload = crop_region_bytes(image_path, detection.get("pos", []), use_padding=False)
+        padding_crop_payload = crop_region_bytes(
+            image_path,
+            detection.get("pos", []),
+            use_padding=True,
+        )
+        if not crop_payload or not padding_crop_payload:
             verified_detections.append(detection)
             continue
         crop_bytes, crop_mime_type = crop_payload
+        padding_crop_bytes, padding_crop_mime_type = padding_crop_payload
         compressed_bytes, compressed_format = compress_image_bytes(crop_bytes)
         compressed_mime_type = "image/jpeg" if compressed_format == "jpeg" else f"image/{compressed_format}"
+        padding_compressed_bytes, padding_compressed_format = compress_image_bytes(
+            padding_crop_bytes
+        )
+        padding_compressed_mime_type = (
+            "image/jpeg"
+            if padding_compressed_format == "jpeg"
+            else f"image/{padding_compressed_format}"
+        )
         cropped_image = image_bytes_to_data_url(compressed_bytes, compressed_mime_type)
+        padded_image = image_bytes_to_data_url(
+            padding_compressed_bytes,
+            padding_compressed_mime_type,
+        )
         cls = str(detection.get("cls", "")).strip()
         reference_images = load_reference_images(reference_dir, cls)
         reference_image_paths = load_reference_image_paths(reference_dir, cls)
@@ -779,7 +918,12 @@ def verify_detections_with_multimodal(
         if not reference_images:
             verified_detections.append(detection)
             continue
-        llm_result = call_multimodal_llm(cropped_image, reference_images, llm_model)
+        llm_result = call_multimodal_llm(
+            cropped_image,
+            padded_image,
+            reference_images,
+            llm_model,
+        )
         detection["llm_result"] = llm_result
         detection["llm_score"] = extract_score(llm_result)
         if detection["llm_score"] is not None and detection["llm_score"] >= llm_score_threshold:
@@ -797,6 +941,68 @@ def filter_confident_detections(detections: list[dict[str, Any]]) -> list[dict[s
     ]
 
 
+def calculate_area(pos: list[Any]) -> float:
+    """计算检测框面积。"""
+    if len(pos) < 4:
+        return 0.0
+    width = max(0.0, float(pos[2]) - float(pos[0]))
+    height = max(0.0, float(pos[3]) - float(pos[1]))
+    return width * height
+
+
+def calculate_overlap_percent_max(pos_a: list[Any], pos_b: list[Any]) -> float:
+    """计算两个检测框相对较小框的最大重叠比例。"""
+    if len(pos_a) < 4 or len(pos_b) < 4:
+        return 0.0
+    left = max(float(pos_a[0]), float(pos_b[0]))
+    top = max(float(pos_a[1]), float(pos_b[1]))
+    right = min(float(pos_a[2]), float(pos_b[2]))
+    bottom = min(float(pos_a[3]), float(pos_b[3]))
+    if right <= left or bottom <= top:
+        return 0.0
+    intersection_area = (right - left) * (bottom - top)
+    area_a = calculate_area(pos_a)
+    area_b = calculate_area(pos_b)
+    min_area = min(area_a, area_b)
+    if min_area <= 0:
+        return 0.0
+    return intersection_area / min_area
+
+
+def deduplicate_detections(detections: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """对同类高重叠检测框去重，保留面积更大的框。"""
+    if len(detections) < 2:
+        return detections
+
+    deduplicated: list[dict[str, Any]] = []
+    for detection in detections:
+        target = detection
+        replaced_index: int | None = None
+        should_skip = False
+        for index, existing in enumerate(deduplicated):
+            if str(existing.get("cls", "")).strip() != str(detection.get("cls", "")).strip():
+                continue
+            overlap = calculate_overlap_percent_max(
+                existing.get("pos", []),
+                detection.get("pos", []),
+            )
+            if overlap <= OVERLAP_THRESHOLD:
+                continue
+            if calculate_area(detection.get("pos", [])) > calculate_area(existing.get("pos", [])):
+                replaced_index = index
+            else:
+                target = existing
+                should_skip = True
+            break
+        if replaced_index is not None:
+            deduplicated[replaced_index] = target
+            continue
+        if should_skip:
+            continue
+        deduplicated.append(target)
+    return deduplicated
+
+
 def build_detail_row(
     folder_path: Path,
     image_path: Path,
@@ -805,11 +1011,12 @@ def build_detail_row(
     llm_model: str,
     llm_score_threshold: int,
     crop_output_dir: Path,
+    padding_crop_output_dir: Path,
 ) -> dict:
     folder_name = folder_path.name
     detailed_id, task_id = split_folder_name(folder_name)
     detections = api_result.get("detections", [])
-    confident_detections = filter_confident_detections(detections)
+    confident_detections = deduplicate_detections(filter_confident_detections(detections))
     verified_detections = verify_detections_with_multimodal(
         detections=confident_detections,
         image_path=image_path,
@@ -817,6 +1024,7 @@ def build_detail_row(
         llm_model=llm_model,
         llm_score_threshold=llm_score_threshold,
         crop_output_dir=crop_output_dir,
+        padding_crop_output_dir=padding_crop_output_dir,
     )
     final_number = len(verified_detections)
     return {
@@ -837,6 +1045,10 @@ def build_detail_row(
         ),
         "llm_crop_image_path": json.dumps(
             [item.get("crop_path", "") for item in confident_detections],
+            ensure_ascii=False,
+        ),
+        "llm_padding_crop_image_path": json.dumps(
+            [item.get("padding_crop_path", "") for item in confident_detections],
             ensure_ascii=False,
         ),
         "llm_logo_compare_image_path": json.dumps(
@@ -863,6 +1075,7 @@ def build_error_row(folder_path: Path, image_path: Path, error_message: str) -> 
         "threshold_positions(may>=0.7)": "",
         "llm_result": "",
         "llm_crop_image_path": "",
+        "llm_padding_crop_image_path": "",
         "llm_logo_compare_image_path": "",
         "status": "failed",
         "error_message": error_message,
@@ -880,6 +1093,7 @@ def process_image(
     llm_model: str,
     llm_score_threshold: int,
     crop_output_dir: Path,
+    padding_crop_output_dir: Path,
 ) -> dict:
     try:
         api_result = call_api(
@@ -896,6 +1110,7 @@ def process_image(
             llm_model=llm_model,
             llm_score_threshold=llm_score_threshold,
             crop_output_dir=crop_output_dir,
+            padding_crop_output_dir=padding_crop_output_dir,
         )
     except Exception as exc:  # noqa: BLE001
         return build_error_row(folder_path, image_path, str(exc))
@@ -909,10 +1124,11 @@ def process_image_from_raw_result(
     llm_model: str,
     llm_score_threshold: int,
     crop_output_dir: Path,
+    padding_crop_output_dir: Path,
 ) -> dict[str, Any]:
     """基于已有 raw_result 重跑裁剪、LLM 和统计。
 
-    Args:
+    参数:
         folder_path: 图片所在任务目录。
         image_path: 原始页图路径。
         raw_result: Excel 中保存的 raw_result 字段。
@@ -920,8 +1136,9 @@ def process_image_from_raw_result(
         llm_model: 多模态模型名。
         llm_score_threshold: LLM 判定阈值。
         crop_output_dir: 裁剪图输出目录。
+        padding_crop_output_dir: 扩展裁剪图输出目录。
 
-    Returns:
+    返回:
         新生成的明细行。
     """
     try:
@@ -936,6 +1153,7 @@ def process_image_from_raw_result(
             llm_model=llm_model,
             llm_score_threshold=llm_score_threshold,
             crop_output_dir=crop_output_dir,
+            padding_crop_output_dir=padding_crop_output_dir,
         )
     except Exception as exc:  # noqa: BLE001
         return build_error_row(folder_path, image_path, str(exc))
@@ -970,6 +1188,7 @@ def update_excel_rows(input_excel: Path, detail_rows: list[dict[str, Any]]) -> i
             "threshold_positions(may>=0.7)",
             "llm_result",
             "llm_crop_image_path",
+            "llm_padding_crop_image_path",
             "llm_logo_compare_image_path",
             "status",
             "error_message",
@@ -1026,6 +1245,7 @@ def write_excel(detail_rows: list[dict], summary_rows: list[dict], output_path: 
         "threshold_positions(may>=0.7)",
         "llm_result",
         "llm_crop_image_path",
+        "llm_padding_crop_image_path",
         "llm_logo_compare_image_path",
         "status",
         "error_message",
@@ -1095,10 +1315,10 @@ def calculate_page_metrics(expect_number: int, position_count: int) -> tuple[int
 def parse_json_list(value: Any) -> list[Any]:
     """将单元格中的 JSON 数组解析为列表。
 
-    Args:
+    参数:
         value: Excel 单元格中的值。
 
-    Returns:
+    返回:
         解析后的列表，失败时返回空列表。
     """
     if value in (None, ""):
@@ -1119,12 +1339,12 @@ def classify_missing_reason(
 ) -> str:
     """细分漏报来源。
 
-    Args:
+    参数:
         raw_payload: raw_result 解析结果。
         threshold_positions: may>=0.7 筛选后的检测框。
         final_number: 最终计数。
 
-    Returns:
+    返回:
         漏报原因分类。
     """
     raw_detections = raw_payload.get("detections", [])
@@ -1145,7 +1365,7 @@ def build_failure_breakdown_sheet(
 ) -> None:
     """生成失败原因细分 sheet。
 
-    Args:
+    参数:
         workbook: Excel 工作簿。
         mismatch_rows: 审计不一致明细。
         detail_header_map: 明细 sheet 表头映射。
@@ -1471,25 +1691,7 @@ def main() -> int:
     args = parse_args()
     output_path = get_output_path(args)
 
-    if args.mode == "audit":
-        input_excel = Path(args.input_excel).expanduser()
-        try:
-            file_count, failed_page_count, mismatch_count = audit_position_counts(
-                input_excel=input_excel,
-                output_path=output_path,
-            )
-        except Exception as exc:  # noqa: BLE001
-            print(f"audit 失败：{exc}", file=sys.stderr)
-            return 1
-
-        print(f"审计结果已写入：{output_path.resolve()}")
-        print(
-            f"完成：不一致文件数={file_count}，失败页数={failed_page_count}，"
-            f"不一致记录数={mismatch_count}"
-        )
-        return 0
-
-    if args.mode == "rerun-from-raw":
+    if args.mode in {"llm", "llm-abnormal"}:
         output_path = Path(args.input_excel).expanduser()
         expect_map = load_expect_number_map(output_path)
         workbook = load_workbook(output_path, read_only=True)
@@ -1511,6 +1713,7 @@ def main() -> int:
 
         input_dir = Path(args.input_dir).expanduser()
         reference_dir = Path(args.reference_dir).expanduser()
+        abnormal_pages = set(load_llm_abnormal_pages(output_path)) if args.mode == "llm-abnormal" else set()
         detail_rows: list[dict[str, Any]] = []
         processed = 0
         skipped = 0
@@ -1527,7 +1730,10 @@ def main() -> int:
             if image_path is None:
                 skipped += 1
                 continue
-            if raw_result in (None, "") and status == "failed":
+            if raw_result in (None, ""):
+                skipped += 1
+                continue
+            if args.mode == "llm-abnormal" and (str(folder_name), page_no) not in abnormal_pages:
                 skipped += 1
                 continue
             rerun_row = process_image_from_raw_result(
@@ -1538,11 +1744,12 @@ def main() -> int:
                 llm_model=args.llm_model,
                 llm_score_threshold=args.llm_score_threshold,
                 crop_output_dir=TMP_CROP_DIR,
+                padding_crop_output_dir=TMP_PADDING_CROP_DIR,
             )
             detail_rows.append(rerun_row)
             processed += 1
             print(
-                f"rerun-from-raw | {folder_name} | page {page_no} | "
+                f"{args.mode} | {folder_name} | page {page_no} | "
                 f"status={rerun_row['status']} | final_number={rerun_row['final_number']}"
             )
 
@@ -1553,66 +1760,12 @@ def main() -> int:
             output_path=output_path,
         )
         print(
-            f"raw_result重跑完成：处理页数={processed}，跳过页数={skipped}，更新页数={updated}，"
+            f"{args.mode} 执行完成：处理页数={processed}，跳过页数={skipped}，更新页数={updated}，"
             f"不一致文件数={file_count}，失败页数={failed_page_count}，不一致记录数={mismatch_count}"
         )
         return 0
 
-    if args.mode in {"rerun-rate-limit", "rerun-large-image", "rerun-retryable"}:
-        output_path = Path(args.input_excel).expanduser()
-        expect_map = load_expect_number_map(output_path)
-        if args.mode == "rerun-rate-limit":
-            pages = load_rate_limited_pages(output_path)
-            mode_label = "限流页"
-        elif args.mode == "rerun-large-image":
-            pages = load_large_image_pages(output_path)
-            mode_label = "图片过大页"
-        else:
-            pages = load_retryable_pages(output_path)
-            mode_label = "限流页和图片过大页"
-        if not pages:
-            print(f"未发现需要重跑的{mode_label}。")
-            return 0
-        input_dir = Path(args.input_dir).expanduser()
-        reference_dir = Path(args.reference_dir).expanduser()
-        detail_rows: list[dict[str, Any]] = []
-        for folder_name, page_no in pages:
-            image_path = find_page_image(input_dir, folder_name, page_no)
-            if image_path is None:
-                continue
-            row = process_image(
-                folder_path=image_path.parent,
-                image_path=image_path,
-                api_url=args.api_url,
-                model_type=args.model_type,
-                timeout=args.timeout,
-                reference_dir=reference_dir,
-                llm_model=args.llm_model,
-                llm_score_threshold=args.llm_score_threshold,
-                crop_output_dir=TMP_CROP_DIR,
-            )
-            detail_rows.append(row)
-            print(
-                f"{args.mode} | {folder_name} | page {page_no} | "
-                f"status={row['status']} | final_number={row['final_number']}"
-            )
-        apply_expect_numbers(detail_rows, expect_map)
-        updated = update_excel_rows(output_path, detail_rows)
-        file_count, failed_page_count, mismatch_count = audit_position_counts(
-            input_excel=output_path,
-            output_path=output_path,
-        )
-        print(
-            f"{mode_label}重跑完成：更新页数={updated}，"
-            f"不一致文件数={file_count}，失败页数={failed_page_count}，不一致记录数={mismatch_count}"
-        )
-        return 0
-
-    if args.mode in {"rerun", "generate"}:
-        output_path = Path(args.input_excel).expanduser()
-        expect_map = load_expect_number_map(output_path)
-    else:
-        expect_map = {}
+    expect_map = load_expect_number_map(output_path)
 
     input_dir = Path(args.input_dir).expanduser()
     reference_dir = Path(args.reference_dir).expanduser()
@@ -1660,6 +1813,7 @@ def main() -> int:
                 args.llm_model,
                 args.llm_score_threshold,
                 TMP_CROP_DIR,
+                TMP_PADDING_CROP_DIR,
             ): (folder_path, image_path)
             for folder_path, image_path in tasks
         }
@@ -1709,15 +1863,14 @@ def main() -> int:
         f"成功页数={sum(row['success_page_count'] for row in summary_rows)}，"
         f"失败页数={sum(row['failed_page_count'] for row in summary_rows)}"
     )
-    if args.mode == "rerun":
-        file_count, failed_page_count, mismatch_count = audit_position_counts(
-            input_excel=output_path,
-            output_path=output_path,
-        )
-        print(
-            f"审计重算完成：不一致文件数={file_count}，"
-            f"失败页数={failed_page_count}，不一致记录数={mismatch_count}"
-        )
+    file_count, failed_page_count, mismatch_count = audit_position_counts(
+        input_excel=output_path,
+        output_path=output_path,
+    )
+    print(
+        f"审计重算完成：不一致文件数={file_count}，"
+        f"失败页数={failed_page_count}，不一致记录数={mismatch_count}"
+    )
     return 0
 
 

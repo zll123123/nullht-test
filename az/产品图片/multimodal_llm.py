@@ -24,25 +24,35 @@ DEFAULT_LLM_SERVICE_NAME = "nhtai_service_azure_gpt"
 DEFAULT_LLM_HOST_HEADER = "prod.nhtai-service.internal.nullht.com"
 DEFAULT_TIMEOUT_SECONDS = 120
 MULTIMODAL_SYSTEM_PROMPT = """
-你是一个专业的品牌图片比对助手。第一张图片是目标检测模型裁剪出的区域，后续图片是该品牌下的官方参考素材（logo、产品包装、品牌吉祥物、卡通形象等）。
-请严格对比裁剪区域与每张参考素材，从以下维度判断是否为同一品牌内容：
-1. 品牌名称文字是否一致（如中文品牌名、英文/拼音标识）
-2. Logo图形、图标形状是否一致
-3. 产品包装的形状、颜色搭配是否一致
-4. 品牌吉祥物、卡通IP形象是否一致（包括造型、配色、服饰细节等）
-5. 是否存在明确的、可辨识的品牌特征对应
-重要：品牌吉祥物和卡通形象是品牌的核心资产之一，如果裁剪区域中的卡通形象与参考素材中的卡通形象在造型、配色、细节上高度一致，应判定为匹配。
-以下情况不算匹配（即使视觉上有一定相似性）：
-- 仅颜色相近但无品牌文字、logo或吉祥物对应
-- 仅形状类似但品牌标识完全不同
-- 纹理、背景等局部相似但核心品牌元素缺失
-- 裁剪区域模糊不清、无法辨识具体内容
-请给出匹配度评分(0-100)：
-- 80-100：裁剪区域与参考素材高度一致，品牌标识清晰可辨
-- 50-79：存在部分相似元素，但不足以确认为同一品牌
-- 0-49：不匹配或无法判断
-严格按照以下JSON格式输出，不要包含其他内容：
-{ "score": 匹配度评分(0-100的整数), "reason": "简要说明判断依据" }
+你是一个专业的品牌图片比对助手。第一张图片是YOLO检测框的精确裁剪区域，第二张图片是该区域扩展后的上下文区域，后续图片是该品牌下的官方参考素材（logo、产品包装、品牌吉祥物、卡通形象等）。
+
+                    请严格对比裁剪区域与每张参考素材，从以下维度判断是否为同一品牌内容：
+                    1. 品牌名称文字是否一致（如中文品牌名、英文/拼音标识）
+                    2. Logo图形、图标形状是否一致
+                    3. 产品包装的形状、颜色搭配是否一致
+                    4. 品牌吉祥物、卡通IP形象是否一致（包括造型、配色、服饰细节等）
+                    5. 是否存在明确的、可辨识的品牌特征对应
+
+                    分析建议：
+                    - 优先参考第一张图片（精确裁剪）进行品牌特征的精确比对
+                    - 第二张图片（扩展上下文）提供更多周边信息，有助于确认场景完整性和品牌关联性
+                    - 当第一张图片区域过小或模糊时，结合第二张图片的上下文信息综合判断
+
+                    重要：品牌吉祥物和卡通形象是品牌的核心资产之一，如果裁剪区域中的卡通形象与参考素材中的卡通形象在造型、配色、细节上高度一致，应判定为匹配。
+
+                    以下情况不算匹配（即使视觉上有一定相似性）：
+                    - 仅颜色相近但无品牌文字、logo或吉祥物对应
+                    - 仅形状类似但品牌标识完全不同
+                    - 纹理、背景等局部相似但核心品牌元素缺失
+                    - 裁剪区域模糊不清、无法辨识具体内容
+
+                    请给出匹配度评分(0-100)：
+                    - 80-100：裁剪区域与参考素材高度一致，品牌标识清晰可辨
+                    - 50-79：存在部分相似元素，但不足以确认为同一品牌
+                    - 0-49：不匹配或无法判断
+
+                    严格按照以下JSON格式输出，不要包含其他内容：
+                    { "score": 匹配度评分(0-100的整数), "reason": "简要说明判断依据" }
 """.strip()
 
 
@@ -66,12 +76,14 @@ def extract_score(response_text: str) -> int | None:
 
 def build_multimodal_input(
     cropped_image_data_url: str,
+    padded_image_data_url: str,
     reference_images: list[str],
 ) -> list[dict[str, Any]]:
     """构建 NHTAI 多模态请求中的用户消息内容。
 
     参数:
         cropped_image_data_url: 裁剪后检测区域图片的 data URL。
+        padded_image_data_url: 扩展 padding 后区域图片的 data URL。
         reference_images: 参考图片的 data URL 列表。
 
     返回:
@@ -83,6 +95,12 @@ def build_multimodal_input(
             "image_url": cropped_image_data_url,
         }
     ]
+    input_content.append(
+        {
+            "type": "image_url",
+            "image_url": padded_image_data_url,
+        }
+    )
     for reference_image in reference_images:
         input_content.append(
             {
@@ -95,6 +113,7 @@ def build_multimodal_input(
 
 def build_nhtai_payload(
     cropped_image_data_url: str,
+    padded_image_data_url: str,
     reference_images: list[str],
     llm_model: str,
 ) -> dict[str, Any]:
@@ -102,13 +121,18 @@ def build_nhtai_payload(
 
     参数:
         cropped_image_data_url: 裁剪后检测区域图片的 data URL。
+        padded_image_data_url: 扩展 padding 后区域图片的 data URL。
         reference_images: 参考图片的 data URL 列表。
         llm_model: 模型名称。
 
     返回:
         请求 JSON 数据。
     """
-    user_content = build_multimodal_input(cropped_image_data_url, reference_images)
+    user_content = build_multimodal_input(
+        cropped_image_data_url,
+        padded_image_data_url,
+        reference_images,
+    )
     return {
         "service": DEFAULT_LLM_SERVICE_NAME,
         "payload": {
@@ -160,22 +184,29 @@ def extract_nhtai_content(response_json: dict[str, Any]) -> str:
 
 def call_multimodal_llm(
     cropped_image_data_url: str,
+    padded_image_data_url: str,
     reference_images: list[str],
     llm_model: str,
 ) -> str:
     """调用 NHTAI 多模态接口并返回原始文本结果。
 
-    Args:
+    参数:
         cropped_image_data_url: 裁剪后的检测区域图片 data URL。
+        padded_image_data_url: 扩展 padding 后区域图片 data URL。
         reference_images: 参考图片 data URL 列表。
         llm_model: 模型名称。
 
-    Returns:
+    返回:
         模型原始输出文本。
     """
     base_url = os.getenv("OPENAI_BASE_URL", DEFAULT_LLM_BASE_URL).rstrip("/")
     host_header = os.getenv("OPENAI_HOST_HEADER", DEFAULT_LLM_HOST_HEADER).strip()
-    payload = build_nhtai_payload(cropped_image_data_url, reference_images, llm_model)
+    payload = build_nhtai_payload(
+        cropped_image_data_url,
+        padded_image_data_url,
+        reference_images,
+        llm_model,
+    )
     headers = {"Content-Type": "application/json"}
     if host_header:
         headers["Host"] = host_header
@@ -191,6 +222,7 @@ def call_multimodal_llm(
 
 def multimodal_verify(
     cropped_image_data_url: str,
+    padded_image_data_url: str,
     reference_images: list[str],
     llm_model: str,
     llm_score_threshold: int,
@@ -199,6 +231,7 @@ def multimodal_verify(
 
     参数:
         cropped_image_data_url: 裁剪后的检测区域图片。
+        padded_image_data_url: 扩展 padding 后区域图片。
         reference_images: 同一 cls 下的参考图片列表。
         llm_model: 多模态模型名称。
         llm_score_threshold: 允许通过的最低相似度分数。
@@ -208,6 +241,7 @@ def multimodal_verify(
     """
     response_text = call_multimodal_llm(
         cropped_image_data_url=cropped_image_data_url,
+        padded_image_data_url=padded_image_data_url,
         reference_images=reference_images,
         llm_model=llm_model,
     )
