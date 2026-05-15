@@ -11,6 +11,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 from config.app_config import AppConfig
+from utils.api_timing import ApiCallCollector, timed_api_call
 
 DEFAULT_HEADERS = {"Content-Type": "application/json"}
 
@@ -66,7 +67,18 @@ def build_headers(config: AppConfig) -> Dict[str, str]:
     return headers
 
 
-def post_json(session: Session, config: AppConfig, path: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+@timed_api_call()
+def post_json(
+    session: Session,
+    config: AppConfig,
+    path: str,
+    payload: Dict[str, Any],
+    method: str = "POST",
+    api_name: str = "",
+    request_identifier: str = "",
+    session_id: str = "",
+    api_collector: ApiCallCollector | None = None,
+) -> tuple[int, Dict[str, Any]]:
     """发送 POST 请求。
 
     Args:
@@ -74,10 +86,16 @@ def post_json(session: Session, config: AppConfig, path: str, payload: Dict[str,
         config: 运行配置。
         path: 接口路径。
         payload: 请求体。
+        method: 请求方法，占位给装饰器读取。
+        api_name: 接口名称。
+        request_identifier: 接口关联标识。
+        session_id: 会话 ID。
+        api_collector: 接口结果收集器。
 
     Returns:
-        Dict[str, Any]: JSON 响应。
+        tuple[int, Dict[str, Any]]: HTTP 状态码和 JSON 响应。
     """
+    del method, api_name, request_identifier, session_id, api_collector
     url = f"{config.base_url}{path}"
     response: Response = session.post(
         url,
@@ -90,20 +108,36 @@ def post_json(session: Session, config: AppConfig, path: str, payload: Dict[str,
     data = response.json()
     if not isinstance(data, dict):
         raise RuntimeError(f"接口返回非 JSON 对象: {url}")
-    return data
+    return response.status_code, data
 
 
-def get_json(session: Session, config: AppConfig, path: str) -> Dict[str, Any]:
+@timed_api_call()
+def get_json(
+    session: Session,
+    config: AppConfig,
+    path: str,
+    method: str = "GET",
+    api_name: str = "",
+    request_identifier: str = "",
+    session_id: str = "",
+    api_collector: ApiCallCollector | None = None,
+) -> tuple[int, Dict[str, Any]]:
     """发送 GET 请求。
 
     Args:
         session: 请求会话。
         config: 运行配置。
         path: 接口路径。
+        method: 请求方法，占位给装饰器读取。
+        api_name: 接口名称。
+        request_identifier: 接口关联标识。
+        session_id: 会话 ID。
+        api_collector: 接口结果收集器。
 
     Returns:
-        Dict[str, Any]: JSON 响应。
+        tuple[int, Dict[str, Any]]: HTTP 状态码和 JSON 响应。
     """
+    del method, api_name, request_identifier, session_id, api_collector
     url = f"{config.base_url}{path}"
     response: Response = session.get(
         url,
@@ -115,7 +149,7 @@ def get_json(session: Session, config: AppConfig, path: str) -> Dict[str, Any]:
     data = response.json()
     if not isinstance(data, dict):
         raise RuntimeError(f"接口返回非 JSON 对象: {url}")
-    return data
+    return response.status_code, data
 
 
 def normalize_message(data: Dict[str, Any]) -> str:
@@ -133,20 +167,68 @@ def normalize_message(data: Dict[str, Any]) -> str:
     return str(message or "")
 
 
-def start_conversation(session: Session, config: AppConfig) -> Dict[str, Any]:
+def start_conversation(
+    session: Session,
+    config: AppConfig,
+    api_collector: ApiCallCollector | None = None,
+    case_id: str = "",
+) -> Dict[str, Any]:
     """启动对话。"""
-    return (post_json(session, config, config.start_path, {})).get("data") or {}
+    return (
+        post_json(
+            session,
+            config,
+            config.start_path,
+            {},
+            api_name="start_conversation",
+            request_identifier=case_id,
+            api_collector=api_collector,
+        )
+    ).get("data") or {}
 
 
-def send_message(session: Session, config: AppConfig, session_id: str, message: str) -> Dict[str, Any]:
+def send_message(
+    session: Session,
+    config: AppConfig,
+    session_id: str,
+    message: str,
+    api_collector: ApiCallCollector | None = None,
+) -> Dict[str, Any]:
     """发送消息。"""
     payload = {"message": message, "session_id": session_id}
-    return (post_json(session, config, config.message_path, payload)).get("data") or {}
+    return (
+        post_json(
+            session,
+            config,
+            config.message_path,
+            payload,
+            api_name="send_message",
+            request_identifier=session_id,
+            session_id=session_id,
+            api_collector=api_collector,
+        )
+    ).get("data") or {}
 
 
-def stop_conversation(session: Session, config: AppConfig, session_id: str) -> Dict[str, Any]:
+def stop_conversation(
+    session: Session,
+    config: AppConfig,
+    session_id: str,
+    api_collector: ApiCallCollector | None = None,
+) -> Dict[str, Any]:
     """结束对话。"""
-    return (post_json(session, config, config.stop_path, {"session_id": session_id})).get("data") or {}
+    return (
+        post_json(
+            session,
+            config,
+            config.stop_path,
+            {"session_id": session_id},
+            api_name="stop_conversation",
+            request_identifier=session_id,
+            session_id=session_id,
+            api_collector=api_collector,
+        )
+    ).get("data") or {}
 
 
 def is_visit_plan_ready(detail_data: Dict[str, Any]) -> bool:
@@ -162,7 +244,12 @@ def is_visit_plan_ready(detail_data: Dict[str, Any]) -> bool:
     return isinstance(visit_plan, dict) and bool(visit_plan)
 
 
-def fetch_visit_plan_detail_once(session: Session, config: AppConfig, session_id: str) -> Dict[str, Any]:
+def fetch_visit_plan_detail_once(
+    session: Session,
+    config: AppConfig,
+    session_id: str,
+    api_collector: ApiCallCollector | None = None,
+) -> Dict[str, Any]:
     """单次获取拜访计划详情。
 
     Args:
@@ -177,7 +264,17 @@ def fetch_visit_plan_detail_once(session: Session, config: AppConfig, session_id
         return {}
     detail_path = f"{config.detail_path.rstrip('/')}/{session_id}"
     try:
-        detail_data = (get_json(session, config, detail_path)).get("data") or {}
+        detail_data = (
+            get_json(
+                session,
+                config,
+                detail_path,
+                api_name="fetch_visit_plan_detail_once",
+                request_identifier=session_id,
+                session_id=session_id,
+                api_collector=api_collector,
+            )
+        ).get("data") or {}
     except Exception as exc:
         response = getattr(exc, "response", None)
         status_code = response.status_code if response is not None else 0

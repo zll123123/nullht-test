@@ -6,6 +6,7 @@ from typing import Any, Dict, Optional
 
 from clients.llm_client import call_focus_match_llm
 from config.app_config import AppConfig
+from utils.api_timing import ApiCallCollector
 
 FOCUS_MATCH_PROMPT_TEMPLATE = """# 角色定义
 你是一位擅长医药代表拜访场景语义理解与结构化提取的助手。
@@ -64,6 +65,9 @@ def match_focus_option_by_llm(
     config: AppConfig,
     question: str,
     focus_point: str,
+    api_collector: ApiCallCollector | None = None,
+    session_id: str = "",
+    case_id: str = "",
 ) -> Optional[Dict[str, Any]]:
     """通过大模型匹配固定关注点对应选项。
 
@@ -71,6 +75,9 @@ def match_focus_option_by_llm(
         config: 运行配置。
         question: 当前问题。
         focus_point: 固定关注点。
+        api_collector: 接口结果收集器。
+        session_id: 会话 ID。
+        case_id: 用例标识。
 
     Returns:
         Optional[Dict[str, Any]]: 匹配结果；不可用时返回 None。
@@ -79,4 +86,10 @@ def match_focus_option_by_llm(
         return None
     if not config.llm_base_url or not config.llm_model or not config.llm_api_key:
         return None
-    return call_focus_match_llm(config, build_focus_match_prompt(question, focus_point))
+    return call_focus_match_llm(
+        config,
+        build_focus_match_prompt(question, focus_point),
+        api_collector=api_collector,
+        session_id=session_id,
+        case_id=case_id,
+    )

@@ -30,6 +30,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config", default=str(CONFIG_FILE), help="配置 YAML 路径")
     parser.add_argument("--data", default=str(DATA_FILE), help="测试路径 YAML 路径")
     parser.add_argument("--case-id", help="只执行单个 case，例如 P017")
+    parser.add_argument("--dept", "--department", dest="dept", help="只执行指定科室，例如 ICU、外科、肝病、医院管理层/药剂科")
     parser.add_argument("--smoke", action="store_true", help="只执行 YAML 中配置的冒烟 case")
     parser.add_argument("--dry-run", action="store_true", help="只校验配置和用例，不发起请求")
     parser.add_argument("--seed", type=int, default=7, help="随机关注点回答的随机种子")
@@ -59,9 +60,16 @@ def main() -> int:
         case_collection.cases,
         args.case_id,
         case_collection.smoke_case_ids if args.smoke else None,
+        args.dept,
     )
     if args.dry_run:
-        logger.info("dry-run 完成，共加载 {} 个 case。", len(selected_cases))
+        logger.info(
+            "dry-run 完成，共加载 {} 个 case。case_id={}, dept={}, smoke={}",
+            len(selected_cases),
+            args.case_id or "-",
+            args.dept or "-",
+            args.smoke,
+        )
         return 0
     run_cases(selected_cases, case_collection.doctor_rank, config, args.seed)
     return 0

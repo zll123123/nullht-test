@@ -3,10 +3,10 @@ from config.constants import MATCH_CONTAINS, MATCH_LIST_EXACT
 from models.case_model import FocusDecision
 from models.result_model import CaseExecutionResult, ConversationStep
 from services.case_loader import build_cases
-from services.validation_service import build_check, collapse_text
 from reporters.json_reporter import filter_cases
 from reporters.markdown_reporter import build_case_record_lines, build_failed_case_summary_lines, build_summary
 from utils.yaml_loader import load_yaml_file
+from validators.assertion_builder import build_check, collapse_text
 from validators.assertion_models import ValidationResult
 
 CASE_DATA_FILE = Path(__file__).parent / "data" / "test_case_priority.yaml"
@@ -70,17 +70,25 @@ def test_validation_result_to_dict() -> None:
 def test_build_cases_prefer_yaml_expected() -> None:
     case_collection = build_cases(CASE_DATA_FILE)
     assert case_collection.cases[0].expected["doctor_type"] == "来自YAML"
+    assert case_collection.cases[0].department == "ICU"
 
 
 def test_build_cases_load_smoke_case_ids() -> None:
     case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
-    assert case_collection.smoke_case_ids == ["P009", "P012", "P028", "P029"]
+    assert case_collection.smoke_case_ids == ["P003", "P015", "P032", "P061", "P084", "P106"]
 
 
 def test_filter_cases_with_smoke_case_ids() -> None:
     case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
     filtered_cases = filter_cases(case_collection.cases, case_id=None, smoke_case_ids=["P009", "P029"])
     assert [case.case_id for case in filtered_cases] == ["P009", "P029"]
+
+
+def test_filter_cases_with_department() -> None:
+    case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
+    filtered_cases = filter_cases(case_collection.cases, case_id=None, department="药剂科")
+    assert filtered_cases
+    assert all(case.department == "医院管理层/药剂科" for case in filtered_cases)
 
 def test_load_yaml_file() -> None:
     data = load_yaml_file(CASE_DATA_FILE)

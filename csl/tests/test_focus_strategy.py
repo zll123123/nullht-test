@@ -14,8 +14,8 @@ from models.case_model import CaseConfig, FocusStrategy
 from models.case_model import FocusDecision
 from services.case_loader import build_focus_strategy
 from services.focus_service import FocusService, choose_focus_answer
-from services.validation_service import build_validation_checks
 from utils.yaml_loader import load_yaml_file
+from validators.validation_rules import build_validation_checks
 
 DATA_FILE = Path(__file__).parent / "data" / "test_focus_strategy.yaml"
 
@@ -72,6 +72,7 @@ def build_test_case(
     data = load_yaml_file(DATA_FILE)
     return CaseConfig(
         case_id="P999",
+        department="ICU",
         scenario="测试关注点策略",
         answers=["既往拜访过"],
         expected={
@@ -215,6 +216,7 @@ def test_choose_focus_answer_for_non_focus_question_with_options() -> None:
     config = build_test_config()
     case = CaseConfig(
         case_id="P998",
+        department="ICU",
         scenario="原始 AI 问询路径",
         answers=["首次拜访"],
         expected={},
@@ -252,6 +254,7 @@ def test_choose_focus_answer_prefer_fixed_option_label() -> None:
     config = build_test_config()
     case = CaseConfig(
         case_id="P997",
+        department="ICU",
         scenario="显式固定关注点选项",
         answers=["既往拜访过"],
         expected={"focus_title": "一个不会命中选项A的标题"},
@@ -281,6 +284,7 @@ def test_choose_focus_answer_prefer_llm_match(monkeypatch) -> None:
     config.llm_api_key = "mock-key"
     case = CaseConfig(
         case_id="P996",
+        department="ICU",
         scenario="LLM 固定关注点匹配",
         answers=["既往拜访过"],
         expected={"focus_title": "主要还是价格太贵，现在DRG医保控费用是主要指标"},
@@ -294,7 +298,7 @@ def test_choose_focus_answer_prefer_llm_match(monkeypatch) -> None:
 
     monkeypatch.setattr(
         "services.focus_service.match_focus_option_by_llm",
-        lambda config, question, focus_point: {
+        lambda config, question, focus_point, api_collector=None, session_id="", case_id="": {
             "option_letter": "A",
             "focus_text": "白蛋白价格较高，是否具有成本效益？",
             "is_match_focus_point": True,

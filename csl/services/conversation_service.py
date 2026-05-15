@@ -15,6 +15,7 @@ from config.app_config import AppConfig
 from models.case_model import CaseConfig, FocusDecision
 from models.result_model import CaseExecutionResult, ConversationExecutionResult, ConversationStep
 from services.focus_service import choose_fallback_answer, choose_focus_answer, is_focus_question
+from utils.api_timing import ApiCallCollector
 
 
 def can_stop_conversation(final_data: Dict[str, Any]) -> bool:
@@ -48,8 +49,10 @@ def run_conversation_steps(
     Returns:
         ConversationExecutionResult: 原始执行结果。
     """
-    start_data = start_conversation(session, config)
+    api_collector = ApiCallCollector(case_id=case.case_id)
+    start_data = start_conversation(session, config, api_collector=api_collector, case_id=case.case_id)
     session_id = str(start_data["session_id"])
+    api_collector.set_session_id(session_id)
     planned_answers = [doctor_rank, *case.answers]
     steps: List[ConversationStep] = []
     focus_decisions: List[FocusDecision] = []
@@ -60,10 +63,17 @@ def run_conversation_steps(
         if planned_answers:
             answer = planned_answers.pop(0)
         elif is_focus_question(str(question)):
-            answer, focus_decision = choose_focus_answer(str(question), case, config, rng)
+            answer, focus_decision = choose_focus_answer(
+                str(question),
+                case,
+                config,
+                rng,
+                api_collector=api_collector,
+                session_id=session_id,
+            )
         else:
             answer = choose_fallback_answer(str(question), config, rng)
-        final_data = send_message(session, config, session_id, answer)
+        final_data = send_message(session, config, session_id, answer, api_collector=api_collector)
         steps.append(ConversationStep(question=question, answer=answer, response=final_data))
         if focus_decision is not None:
             focus_decisions.append(focus_decision)
@@ -74,13 +84,14 @@ def run_conversation_steps(
             raise RuntimeError(f"{case.case_id} 未完成，但没有后续问题。")
     stop_data: Dict[str, Any] = {}
     if can_stop_conversation(final_data):
-        stop_data = stop_conversation(session, config, session_id)
+        stop_data = stop_conversation(session, config, session_id, api_collector=api_collector)
     return ConversationExecutionResult(
         session_id=session_id,
         steps=steps,
         final_data=final_data,
         stop_data=stop_data,
         focus_decisions=focus_decisions,
+        api_call_records=api_collector.records,
     )
 
 def build_pending_case_result(
@@ -123,4 +134,5 @@ def build_pending_case_result(
         detail_data={},
         validation=None,
         status="PENDING_PLAN",
+        api_call_records=conversation_result.api_call_records,
     )

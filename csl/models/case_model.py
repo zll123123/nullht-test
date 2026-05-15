@@ -65,6 +65,7 @@ class CaseConfig:
     """对话用例配置。"""
 
     case_id: str
+    department: str
     scenario: str
     answers: List[str]
     expected: Dict[str, Any]

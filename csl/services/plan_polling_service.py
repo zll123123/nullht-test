@@ -9,7 +9,9 @@ from clients.chat_client import fetch_visit_plan_detail_once
 from config.app_config import AppConfig
 from models.case_model import CaseConfig
 from models.result_model import CaseExecutionResult
-from services.validation_service import build_validation_result, extract_visit_plan
+from utils.api_timing import ApiCallCollector
+from validators.field_extractors import extract_visit_plan
+from validators.validation_service import build_validation_result
 
 PENDING_STATUS = "PENDING_PLAN"
 DONE_STATUS = "DONE"
@@ -124,7 +126,17 @@ def poll_pending_case(
         None
     """
     case_result.poll_attempts = int(case_result.poll_attempts or 0) + 1
-    detail_data = fetch_visit_plan_detail_once(session, config, str(case_result.session_id))
+    api_collector = ApiCallCollector(
+        case_id=case.case_id,
+        session_id=str(case_result.session_id),
+        records=case_result.api_call_records,
+    )
+    detail_data = fetch_visit_plan_detail_once(
+        session,
+        config,
+        str(case_result.session_id),
+        api_collector=api_collector,
+    )
     if detail_data:
         finalize_case_result(case, case_result, detail_data)
         return

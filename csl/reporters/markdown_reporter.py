@@ -57,6 +57,8 @@ def build_case_record_lines(case_result: CaseExecutionResult) -> List[str]:
         lines.append(f"- 测试回答：{step.answer or ''}")
     if case_result.focus_decisions:
         lines.extend(["- 关注点执行结果：", format_json_block([item.to_dict() for item in case_result.focus_decisions])])
+    if case_result.api_call_records:
+        lines.extend(["- 接口耗时记录：", format_json_block([item.to_dict() for item in case_result.api_call_records])])
     if case_result.visit_plan:
         lines.extend(["- 最终拜访计划：", format_json_block(case_result.visit_plan or {})])
     if case_result.validation:

@@ -1,8 +1,3 @@
-base_url: "https://dmc-dev-1.nullht.com"
-start_path: "/api/sale/chat/start"
-message_path: "api/sale/chat/message"
-stop_path: "/api/sale/chat/stop"
-detail_path: "/api/sale/chat/history"
 timeout_seconds: 30
 detail_poll_wait_seconds: 600
 detail_poll_interval_seconds: 60

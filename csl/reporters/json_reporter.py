@@ -9,6 +9,7 @@ from typing import Any, List, Optional
 from config.settings import OUTPUT_DIR
 from models.result_model import CaseExecutionResult
 from reporters.markdown_reporter import build_summary
+from services.case_loader import normalize_department
 
 RESULT_FILE_NAME = "csl_full_path_results.json"
 
@@ -43,16 +44,27 @@ def save_results(results: List[CaseExecutionResult]) -> Path:
     return output_file
 
 
-def filter_cases(cases: List[Any], case_id: Optional[str], smoke_case_ids: Optional[List[str]] = None) -> List[Any]:
-    """按 case 编号过滤用例。"""
-    if not case_id:
-        if not smoke_case_ids:
-            return cases
-        filtered_cases = [case for case in cases if case.case_id in set(smoke_case_ids)]
+def filter_cases(
+    cases: List[Any],
+    case_id: Optional[str],
+    smoke_case_ids: Optional[List[str]] = None,
+    department: Optional[str] = None,
+) -> List[Any]:
+    """按编号、冒烟集和科室过滤用例。"""
+    filtered_cases = list(cases)
+    if department:
+        target_department = normalize_department(department)
+        filtered_cases = [case for case in filtered_cases if normalize_department(str(case.department)) == target_department]
+        if not filtered_cases:
+            raise ValueError(f"未找到科室为 {department} 的 case")
+    if smoke_case_ids:
+        smoke_case_id_set = set(smoke_case_ids)
+        filtered_cases = [case for case in filtered_cases if case.case_id in smoke_case_id_set]
         if not filtered_cases:
             raise ValueError("未找到任何冒烟 case")
+    if not case_id:
         return filtered_cases
-    filtered_cases = [case for case in cases if case.case_id == case_id]
+    filtered_cases = [case for case in filtered_cases if case.case_id == case_id]
     if not filtered_cases:
         raise ValueError(f"未找到 case: {case_id}")
     return filtered_cases

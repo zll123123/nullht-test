@@ -1,7 +1,9 @@
 doctor_rank: "主任医师"
 cases:
   - case_id: "P900"
-    scenario: "优先使用 YAML 里的 expected"
-    answers: ["A"]
+    scenario: "ICU -> 优先使用 YAML 里的 expected"
+    answers: ["ICU"]
     expected:
       doctor_type: "来自YAML"
+      visit_plan_digest:
+        department: "ICU"

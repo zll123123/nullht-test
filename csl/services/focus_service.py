@@ -16,6 +16,7 @@ from config.constants import (
 )
 from models.case_model import CaseConfig, FocusDecision
 from services.focus_match_service import match_focus_option_by_llm
+from utils.api_timing import ApiCallCollector
 from validators.assertions import CommonAssertion
 
 OPTIONS_BLOCK_PATTERN = re.compile(r"\[OPTIONS\](.*?)\[/OPTIONS\]", re.IGNORECASE | re.DOTALL)
@@ -130,6 +131,8 @@ class FocusService:
         case: CaseConfig,
         config: AppConfig,
         question: str,
+        api_collector: ApiCallCollector | None = None,
+        session_id: str = "",
     ) -> Optional[Dict[str, str]]:
         """匹配固定关注点对应选项。
 
@@ -138,6 +141,8 @@ class FocusService:
             case: 当前用例。
             config: 运行配置。
             question: 当前问题文本。
+            api_collector: 接口结果收集器。
+            session_id: 会话 ID。
 
         Returns:
             Optional[Dict[str, str]]: 固定关注点命中的选项。
@@ -149,7 +154,14 @@ class FocusService:
             fixed_option = cls.find_option_by_label(options, strategy.fixed_option_label)
             if fixed_option is not None:
                 return fixed_option
-        llm_match_result = match_focus_option_by_llm(config, question, str(case.expected.get("focus_title") or ""))
+        llm_match_result = match_focus_option_by_llm(
+            config,
+            question,
+            str(case.expected.get("focus_title") or ""),
+            api_collector=api_collector,
+            session_id=session_id,
+            case_id=case.case_id,
+        )
         if llm_match_result and llm_match_result.get("is_match_focus_point") is True:
             fixed_option = cls.find_option_by_label(options, str(llm_match_result.get("option_letter") or ""))
             if fixed_option is not None:
@@ -193,6 +205,8 @@ class FocusService:
         case: CaseConfig,
         config: AppConfig,
         rng: random.Random,
+        api_collector: ApiCallCollector | None = None,
+        session_id: str = "",
     ) -> Tuple[str, Optional[FocusDecision]]:
         """根据策略生成关注点问题回答。
 
@@ -201,6 +215,8 @@ class FocusService:
             case: 当前用例。
             config: 运行配置。
             rng: 随机数生成器。
+            api_collector: 接口结果收集器。
+            session_id: 会话 ID。
 
         Returns:
             Tuple[str, Optional[FocusDecision]]: 回答和执行记录。
@@ -209,7 +225,14 @@ class FocusService:
             return cls.choose_fallback_answer(question, config, rng), None
         strategy = case.focus_strategy
         options = cls.extract_focus_options(question)
-        fixed_option = cls.match_fixed_option(options, case, config, question)
+        fixed_option = cls.match_fixed_option(
+            options,
+            case,
+            config,
+            question,
+            api_collector=api_collector,
+            session_id=session_id,
+        )
         answer = config.default_focus_answer
         custom_input = ""
         if strategy.branch == FOCUS_BRANCH_F1 and fixed_option:
@@ -256,6 +279,15 @@ def choose_focus_answer(
     case: CaseConfig,
     config: AppConfig,
     rng: random.Random,
+    api_collector: ApiCallCollector | None = None,
+    session_id: str = "",
 ) -> Tuple[str, Optional[FocusDecision]]:
     """兼容旧调用的关注点回答函数。"""
-    return FocusService.resolve_focus_strategy(question, case, config, rng)
+    return FocusService.resolve_focus_strategy(
+        question,
+        case,
+        config,
+        rng,
+        api_collector=api_collector,
+        session_id=session_id,
+    )

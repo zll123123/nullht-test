@@ -10,6 +10,53 @@ from validators.assertion_models import ValidationResult
 
 
 @dataclass
+class ApiCallRecord:
+    """单次接口调用记录。"""
+
+    api_name: str
+    request_method: str
+    request_path: str
+    request_identifier: str
+    case_id: str = ""
+    session_id: str = ""
+    elapsed_ms: float = 0.0
+    success: bool = True
+    status_code: int = 0
+    error: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        """转换为字典。"""
+        return {
+            "api_name": self.api_name,
+            "request_method": self.request_method,
+            "request_path": self.request_path,
+            "request_identifier": self.request_identifier,
+            "case_id": self.case_id,
+            "session_id": self.session_id,
+            "elapsed_ms": self.elapsed_ms,
+            "success": self.success,
+            "status_code": self.status_code,
+            "error": self.error,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "ApiCallRecord":
+        """从字典构造模型。"""
+        return cls(
+            api_name=str(data.get("api_name") or ""),
+            request_method=str(data.get("request_method") or ""),
+            request_path=str(data.get("request_path") or ""),
+            request_identifier=str(data.get("request_identifier") or ""),
+            case_id=str(data.get("case_id") or ""),
+            session_id=str(data.get("session_id") or ""),
+            elapsed_ms=float(data.get("elapsed_ms") or 0.0),
+            success=bool(data.get("success", False)),
+            status_code=int(data.get("status_code") or 0),
+            error=str(data.get("error") or ""),
+        )
+
+
+@dataclass
 class ConversationStep:
     """单轮对话步骤。"""
 
@@ -44,6 +91,7 @@ class ConversationExecutionResult:
     final_data: Dict[str, Any]
     stop_data: Dict[str, Any]
     focus_decisions: List[FocusDecision]
+    api_call_records: List[ApiCallRecord]
 
 
 @dataclass
@@ -69,6 +117,7 @@ class CaseExecutionResult:
     poll_attempts: int = 0
     next_poll_at: float = 0.0
     poll_deadline_at: float = 0.0
+    api_call_records: List[ApiCallRecord] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         """转换为字典。"""
@@ -86,6 +135,7 @@ class CaseExecutionResult:
             "detail_data": self.detail_data,
             "validation": self.validation.to_dict() if self.validation is not None else {},
             "status": self.status,
+            "api_call_records": [item.to_dict() for item in self.api_call_records],
             "result_type": self.result_type,
             "failure_reason": self.failure_reason,
             "error": self.error,
@@ -112,6 +162,7 @@ class CaseExecutionResult:
             detail_data=dict(data.get("detail_data") or {}),
             validation=ValidationResult.from_dict(validation_data) if validation_data else None,
             status=str(data.get("status") or ""),
+            api_call_records=[ApiCallRecord.from_dict(item) for item in data.get("api_call_records") or []],
             result_type=str(data.get("result_type") or ""),
             failure_reason=str(data.get("failure_reason") or ""),
             error=str(data.get("error") or ""),

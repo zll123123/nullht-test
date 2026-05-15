@@ -9,6 +9,15 @@ from config.constants import DEFAULT_INVALID_FOCUS_INPUT, FOCUS_BRANCHES, FOCUS_
 from models.case_model import CaseCollection, CaseConfig, FocusDecision, FocusStrategy
 from utils.yaml_loader import load_yaml_file
 
+DEPARTMENT_ALIAS_MAP = {
+    "ICU": "ICU",
+    "医院管理层": "医院管理层/药剂科",
+    "药剂科": "医院管理层/药剂科",
+    "医院管理层/药剂科": "医院管理层/药剂科",
+    "肝病": "肝病",
+    "外科": "外科",
+}
+
 
 def normalize_focus_branch(branch: str) -> str:
     """标准化关注点分支名称。
@@ -53,6 +62,41 @@ def build_focus_strategy(item: Dict[str, Any]) -> Optional[FocusStrategy]:
     )
 
 
+def normalize_department(department: str) -> str:
+    """标准化科室名称。
+
+    Args:
+        department: 原始科室名称。
+
+    Returns:
+        str: 标准化后的科室名称。
+    """
+    cleaned = department.strip().replace("（现版本）", "").replace("(现版本)", "")
+    return DEPARTMENT_ALIAS_MAP.get(cleaned, cleaned)
+
+
+def extract_case_department(item: Dict[str, Any]) -> str:
+    """从 case 数据中提取科室。
+
+    Args:
+        item: 单条 case 原始数据。
+
+    Returns:
+        str: 标准化后的科室名称。
+    """
+    digest = (item.get("expected") or {}).get("visit_plan_digest") or {}
+    department = str(digest.get("department") or "").strip()
+    if department:
+        return normalize_department(department)
+    scenario = str(item.get("scenario") or "")
+    if "->" in scenario:
+        return normalize_department(scenario.split("->", 1)[0].strip())
+    answers = [str(answer).strip() for answer in item.get("answers") or []]
+    if answers:
+        return normalize_department(answers[0])
+    return ""
+
+
 def build_cases(data_file: Path) -> CaseCollection:
     """加载并构建 case 列表。
 
@@ -68,13 +112,15 @@ def build_cases(data_file: Path) -> CaseCollection:
     cases: List[CaseConfig] = []
     for item in data.get("cases") or []:
         case_id = str(item.get("case_id", ""))
+        department = extract_case_department(item)
         scenario = str(item.get("scenario", ""))
         answers = [str(answer) for answer in item.get("answers") or []]
-        if not case_id or not scenario or not answers:
+        if not case_id or not department or not scenario or not answers:
             raise ValueError(f"case 数据不完整: {item}")
         cases.append(
             CaseConfig(
                 case_id=case_id,
+                department=department,
                 scenario=scenario,
                 answers=answers,
                 expected=item.get("expected") or {},

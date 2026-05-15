@@ -86,21 +86,21 @@ def load_app_config(config_path: Path) -> AppConfig:
     config_data = load_yaml_file(config_path)
     llm_config_data = load_yaml_file(LLM_CONFIG_FILE) if LLM_CONFIG_FILE.exists() else {}
     return AppConfig(
-        base_url=os.getenv("CSL_BASE_URL", str(config_data["base_url"])).rstrip("/"),
-        start_path=os.getenv("CSL_START_PATH", str(config_data["start_path"])),
-        message_path=os.getenv("CSL_MESSAGE_PATH", str(config_data["message_path"])),
-        stop_path=os.getenv("CSL_STOP_PATH", str(config_data["stop_path"])),
+        base_url=os.getenv("CSL_BASE_URL", str(config_data.get("base_url", ""))).rstrip("/"),
+        start_path=os.getenv("CSL_START_PATH", str(config_data.get("start_path", ""))),
+        message_path=os.getenv("CSL_MESSAGE_PATH", str(config_data.get("message_path", ""))),
+        stop_path=os.getenv("CSL_STOP_PATH", str(config_data.get("stop_path", ""))),
         detail_path=os.getenv("CSL_DETAIL_PATH", str(config_data.get("detail_path", ""))),
-        timeout_seconds=int(os.getenv("CSL_TIMEOUT_SECONDS", config_data["timeout_seconds"])),
+        timeout_seconds=int(os.getenv("CSL_TIMEOUT_SECONDS", config_data.get("timeout_seconds", 30))),
         detail_poll_wait_seconds=int(
             os.getenv("CSL_DETAIL_POLL_WAIT_SECONDS", config_data.get("detail_poll_wait_seconds", 240))
         ),
         detail_poll_interval_seconds=int(
             os.getenv("CSL_DETAIL_POLL_INTERVAL_SECONDS", config_data.get("detail_poll_interval_seconds", 15))
         ),
-        verify_ssl=os.getenv("CSL_VERIFY_SSL", str(config_data["verify_ssl"])).lower() == "true",
-        default_focus_answer=os.getenv("CSL_DEFAULT_FOCUS_ANSWER", str(config_data["default_focus_answer"])),
-        log_level=os.getenv("CSL_LOG_LEVEL", str(config_data["log_level"])),
+        verify_ssl=os.getenv("CSL_VERIFY_SSL", str(config_data.get("verify_ssl", True))).lower() == "true",
+        default_focus_answer=os.getenv("CSL_DEFAULT_FOCUS_ANSWER", str(config_data.get("default_focus_answer", "A"))),
+        log_level=os.getenv("CSL_LOG_LEVEL", str(config_data.get("log_level", "INFO"))),
         accept=os.getenv("CSL_ACCEPT", str(config_data.get("accept", "application/json, text/plain, */*"))),
         accept_language=os.getenv("CSL_ACCEPT_LANGUAGE", str(config_data.get("accept_language", "zh-CN,zh;q=0.9"))),
         origin=os.getenv("CSL_ORIGIN", str(config_data.get("origin", ""))),
