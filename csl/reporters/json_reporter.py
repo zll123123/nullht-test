@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import shutil
 from typing import Any, List, Optional
 
 from config.settings import OUTPUT_DIR
@@ -17,6 +18,11 @@ RESULT_FILE_NAME = "csl_full_path_results.json"
 def initialize_output_files() -> None:
     """初始化输出目录和统一结果文件。"""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    for path in OUTPUT_DIR.iterdir():
+        if path.is_dir():
+            shutil.rmtree(path)
+        else:
+            path.unlink()
     output_file = OUTPUT_DIR / RESULT_FILE_NAME
     output_file.write_text(
         json.dumps(

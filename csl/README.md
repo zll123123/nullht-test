@@ -7,6 +7,7 @@
 - 拜访计划异步轮询
 - 拜访计划断言校验
 - 接口耗时记录与统一输出
+- Qase Report 兼容结果导出
 
 框架遵循分层设计，测试数据、配置、请求封装、业务编排、断言、输出彼此分离。
 
@@ -165,8 +166,36 @@ python3 run_csl_full_paths.py --smoke
   统一结构化结果，接口耗时记录位于每条 case 的 `api_call_records` 字段。
 - [output/csl_full_path_execution_record.md](/Users/layla.zhang/workspace/nullht-test/csl/output/csl_full_path_execution_record.md)
   统一执行记录，每条 case 下会有“接口耗时记录”小节。
+- [output/qase-report/run.json](/Users/layla.zhang/workspace/nullht-test/csl/output/qase-report/run.json)
+  Qase Report 运行元数据。
+- `output/qase-report/results/*.json`
+  Qase Report 单条 case 结果。
+- [output/qase-report/report.html](/Users/layla.zhang/workspace/nullht-test/csl/output/qase-report/report.html)
+  使用 `qase-report generate` 生成的静态 HTML 报告。
 - [logs/app.log](/Users/layla.zhang/workspace/nullht-test/csl/logs/app.log)
   运行日志。
+
+## Qase Report 使用方式
+当前框架会自动导出 Qase Report 兼容目录：
+
+```bash
+output/qase-report/
+├── run.json
+└── results/
+```
+
+如果你本地已安装 `qase-report`，可以直接查看：
+
+```bash
+qase-report open /Users/layla.zhang/workspace/nullht-test/csl/output/qase-report
+```
+
+也可以生成静态 HTML：
+
+```bash
+qase-report generate /Users/layla.zhang/workspace/nullht-test/csl/output/qase-report \
+  -o /Users/layla.zhang/workspace/nullht-test/csl/output/qase-report/report.html
+```
 
 ## 当前结果模型
 case 级结果当前会收集：

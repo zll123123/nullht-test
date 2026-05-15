@@ -12,6 +12,7 @@ from config.settings import CONFIG_FILE, DATA_FILE, OUTPUT_DIR
 from loguru import logger
 from reporters.markdown_reporter import MARKDOWN_RECORD_FILE
 from reporters.json_reporter import filter_cases, initialize_output_files
+from reporters.qase_reporter import initialize_qase_report
 from services.case_loader import build_cases
 from services.run_service import run_cases
 from utils.logger import setup_logger
@@ -52,6 +53,7 @@ def main() -> int:
     config = load_app_config(config_path)
     setup_logger(config.log_level)
     initialize_output_files()
+    initialize_qase_report(OUTPUT_DIR)
     (OUTPUT_DIR / MARKDOWN_RECORD_FILE).write_text("", encoding="utf-8")
     case_collection = build_cases(Path(args.data).expanduser().resolve())
     if args.case_id and args.smoke:

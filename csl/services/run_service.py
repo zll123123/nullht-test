@@ -14,6 +14,7 @@ from models.case_model import CaseConfig
 from models.result_model import CaseExecutionResult
 from reporters.markdown_reporter import save_markdown_record
 from reporters.json_reporter import save_results
+from reporters.qase_reporter import save_qase_report
 from services.conversation_service import build_pending_case_result
 from services.plan_polling_service import (
     build_case_index,
@@ -64,8 +65,10 @@ def flush_outputs(results: List[CaseExecutionResult]) -> None:
     """
     output_file = save_results(results)
     markdown_file = save_markdown_record(OUTPUT_DIR, results)
+    qase_report_dir = save_qase_report(OUTPUT_DIR, results)
     logger.info("结果已保存: {}", output_file)
     logger.info("执行记录已保存: {}", markdown_file)
+    logger.info("Qase Report 已保存: {}", qase_report_dir)
 
 
 def poll_pending_results(
