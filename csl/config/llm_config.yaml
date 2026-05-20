@@ -1,4 +1,4 @@
 llm_enabled: true
-llm_base_url: "https://xcode.best/v1"
-llm_model: "gpt-5.4"
+llm_base_url: "https://api.deepseek.com/chat/completions"
+llm_model: "deepseek-v4-flash"
 llm_timeout_seconds: 30

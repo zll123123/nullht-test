@@ -171,17 +171,18 @@ python3 run_csl_full_paths.py --smoke
 - `output/qase-report/results/*.json`
   Qase Report 单条 case 结果。
 - [output/qase-report/report.html](/Users/layla.zhang/workspace/nullht-test/csl/output/qase-report/report.html)
-  使用 `qase-report generate` 生成的静态 HTML 报告。
+  每轮运行全部结束后自动生成一次的静态 HTML 报告。
 - [logs/app.log](/Users/layla.zhang/workspace/nullht-test/csl/logs/app.log)
   运行日志。
 
 ## Qase Report 使用方式
-当前框架会自动导出 Qase Report 兼容目录：
+当前框架会自动导出 Qase Report 兼容目录，并在整轮运行结束后自动生成一次 HTML 报告：
 
 ```bash
 output/qase-report/
 ├── run.json
 └── results/
+    report.html
 ```
 
 如果你本地已安装 `qase-report`，可以直接查看：
@@ -190,7 +191,7 @@ output/qase-report/
 qase-report open /Users/layla.zhang/workspace/nullht-test/csl/output/qase-report
 ```
 
-也可以生成静态 HTML：
+如需手动重生成静态 HTML：
 
 ```bash
 qase-report generate /Users/layla.zhang/workspace/nullht-test/csl/output/qase-report \

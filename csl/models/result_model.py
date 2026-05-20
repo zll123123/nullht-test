@@ -90,6 +90,9 @@ class ConversationExecutionResult:
     steps: List[ConversationStep]
     final_data: Dict[str, Any]
     stop_data: Dict[str, Any]
+    stop_error: str
+    first_can_stop_step_index: int
+    stop_called_step_index: int
     focus_decisions: List[FocusDecision]
     api_call_records: List[ApiCallRecord]
 
@@ -108,6 +111,9 @@ class CaseExecutionResult:
     final_data: Dict[str, Any]
     visit_plan: Dict[str, Any]
     stop_data: Dict[str, Any]
+    stop_error: str
+    first_can_stop_step_index: int
+    stop_called_step_index: int
     detail_data: Dict[str, Any]
     validation: Optional[ValidationResult]
     status: str
@@ -132,6 +138,9 @@ class CaseExecutionResult:
             "final_data": self.final_data,
             "visit_plan": self.visit_plan,
             "stop_data": self.stop_data,
+            "stop_error": self.stop_error,
+            "first_can_stop_step_index": self.first_can_stop_step_index,
+            "stop_called_step_index": self.stop_called_step_index,
             "detail_data": self.detail_data,
             "validation": self.validation.to_dict() if self.validation is not None else {},
             "status": self.status,
@@ -159,6 +168,9 @@ class CaseExecutionResult:
             final_data=dict(data.get("final_data") or {}),
             visit_plan=dict(data.get("visit_plan") or {}),
             stop_data=dict(data.get("stop_data") or {}),
+            stop_error=str(data.get("stop_error") or ""),
+            first_can_stop_step_index=int(data.get("first_can_stop_step_index") or 0),
+            stop_called_step_index=int(data.get("stop_called_step_index") or 0),
             detail_data=dict(data.get("detail_data") or {}),
             validation=ValidationResult.from_dict(validation_data) if validation_data else None,
             status=str(data.get("status") or ""),

@@ -20,8 +20,16 @@ from validators.field_extractors import (
 )
 
 
+def has_expected_focus_content(case: CaseConfig) -> bool:
+    """判断是否存在可校验的原始关注点信息。"""
+    expected = case.expected
+    return bool(str(expected.get("focus_title") or "").strip() or str(expected.get("focus_content") or "").strip())
+
+
 def get_effective_focus_branch(case: CaseConfig, focus_decisions: List[FocusDecision]) -> str:
     """获取本轮实际命中的关注点分支。"""
+    if not has_expected_focus_content(case):
+        return ""
     if focus_decisions:
         return focus_decisions[-1].actual_branch
     if case.focus_strategy is None:
@@ -41,6 +49,11 @@ def build_focus_validation_checks(
     expected = case.expected
     actual_title = get_focus_titles(final_data, visit_plan)
     actual_content = get_focus_contents(final_data, visit_plan)
+    if not has_expected_focus_content(case):
+        return [
+            build_non_empty_check("focus_title.non_empty", actual_title),
+            build_non_empty_check("focus_content.non_empty", actual_content),
+        ]
     if focus_branch in {FOCUS_BRANCH_F1, FOCUS_BRANCH_F3, ""}:
         return [
             build_check("focus_title", expected.get("focus_title"), actual_title, MATCH_CONTAINS),
@@ -77,7 +90,7 @@ def build_validation_checks(
         build_check("digest.type", (expected.get("visit_plan_digest") or {}).get("type"), digest.get("type")),
         build_check("digest.grade", (expected.get("visit_plan_digest") or {}).get("grade"), digest.get("grade")),
     ]
-    if case.focus_strategy is not None:
+    if case.focus_strategy is not None and has_expected_focus_content(case):
         candidates.append(build_check("focus_branch", case.focus_strategy.branch, focus_branch))
     candidates.extend(build_focus_validation_checks(case, focus_branch, focus_decisions, final_data, visit_plan))
     return [check for check in candidates if check is not None]

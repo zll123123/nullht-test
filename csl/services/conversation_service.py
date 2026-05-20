@@ -58,6 +58,7 @@ def run_conversation_steps(
     focus_decisions: List[FocusDecision] = []
     question = (start_data.get("message") or [""])[-1]
     final_data: Dict[str, Any] = start_data
+    first_can_stop_step_index = 0
     while True:
         focus_decision: Optional[FocusDecision] = None
         if planned_answers:
@@ -75,6 +76,8 @@ def run_conversation_steps(
             answer = choose_fallback_answer(str(question), config, rng)
         final_data = send_message(session, config, session_id, answer, api_collector=api_collector)
         steps.append(ConversationStep(question=question, answer=answer, response=final_data))
+        if can_stop_conversation(final_data) and first_can_stop_step_index == 0:
+            first_can_stop_step_index = len(steps)
         if focus_decision is not None:
             focus_decisions.append(focus_decision)
         if final_data.get("is_complete"):
@@ -83,13 +86,22 @@ def run_conversation_steps(
         if not question:
             raise RuntimeError(f"{case.case_id} 未完成，但没有后续问题。")
     stop_data: Dict[str, Any] = {}
+    stop_error = ""
+    stop_called_step_index = 0
     if can_stop_conversation(final_data):
-        stop_data = stop_conversation(session, config, session_id, api_collector=api_collector)
+        stop_called_step_index = len(steps)
+        try:
+            stop_data = stop_conversation(session, config, session_id, api_collector=api_collector)
+        except Exception as exc:
+            stop_error = str(exc)
     return ConversationExecutionResult(
         session_id=session_id,
         steps=steps,
         final_data=final_data,
         stop_data=stop_data,
+        stop_error=stop_error,
+        first_can_stop_step_index=first_can_stop_step_index,
+        stop_called_step_index=stop_called_step_index,
         focus_decisions=focus_decisions,
         api_call_records=api_collector.records,
     )
@@ -131,6 +143,9 @@ def build_pending_case_result(
         final_data=conversation_result.final_data,
         visit_plan={},
         stop_data=conversation_result.stop_data,
+        stop_error=conversation_result.stop_error,
+        first_can_stop_step_index=conversation_result.first_can_stop_step_index,
+        stop_called_step_index=conversation_result.stop_called_step_index,
         detail_data={},
         validation=None,
         status="PENDING_PLAN",

@@ -20,6 +20,7 @@ class AppConfig:
     stop_path: str
     detail_path: str
     timeout_seconds: int
+    case_retry_times: int
     detail_poll_wait_seconds: int
     detail_poll_interval_seconds: int
     verify_ssl: bool
@@ -92,6 +93,7 @@ def load_app_config(config_path: Path) -> AppConfig:
         stop_path=os.getenv("CSL_STOP_PATH", str(config_data.get("stop_path", ""))),
         detail_path=os.getenv("CSL_DETAIL_PATH", str(config_data.get("detail_path", ""))),
         timeout_seconds=int(os.getenv("CSL_TIMEOUT_SECONDS", config_data.get("timeout_seconds", 30))),
+        case_retry_times=int(os.getenv("CSL_CASE_RETRY_TIMES", config_data.get("case_retry_times", 0))),
         detail_poll_wait_seconds=int(
             os.getenv("CSL_DETAIL_POLL_WAIT_SECONDS", config_data.get("detail_poll_wait_seconds", 240))
         ),

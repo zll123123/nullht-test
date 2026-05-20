@@ -52,6 +52,10 @@ def build_case_record_lines(case_result: CaseExecutionResult) -> List[str]:
         f"- session_id：{case_result.session_id or '-'}",
         f"- 关注点策略：{case_result.focus_strategy or '-'}",
     ]
+    lines.append(f"- 首次出现can_stop=true的轮次：{case_result.first_can_stop_step_index or '-'}")
+    lines.append(f"- 实际调用stop的轮次：{case_result.stop_called_step_index or '-'}")
+    if case_result.stop_error:
+        lines.append(f"- stop接口异常：{case_result.stop_error}")
     for step in case_result.steps or []:
         lines.append(f"- 系统提问：{step.question or ''}")
         lines.append(f"- 测试回答：{step.answer or ''}")
