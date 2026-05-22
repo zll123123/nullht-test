@@ -79,11 +79,12 @@ def parse_args() -> argparse.Namespace:
         "--mode",
         default="all",
         choices=[
+            "yolo",
             "all",
             "llm",
             "llm-abnormal",
         ],
-        help="all: 全部重新执行 YOLO+LLM；llm: 基于现有 raw_result 全量重跑 LLM；llm-abnormal: 仅重跑 LLM 返回异常的页",
+        help="yolo: 只调 YOLO 并回写 YOLO 结果；all: 全部重新执行 YOLO+LLM；llm: 基于现有 raw_result 全量重跑 LLM；llm-abnormal: 仅重跑 LLM 返回异常的页",
     )
     parser.add_argument(
         "--input-dir",
@@ -1027,6 +1028,7 @@ def build_detail_row(
         padding_crop_output_dir=padding_crop_output_dir,
     )
     final_number = len(verified_detections)
+    yolo_number = len(confident_detections)
     return {
         "folder_name": folder_name,
         "detailed_id": detailed_id,
@@ -1034,6 +1036,7 @@ def build_detail_row(
         "page_no": extract_page_no(image_path),
         "expect_number": None,
         "position_count": final_number,
+        "yolo_number": yolo_number,
         "final_number": final_number,
         "threshold_positions(may>=0.7)": json.dumps(
             confident_detections,
@@ -1061,6 +1064,35 @@ def build_detail_row(
     }
 
 
+def build_yolo_only_detail_row(
+    folder_path: Path,
+    image_path: Path,
+    api_result: dict[str, Any],
+) -> dict[str, Any]:
+    """构造仅包含 YOLO 结果的明细行。"""
+    folder_name = folder_path.name
+    detailed_id, task_id = split_folder_name(folder_name)
+    detections = api_result.get("detections", [])
+    confident_detections = deduplicate_detections(filter_confident_detections(detections))
+    yolo_number = len(confident_detections)
+    return {
+        "folder_name": folder_name,
+        "detailed_id": detailed_id,
+        "task_id": task_id,
+        "page_no": extract_page_no(image_path),
+        "expect_number": None,
+        "position_count": yolo_number,
+        "yolo_number": yolo_number,
+        "threshold_positions(may>=0.7)": json.dumps(
+            confident_detections,
+            ensure_ascii=False,
+        ),
+        "status": "success",
+        "error_message": "",
+        "raw_result": json.dumps(api_result, ensure_ascii=False),
+    }
+
+
 def build_error_row(folder_path: Path, image_path: Path, error_message: str) -> dict:
     folder_name = folder_path.name
     detailed_id, task_id = split_folder_name(folder_name)
@@ -1071,6 +1103,7 @@ def build_error_row(folder_path: Path, image_path: Path, error_message: str) -> 
         "page_no": extract_page_no(image_path),
         "expect_number": None,
         "position_count": 0,
+        "yolo_number": 0,
         "final_number": 0,
         "threshold_positions(may>=0.7)": "",
         "llm_result": "",
@@ -1111,6 +1144,30 @@ def process_image(
             llm_score_threshold=llm_score_threshold,
             crop_output_dir=crop_output_dir,
             padding_crop_output_dir=padding_crop_output_dir,
+        )
+    except Exception as exc:  # noqa: BLE001
+        return build_error_row(folder_path, image_path, str(exc))
+
+
+def process_image_yolo_only(
+    folder_path: Path,
+    image_path: Path,
+    api_url: str,
+    model_type: str,
+    timeout: int,
+) -> dict[str, Any]:
+    """仅调用 YOLO 并构造明细行。"""
+    try:
+        api_result = call_api(
+            image_path=image_path,
+            api_url=api_url,
+            model_type=model_type,
+            timeout=timeout,
+        )
+        return build_yolo_only_detail_row(
+            folder_path=folder_path,
+            image_path=image_path,
+            api_result=api_result,
         )
     except Exception as exc:  # noqa: BLE001
         return build_error_row(folder_path, image_path, str(exc))
@@ -1184,6 +1241,7 @@ def update_excel_rows(input_excel: Path, detail_rows: list[dict[str, Any]]) -> i
             "page_no",
             "expect_number",
             "position_count",
+            "yolo_number",
             "final_number",
             "threshold_positions(may>=0.7)",
             "llm_result",
@@ -1208,15 +1266,41 @@ def update_excel_rows(input_excel: Path, detail_rows: list[dict[str, Any]]) -> i
         key = (str(row["folder_name"]), int(row["page_no"]))
         row_index = row_map.get(key)
         if row_index is None:
+            print(
+                f"Excel 写入跳过 | folder={row['folder_name']} | page={row['page_no']} | 原因=未找到对应行"
+            )
             continue
+        updated_fields = [header for header in header_map if header in row]
+        print(
+            f"准备写入 Excel | folder={row['folder_name']} | page={row['page_no']} | "
+            f"row={row_index} | fields={','.join(updated_fields)}"
+        )
         for header, column_index in header_map.items():
             if header in row:
                 detail_sheet.cell(row=row_index, column=column_index, value=row[header])
         updated += 1
+        print(
+            f"Excel 已写入并保存前 | folder={row['folder_name']} | page={row['page_no']} | "
+            f"row={row_index} | updated_fields={len(updated_fields)}"
+        )
 
     autosize_worksheet(detail_sheet)
     workbook.save(input_excel)
+    print(f"Excel 已保存 | path={input_excel.resolve()} | updated_rows={updated}")
     return updated
+
+
+def write_rows_immediately(
+    input_excel: Path,
+    detail_rows: list[dict[str, Any]],
+    expect_map: dict[tuple[str, int], int | None],
+) -> int:
+    """将一批明细行逐条写入并立即保存。"""
+    updated_total = 0
+    for row in detail_rows:
+        apply_expect_numbers([row], expect_map)
+        updated_total += update_excel_rows(input_excel, [row])
+    return updated_total
 
 
 def autosize_worksheet(worksheet) -> None:
@@ -1241,6 +1325,7 @@ def write_excel(detail_rows: list[dict], summary_rows: list[dict], output_path: 
         "page_no",
         "expect_number",
         "position_count",
+        "yolo_number",
         "final_number",
         "threshold_positions(may>=0.7)",
         "llm_result",
@@ -1648,6 +1733,142 @@ def audit_position_counts(input_excel: Path, output_path: Path) -> tuple[int, in
     return mismatch_file_count, failed_page_count, len(mismatch_rows)
 
 
+def audit_yolo_counts(input_excel: Path, output_path: Path) -> tuple[int, int, int]:
+    """基于 yolo_number 统计不一致情况，写入独立 sheet。"""
+    workbook = load_workbook(input_excel)
+    if "明细" not in workbook.sheetnames:
+        raise ValueError("输入 Excel 缺少 '明细' sheet")
+
+    detail_sheet = workbook["明细"]
+    detail_rows = list(detail_sheet.iter_rows(values_only=True))
+    rows = iter(detail_rows)
+    headers = next(rows, None)
+    if not headers:
+        raise ValueError("明细 sheet 为空")
+
+    header_map = {str(header): index for index, header in enumerate(headers) if header is not None}
+    required_headers = ["folder_name", "detailed_id", "task_id", "page_no", "expect_number", "yolo_number"]
+    missing_headers = [header for header in required_headers if header not in header_map]
+    if missing_headers:
+        raise ValueError(f"明细 sheet 缺少列: {', '.join(missing_headers)}")
+
+    mismatch_rows: list[dict[str, Any]] = []
+    summary_map: dict[str, dict[str, Any]] = {}
+    total_true_positive = 0
+    total_false_positive = 0
+    total_false_negative = 0
+
+    for row in rows:
+        folder_name = row[header_map["folder_name"]]
+        if folder_name in (None, ""):
+            continue
+        detailed_id = row[header_map["detailed_id"]]
+        task_id = row[header_map["task_id"]]
+        page_no = row[header_map["page_no"]]
+        yolo_number = normalize_count(row[header_map["yolo_number"]])
+        expect_number = normalize_count(row[header_map["expect_number"]])
+
+        if yolo_number is None and expect_number is None:
+            continue
+
+        normalized_yolo_number = yolo_number or 0
+        normalized_expect_number = expect_number or 0
+        true_positive, false_positive, false_negative = calculate_page_metrics(
+            expect_number=normalized_expect_number,
+            position_count=normalized_yolo_number,
+        )
+        total_true_positive += true_positive
+        total_false_positive += false_positive
+        total_false_negative += false_negative
+        if yolo_number != expect_number:
+            failure_type = "误报" if normalized_yolo_number > normalized_expect_number else "漏报"
+            mismatch_row = {
+                "folder_name": folder_name,
+                "detailed_id": detailed_id,
+                "task_id": task_id,
+                "page_no": page_no,
+                "expect_number": expect_number,
+                "yolo_number": yolo_number,
+                "difference": normalized_yolo_number - normalized_expect_number,
+                "failure_type": failure_type,
+            }
+            mismatch_rows.append(mismatch_row)
+
+        summary_item = summary_map.setdefault(
+            str(folder_name),
+            {
+                "folder_name": folder_name,
+                "detailed_id": detailed_id,
+                "task_id": task_id,
+                "total_page_count": 0,
+                "failed_page_count": 0,
+                "failed_page_nos": [],
+            },
+        )
+        summary_item["total_page_count"] += 1
+        if yolo_number != expect_number:
+            summary_item["failed_page_count"] += 1
+            summary_item["failed_page_nos"].append(page_no)
+
+    mismatch_file_count = sum(1 for item in summary_map.values() if item["failed_page_count"] > 0)
+    failed_page_count = len(mismatch_rows)
+
+    if "YOLO审计结果" in workbook.sheetnames:
+        del workbook["YOLO审计结果"]
+    result_sheet = workbook.create_sheet("YOLO审计结果")
+
+    result_sheet.append(["指标", "值"])
+    for cell in result_sheet[1]:
+        cell.font = Font(bold=True)
+    result_sheet.append(("总文件数", len(summary_map)))
+    result_sheet.append(("不一致文件数", mismatch_file_count))
+    result_sheet.append(("总页数", sum(item["total_page_count"] for item in summary_map.values())))
+    result_sheet.append(("不一致页数", failed_page_count))
+    result_sheet.append(("TP", total_true_positive))
+    result_sheet.append(("FP", total_false_positive))
+    result_sheet.append(("FN", total_false_negative))
+
+    result_sheet.append(())
+    summary_headers = [
+        "folder_name",
+        "detailed_id",
+        "task_id",
+        "total_page_count",
+        "failed_page_count",
+        "failed_page_nos",
+    ]
+    result_sheet.append(summary_headers)
+    summary_header_row_index = result_sheet.max_row
+    for cell in result_sheet[summary_header_row_index]:
+        cell.font = Font(bold=True)
+    for item in sorted(summary_map.values(), key=lambda value: str(value["folder_name"])):
+        item["failed_page_nos"] = ", ".join(str(page_no) for page_no in sorted(item["failed_page_nos"]))
+        result_sheet.append([item[header] for header in summary_headers])
+
+    result_sheet.append(())
+    mismatch_headers = [
+        "folder_name",
+        "detailed_id",
+        "task_id",
+        "page_no",
+        "failure_type",
+        "expect_number",
+        "yolo_number",
+        "difference",
+    ]
+    result_sheet.append(mismatch_headers)
+    mismatch_header_row_index = result_sheet.max_row
+    for cell in result_sheet[mismatch_header_row_index]:
+        cell.font = Font(bold=True)
+    for item in mismatch_rows:
+        result_sheet.append([item[header] for header in mismatch_headers])
+
+    autosize_worksheet(result_sheet)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    workbook.save(output_path)
+    return mismatch_file_count, failed_page_count, len(mismatch_rows)
+
+
 def parse_raw_result(raw_result: Any) -> dict[str, Any]:
     """解析明细中的 raw_result 字段。"""
     if raw_result in (None, ""):
@@ -1747,21 +1968,85 @@ def main() -> int:
                 padding_crop_output_dir=TMP_PADDING_CROP_DIR,
             )
             detail_rows.append(rerun_row)
+            write_rows_immediately(output_path, [rerun_row], expect_map)
             processed += 1
             print(
                 f"{args.mode} | {folder_name} | page {page_no} | "
                 f"status={rerun_row['status']} | final_number={rerun_row['final_number']}"
             )
 
-        apply_expect_numbers(detail_rows, expect_map)
-        updated = update_excel_rows(output_path, detail_rows)
         file_count, failed_page_count, mismatch_count = audit_position_counts(
             input_excel=output_path,
             output_path=output_path,
         )
         print(
-            f"{args.mode} 执行完成：处理页数={processed}，跳过页数={skipped}，更新页数={updated}，"
+            f"{args.mode} 执行完成：处理页数={processed}，跳过页数={skipped}，更新页数={processed}，"
             f"不一致文件数={file_count}，失败页数={failed_page_count}，不一致记录数={mismatch_count}"
+        )
+        return 0
+
+    if args.mode == "yolo":
+        expect_map = load_expect_number_map(output_path)
+        input_dir = Path(args.input_dir).expanduser()
+        try:
+            task_folders = iter_task_folders(input_dir)
+        except FileNotFoundError as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
+
+        if not task_folders:
+            print("未找到任何任务文件夹。", file=sys.stderr)
+            return 1
+
+        if args.workers < 1:
+            print("并发数必须大于等于 1。", file=sys.stderr)
+            return 1
+
+        tasks: list[tuple[Path, Path]] = []
+        for folder_path in task_folders:
+            for image_path in iter_images(folder_path):
+                tasks.append((folder_path, image_path))
+
+        if not tasks:
+            print("没有生成任何结果，请检查目录中的图片文件。", file=sys.stderr)
+            return 1
+
+        with ThreadPoolExecutor(max_workers=args.workers) as executor:
+            future_map = {
+                executor.submit(
+                    process_image_yolo_only,
+                    folder_path,
+                    image_path,
+                    args.api_url,
+                    args.model_type,
+                    args.timeout,
+                ): (folder_path, image_path)
+                for folder_path, image_path in tasks
+            }
+            for future in as_completed(future_map):
+                row = future.result()
+                write_rows_immediately(output_path, [row], expect_map)
+                if row["status"] == "success":
+                    print(
+                        f"yolo | {row['folder_name']} | page {row['page_no']} | "
+                        f"yolo_number={row['yolo_number']}"
+                    )
+                else:
+                    print(
+                        f"yolo | {row['folder_name']} | page {row['page_no']} | "
+                        f"failed={row['error_message']}",
+                        file=sys.stderr,
+                    )
+
+        yolo_file_count, yolo_failed_page_count, yolo_mismatch_count = audit_yolo_counts(
+            input_excel=output_path,
+            output_path=output_path,
+        )
+        print(
+            f"yolo 执行完成：已逐页写入 Excel；"
+            f"YOLO不一致文件数={yolo_file_count}，"
+            f"YOLO不一致页数={yolo_failed_page_count}，"
+            f"YOLO不一致记录数={yolo_mismatch_count}"
         )
         return 0
 
@@ -1784,7 +2069,6 @@ def main() -> int:
         print("并发数必须大于等于 1。", file=sys.stderr)
         return 1
 
-    detail_rows: list[dict] = []
     tasks: list[tuple[Path, Path]] = []
     folder_image_counts: dict[str, int] = {}
 
@@ -1819,7 +2103,7 @@ def main() -> int:
         }
         for future in as_completed(future_map):
             row = future.result()
-            detail_rows.append(row)
+            write_rows_immediately(output_path, [row], expect_map)
             if row["status"] == "success":
                 print(
                     f"{row['folder_name']} | page {row['page_no']} | "
@@ -1832,11 +2116,19 @@ def main() -> int:
                     file=sys.stderr,
                 )
 
-    detail_rows.sort(key=lambda row: (row["folder_name"], row["page_no"]))
-
     summary_rows: list[dict] = []
     for folder_path in task_folders:
-        folder_rows = [row for row in detail_rows if row["folder_name"] == folder_path.name]
+        folder_rows = []
+        workbook = load_workbook(output_path, read_only=True)
+        if "明细" in workbook.sheetnames:
+            detail_sheet = workbook["明细"]
+            rows = detail_sheet.iter_rows(values_only=True)
+            headers = next(rows, None)
+            if headers:
+                header_map = {str(header): index for index, header in enumerate(headers) if header is not None}
+                for row in rows:
+                    if row[header_map["folder_name"]] == folder_path.name:
+                        folder_rows.append(row)
         if not folder_rows:
             continue
         detailed_id, task_id = split_folder_name(folder_path.name)
@@ -1846,10 +2138,10 @@ def main() -> int:
                 "detailed_id": detailed_id,
                 "task_id": task_id,
                 "page_count": folder_image_counts[folder_path.name],
-                "success_page_count": sum(1 for row in folder_rows if row["status"] == "success"),
-                "failed_page_count": sum(1 for row in folder_rows if row["status"] == "failed"),
-                "total_position_count": sum(row["position_count"] for row in folder_rows),
-                "total_final_number": sum(row["final_number"] for row in folder_rows),
+                "success_page_count": sum(1 for row in folder_rows if row[header_map["status"]] == "success"),
+                "failed_page_count": sum(1 for row in folder_rows if row[header_map["status"]] == "failed"),
+                "total_position_count": sum(normalize_count(row[header_map["position_count"]]) or 0 for row in folder_rows),
+                "total_final_number": sum(normalize_count(row[header_map["final_number"]]) or 0 for row in folder_rows),
             }
         )
 
