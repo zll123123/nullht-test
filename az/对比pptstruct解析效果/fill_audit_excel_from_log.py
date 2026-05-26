@@ -9,19 +9,30 @@ from typing import Dict, Optional
 from openpyxl import load_workbook
 
 
-DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("ppt解析测试case.xlsx")
+
+#fill_audit_excel_from_log.py --mode error-page  只跑error page页
+#fill_audit_excel_from_log.py --mode full-file   跑全部文件
+#fill_audit_excel_from_log.py --mode full-file --skip-non-empty  跳过非空模式，有内容则不写入
+
+DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("ppt原文抽取结果_获取pptstruct对比.xlsx")
 DEFAULT_LOG_SOURCE = Path(__file__).resolve().parent
-TASK_ID_HEADER = "任务编号"
-PAGE_NUMBER_HEADER = "报错页码"
-PPT_STRUCT_HEADER = "日志中提取的pptstrut"
+TASK_ID_HEADER = "taskid"
+PAGE_NUMBER_HEADER = "页码"
+PPT_STRUCT_HEADER = "日志中的pptstruct"
 
 TASK_ID_PATTERN = re.compile(r"TaskID:\s*([A-Za-z0-9]+)")
 FILE_ID_PATTERN = re.compile(r"getPptxFlow fileId\s*=\s*([^\s]+)")
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="根据 Excel 中的任务编号和报错页码，从日志正文提取对应页的 pptStruct 并回填。")
+    parser = argparse.ArgumentParser(description="根据 Excel 中的任务编号，从日志正文提取错误页或整份文件的 pptStruct 并回填。")
     parser.add_argument("--sheet-name", help="可选，指定工作表名称；默认使用 active sheet")
+    parser.add_argument(
+        "--mode",
+        choices=("error-page", "full-file"),
+        default="error-page",
+        help="error-page 提取错误页码对应的 pptStruct；full-file 提取整份文件每一页的 pptStruct",
+    )
     parser.add_argument(
         "--skip-non-empty",
         action="store_true",
@@ -121,6 +132,12 @@ def overwrite_cell(sheet, row_index: int, column_index: int, value: str) -> None
     cell.value = value
 
 
+def build_full_file_ppt_struct(page_map: Dict[str, object]) -> str:
+    ordered_pages = sorted(page_map.items(), key=lambda item: int(item[0]) if str(item[0]).isdigit() else str(item[0]))
+    ordered_dict = {page_number: page_object for page_number, page_object in ordered_pages}
+    return json.dumps(ordered_dict, ensure_ascii=False)
+
+
 def main() -> int:
     args = parse_args()
     excel_path = DEFAULT_EXCEL_PATH.expanduser().resolve()
@@ -144,10 +161,6 @@ def main() -> int:
         if not task_id:
             continue
 
-        normalized_page_number = normalize_page_number(page_number)
-        if not normalized_page_number:
-            continue
-
         file_id = task_to_file_id.get(str(task_id).strip())
         if not file_id:
             overwrite_cell(sheet, row_index, column_map["ppt_struct"], "日志中未定位到该任务编号对应的file_id")
@@ -158,6 +171,15 @@ def main() -> int:
         if not isinstance(page_map, dict):
             overwrite_cell(sheet, row_index, column_map["ppt_struct"], "日志中未定位到该任务编号对应的pptStruct")
             updated_rows += 1
+            continue
+
+        if args.mode == "full-file":
+            overwrite_cell(sheet, row_index, column_map["ppt_struct"], build_full_file_ppt_struct(page_map))
+            updated_rows += 1
+            continue
+
+        normalized_page_number = normalize_page_number(page_number)
+        if not normalized_page_number:
             continue
 
         page_object = page_map.get(normalized_page_number)

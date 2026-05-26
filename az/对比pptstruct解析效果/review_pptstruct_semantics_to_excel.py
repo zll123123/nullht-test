@@ -18,7 +18,7 @@ from openpyxl.utils import get_column_letter
 from pptx import Presentation
 
 
-DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("ppt解析测试case.xlsx")
+DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("ppt原文抽取结果_获取pptstruct对比.xlsx")
 DEFAULT_LOG_PATH = Path(__file__).resolve().with_name("review_pptstruct_semantics_to_excel.log")
 DEFAULT_PPT_DIR = Path("/Users/layla.zhang/测试用例/测试材料/az/验证case/")
 DEFAULT_LLM_BASE_URL = "https://api.minimaxi.com/v1"
@@ -28,14 +28,14 @@ DEFAULT_LLM_TIMEOUT_SECONDS = 120
 DEFAULT_LLM_MAX_RETRIES = 3
 
 FILE_NAME_HEADER = "文件名称"
-PAGE_NUMBER_HEADER = "报错页码"
-PPT_STRUCT_HEADER = "日志中提取的pptstrut"
+PAGE_NUMBER_HEADER = "页码"
+PPT_STRUCT_HEADER = "日志中的pptstruct"
 PPT_SOURCE_HEADER = "ppt原文"
 DIFF_HEADER = "diff"
 LLM_ERROR_TYPE_HEADER = "LLM错误类型"
 LLM_SEVERITY_HEADER = "LLM严重程度"
 LLM_BASIS_HEADER = "LLM判断依据"
-LLM_RESULT_HEADER = "LLM审核结果"
+LLM_RESULT_HEADER = "人工审核结果"
 
 SENTENCE_SEPARATOR_PATTERN = re.compile(r"[。！？!?；;]+|\n+")
 WHITESPACE_PATTERN = re.compile(r"\s+")
