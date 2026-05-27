@@ -1,64 +1,51 @@
 # CSL 完整对话路径执行记录
 
-- 总数：20
+- 总数：6
 - 通过：6
 - 失败：0
-- 异常：14
+- 异常：0
 - 待完成：0
 
 ## 失败汇总
-未通过 case 数：14
-- P035 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P036 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P037 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P038 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P039 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P040 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P041 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P042 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P043 | 执行失败 | 失败字段：- | 原因：503 Server Error: Service Temporarily Unavailable for url: https://api.deepseek.com/chat/completions
-- P044 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P045 | 执行失败 | 失败字段：- | 原因：503 Server Error: Service Temporarily Unavailable for url: https://api.deepseek.com/chat/completions
-- P046 | 执行失败 | 失败字段：- | 原因：HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
-- P047 | 执行失败 | 失败字段：- | 原因：503 Server Error: Service Temporarily Unavailable for url: https://api.deepseek.com/chat/completions
-- P048 | 执行失败 | 失败字段：- | 原因：P048 未完成，但没有后续问题。
+未通过 case 数：0
 
 ## 执行明细
 
-## P030 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 知道
+## P003 ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
 - 状态：DONE
-- session_id：c3ec9912-0ead-49e7-9684-2700f7995a9a
-- 关注点策略：F1
+- session_id：98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76
+- 关注点策略：F2_OPTION
 - 首次出现can_stop=true的轮次：-
 - 实际调用stop的轮次：-
 - 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
 - 测试回答：主任医师
 - 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 外科[/OPTIONS][/QUESTION]
-- 测试回答：医院管理层/药剂科
+- 测试回答：ICU（现版本）
 - 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
 - 测试回答：既往拜访过
 - 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
 - 测试回答：≥50%
-- 系统提问：临床医生如何看待白蛋白在临床应用中的获益？临床应用是否合理？
-[QUESTION]请选择或描述：[OPTIONS]A. 白蛋白目前大部分是滥用，需要减少整体使用 B. 认可白蛋白在重症监护室/肝病科的应用，但认为外科滥用严重，需要减少使用 C. 目前，对人血白蛋白总
-体上管理较好，Alb<30g/L
-的患者可以使用 D. 人血白蛋白应用合理，并未重点监控，但考虑到白蛋白价格高，MDL/DRG下带来医保资金压力 E. 人血白蛋白应用合理，并未重点监控，MDL/DRG的执行也不会影响白蛋白的临床应用[/OPTIONS][/QUESTION]
+- 系统提问：您拜访的医生属于下列哪种类型？
+[QUESTION]请选择：[OPTIONS]A. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例<70% B. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例≥70%[/OPTIONS][/QUESTION]
 - 测试回答：A
-- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 人血白蛋白作为血液制品，是否存在病毒感染风险？是否应尽量少用？ B. 白蛋白在重症患者中能否真正降低死亡率和ICU停留时长？ C. 白蛋白用于肝病患者（如腹水、SBP、HRS）是否确有循证支持的临床获益？ D. 在DRG/MDL支付背景下，白蛋白使用的成本效益比如何？[/OPTIONS][/QUESTION]
-- 测试回答：A
+- 系统提问：你所拜访的医生在低白蛋白血症的患者中，通常有多少使用人血白蛋白进行治疗？
+[QUESTION]请选择或描述：[OPTIONS]A. <20% B. 20%~40% C.  40%~60% D. ＞60% E. ＞60%，同时会向其他医生主动推荐在这类患者中优先使用白蛋白[/OPTIONS][/QUESTION]
+- 测试回答：C
+- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 医保报销限制：仅Alb≤25g/L患者才可报销白蛋白 B. 纠正低白蛋白血症（Alb＜30g/L）是否被权威指南明确推荐 C. 低白蛋白血症如何影响高蛋白结合率抗菌药物的疗效 D. 补充白蛋白能否降低危重症患者抗菌治疗失败及死亡风险[/OPTIONS][/QUESTION]
+- 测试回答：C
 - 关注点执行结果：
 ```json
 [
   {
-    "planned_branch": "F1",
-    "actual_branch": "F1",
-    "answer": "A",
+    "planned_branch": "F2_OPTION",
+    "actual_branch": "F2_OPTION",
+    "answer": "C",
     "fixed_option_label": "A",
-    "fixed_option_text": "人血白蛋白作为血液制品，是否存在病毒感染风险？是否应尽量少用？",
-    "selected_option_label": "A",
-    "selected_option_text": "人血白蛋白作为血液制品，是否存在病毒感染风险？是否应尽量少用？",
+    "fixed_option_text": "医保报销限制：仅Alb≤25g/L患者才可报销白蛋白",
+    "selected_option_label": "C",
+    "selected_option_text": "低白蛋白血症如何影响高蛋白结合率抗菌药物的疗效",
     "custom_input": "",
-    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 人血白蛋白作为血液制品，是否存在病毒感染风险？是否应尽量少用？ B. 白蛋白在重症患者中能否真正降低死亡率和ICU停留时长？ C. 白蛋白用于肝病患者（如腹水、SBP、HRS）是否确有循证支持的临床获益？ D. 在DRG/MDL支付背景下，白蛋白使用的成本效益比如何？[/OPTIONS][/QUESTION]"
+    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 医保报销限制：仅Alb≤25g/L患者才可报销白蛋白 B. 纠正低白蛋白血症（Alb＜30g/L）是否被权威指南明确推荐 C. 低白蛋白血症如何影响高蛋白结合率抗菌药物的疗效 D. 补充白蛋白能否降低危重症患者抗菌治疗失败及死亡风险[/OPTIONS][/QUESTION]"
   }
 ]
 ```
@@ -68,11 +55,11 @@
   {
     "api_name": "start_conversation",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/start",
-    "request_identifier": "P030",
-    "case_id": "P030",
+    "request_path": "/api/sale/chat/start",
+    "request_identifier": "P003",
+    "case_id": "P003",
     "session_id": "",
-    "elapsed_ms": 187.69,
+    "elapsed_ms": 140.45,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -80,11 +67,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "case_id": "P030",
-    "session_id": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "elapsed_ms": 2242.27,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 2127.73,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -92,11 +79,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "case_id": "P030",
-    "session_id": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "elapsed_ms": 2172.12,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 1789.84,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -104,11 +91,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "case_id": "P030",
-    "session_id": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "elapsed_ms": 942.56,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 806.0,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -116,11 +103,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "case_id": "P030",
-    "session_id": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "elapsed_ms": 1206.63,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 1009.84,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -128,11 +115,23 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "case_id": "P030",
-    "session_id": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "elapsed_ms": 3203.9,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 66.72,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 3034.22,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -141,10 +140,10 @@
     "api_name": "call_focus_match_llm",
     "request_method": "POST",
     "request_path": "https://api.deepseek.com/chat/completions",
-    "request_identifier": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "case_id": "P030",
-    "session_id": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "elapsed_ms": 1710.08,
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 1902.32,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -152,11 +151,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "case_id": "P030",
-    "session_id": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "elapsed_ms": 1446.55,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 1374.7,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -164,11 +163,23 @@
   {
     "api_name": "fetch_visit_plan_detail_once",
     "request_method": "GET",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/history/c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "request_identifier": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "case_id": "P030",
-    "session_id": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
-    "elapsed_ms": 72.46,
+    "request_path": "/api/sale/chat/history/98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 30.7,
+    "success": false,
+    "status_code": 400,
+    "error": "400 Client Error: Bad Request for url: https://dev-ccet.cslbehring.com.cn/api/sale/chat/history/98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76"
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "request_identifier": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "case_id": "P003",
+    "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
+    "elapsed_ms": 31.28,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -180,480 +191,115 @@
 {
   "literatures": [
     {
-      "id": "08185186d3ec6eaa2b74b0be2c1538fa",
-      "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
+      "id": "5b03a70bd53a7f819fd6aae36e9d3217",
+      "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
       "type": "INNER",
       "chunk_ids": [],
       "file_name": null,
-      "research_summary": "该研究显示人血白蛋白采用巴氏消毒法和多重病毒灭活工艺，数十年上市后监测数据显示无病原体传播事件，为临床安全性管理提供了可靠依据。",
-      "file_key": "92fca00cad9674414d7882c518635033"
+      "research_summary": "在脓毒症及脓毒症休克临床场景中，该研究显示人血白蛋白可改善高蛋白结合率抗生素的药代动力学（PK/PD），为临床优化给药提供了有价值的参考依据。",
+      "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
     },
     {
-      "id": "614d32b7c458abe70fe51c660500fc3f",
-      "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
+      "id": "b71901973a6930e4031c50bb2e4d93ab",
+      "title": "专家幻灯-脓毒症休克患者的微循环及内皮细胞屏障功能的监测-CHN-ALB-0378.pdf",
       "type": "INNER",
       "chunk_ids": [],
       "file_name": null,
-      "research_summary": "该共识系统规范了人血白蛋白临床应用标准与合理用药管理措施，为医疗机构制定基于Alb<30g/L治疗阈值的用药决策提供了权威指导框架。",
-      "file_key": "24a5eb52596a20afe11ce38f7b41e094"
+      "research_summary": "该研究针对危重症药物转运场景提供了人血白蛋白结合并转运药物的机制证据，提示其可改善抗菌药物疗效，值得优先推荐。",
+      "file_key": "7502623d18f854013b142b58cbf06e12"
     },
     {
-      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-1ff9d2bcfb8c46818101914cc885f13f",
-      "title": "住院患者人血白蛋白处方点评分析",
-      "type": "EXTERNAL",
+      "id": "7faaadada337b94c055c3a73d340a47a",
+      "title": "8_中国医师协会急诊医师分会_临床急诊杂志_2018_19(9)_567-588.pdf",
+      "type": "INNER",
       "chunk_ids": [],
       "file_name": null,
-      "research_summary": "该分析显示90.22%患者用药前血清白蛋白水平低于30g/L，符合临床合理应用标准，为治疗阈值的执行提供了实证数据支持。",
-      "file_key": null
+      "research_summary": "该研究在脓毒症早期复苏中观察到人血白蛋白治疗可显著降低患者病死率，为临床应用提供了有价值的参考依据。",
+      "file_key": "a93964071af3c21592cb30971bd259b4"
     }
   ],
   "user_id": null,
-  "session_id": "c3ec9912-0ead-49e7-9684-2700f7995a9a",
+  "session_id": "98acbc3e-bb7b-4cd1-95a4-66ebe0a40e76",
   "visit_plan_digest": {
-    "notion": "医生作为合理用药管理者，当前处于'知道'阶段，认为人血白蛋白存在滥用需重点监控，并关注其作为血液制品的病毒感染风险。",
+    "notion": "ICU主任，针对Alb<30 g/L患者白蛋白使用率约40–60%（处于“使用”阶段），并明确关注低Alb对高蛋白结合抗菌药物PK/PD的影响。",
     "doctorInfo": {
-      "department": "医院管理层/药剂科",
-      "type": "合理用药管理者",
-      "grade": "知道",
+      "department": "ICU",
+      "type": "低蛋白使用者",
+      "grade": "使用",
       "rank": "主任医师"
     },
-    "goal": "围绕'重症/肝病领域合理使用人血白蛋白可降低并发症与死亡率'，推动医生从'知道'向'尝试'阶段进阶；下一阶段意味着医生将开始认可人血白蛋白作为治疗药物的临床价值，但仍关注外科滥用需重点监管。",
-    "strategy": "以病原体灭活工艺安全性为切入点建立信任，结合Alb<30g/L治疗阈值循证依据，阐明重症/肝病领域精准应用对改善预后的管理价值。"
+    "goal": "围绕权威共识：在危重症中纠正Alb＜30 g/L可优化抗菌药物疗效并降低感染风险，推动医生从“使用”向“偏好”进阶；“偏好”意味着在更多Alb＜30 g/L患者中常规选择白蛋白（使用率>60%），并在拟用高蛋白结合抗菌药物时更主动补白蛋白、以≥30 g/L为短期纠正目标并纳入抗菌治疗路径考量。",
+    "strategy": "以指南与PK/PD对抗菌疗效的影响为切入，强调在拟用高蛋白结合抗菌药物且Alb<30 g/L时优先补白蛋白、以≥30 g/L为短期目标，并建议在科室内作为抗菌路径的试点推进。"
   },
   "comm_suggest": {
     "literatures": [
       {
         "id": null,
-        "title": "1. Finfer S,et al. N Engl J Med. 2004;350(22):2247-2256；",
+        "title": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.",
         "type": "CSL",
         "chunk_ids": null,
         "file_name": null,
-        "research_summary": "SAFE研究是一项随机对照研究，纳入澳大利亚和新西兰16家ICU中6997例需容量治疗的患者，分为杰特贝林4%人血白蛋白组（3497例）和生理盐水组（3500例）。亚组分析纳入1218例严重脓毒症患者，最终多变量分析样本为白蛋白组452例，生理盐水组467例，主要评估两种液体复苏对器官功能和死亡率的影响。结果：白蛋白显著降低严重脓毒症患者28天死亡风险29%（p=0.03），对肾功能障碍无显著影响（p=0.92）。白蛋白在复苏早期显著降低净正液平衡，提升中心静脉压，更易促进血流动力学稳定。",
+        "research_summary": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）",
         "file_key": null
       },
       {
         "id": null,
-        "title": "2. SAFE Study Investigators, Intensive Care Med. 2011 Jan;37 (1):86-96",
+        "title": "2. Ibrahim, E.H., et al.,Chest, 2000. 118(1):146-155.",
         "type": "CSL",
         "chunk_ids": null,
         "file_name": null,
-        "research_summary": "SAFE研究是一项随机对照研究，纳入澳大利亚和新西兰16家ICU中6997例需容量治疗的患者，分为杰特贝林4%人血白蛋白组（3497例）和生理盐水组（3500例）。亚组分析纳入1218例严重脓毒症患者，最终多变量分析样本为白蛋白组452例，生理盐水组467例，主要评估两种液体复苏对器官功能和死亡率的影响。结果：白蛋白显著降低严重脓毒症患者28天死亡风险29%（p=0.03），对肾功能障碍无显著影响（p=0.92）。白蛋白在复苏早期显著降低净正液平衡，提升中心静脉压，更易促进血流动力学稳定。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "3. Xu JY, et al. Crit Care, 2014, 18(6): 702",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "一项荟萃分析评估了白蛋白与晶体液对严重脓毒症和脓毒症休克患者液体复苏的效果，共纳入5项研究，涉及3658例严重脓毒症和2180例脓毒症休克患者。结果：白蛋白相比晶体液显著降低脓毒症休克患者90天死亡风险19%（RR=0.81）。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "4. Park, Sandra H et al. J Trauma Acute Care Surg. 2012;73(5):1294-1297.",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "一项单中心研究纳入2003-2011年间ICU收治的烧伤患者。2007年3月前的患者在第一个24h内输注乳酸林格液；2007年3月后的患者在第一个24h内添加5％人血白蛋白。结果：烧伤后最初24h内使用人血白蛋白显著降低死亡率（10% vs 26%, P＜0.01）、减少机械通气时间（10天 vs 20天，P＜0.05），输液量也有所下降（输液量＞6ml/kg/%TBS的患者比例：9% vs 18%）。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "5. Salerno F, et al. Clinical Gastroenterology & Hepatology. 2013,11(2):123-130",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "一项荟萃分析纳入4项随机对照研究，共288位SBP患者，所有患者均接受抗生素治疗，研究中输注20%人血白蛋白，评估人血白蛋白对SBP患者肾损伤及死亡率的影响。结果：抗生素联合白蛋白治疗显著降低死亡风险66%（OR=0.34,）和肾损伤风险79%（OR=0.21）。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "6. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "7. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
+        "research_summary": "一项前瞻性队列研究纳入492名ICU患者，评估抗菌治疗血流感染的充分性与临床结局关系。结果：院内死亡患者的血清白蛋白水平（2.6 g/dL）显著低于存活者（2.9 g/dL）；血清白蛋白每下降1 g/dL，抗菌治疗失败风险增加37%（AOR 1.37, p<0.014）。",
         "file_key": null
       }
     ],
     "transitional_info": [
-      "在重症监护室/肝病科减少并发症发生率、降低死亡率、减少重症监护室停留时长与反复住院的频次"
+      "强调对Alb＜30 g/L的患者纠正低白蛋白血症有权威指南推荐以及纠正低白蛋白血症有助于提高抗菌药物治疗的有效性，降低感染风险等积极的临床获益。"
     ],
-    "support_info": "{1}. 白蛋白的多种生理功能\n● 白蛋白独特的三级结构决定其具有多重生理功能，除了血浆扩容、维持渗透压的胶体功能之外，还具有结合转运、抗氧化、抗炎、维持血管内皮完整性等多种非胶体功能。\n● 基于其维持血浆胶体渗透压的作用，白蛋白用于不同的临床适应症：①危重患者的循环支持；②肝硬化及其并发症（腹水和大量放腹水，自发性细菌性腹膜炎，肝肾综合征，腹水）\n● 此外，低白蛋白血症是危重疾病、肝病等常见的伴发状态，与患者不良预后相关，可显著延长患者的住院时长、延长在重症监护室的停留时长、增加并发症发生风险，甚至显著升高死亡风险。而人血白蛋白输注正是纠正低白蛋白血症的特异性疗法\n\n{2}. 人血白蛋白用于重症患者的临床价值\n人血白蛋白被各国指南推荐用于脓毒症、烧伤等危重患者，目前是临床应用最多的胶体溶液。人血白蛋白在危重症患者液体复苏治疗中的临床优势包括：\n● 减少液体过负荷，更易促进血流动力学稳定\n● 对脓毒症休克患者，与晶体液相比，人血白蛋白可显著降低患者90天死亡风险，降幅高达19%，且具有良好的肾脏安全性{1},{2}.3\n●对重症烧伤患者，24h内使用人血白蛋白可显著降低死亡率、减少机械通气时间，减少患者输液量，从而减少重症监护室的停留时长{4}\n●此外，人血白蛋白还有潜在的维持血管完整性，改善微循环和抗氧化等益处\n\n{3}. 人血白蛋白用于肝病患者的临床价值\n●《2023 肝硬化腹水诊疗指南》11建议短期或紧急补充人血白蛋白以改善肝硬化腹水患者的预后\n●《2018 EASL临床实践指南》{7}推荐顽固型腹水患者LVP后输注人血白蛋白，可降低PCD的发生和死亡风险与单用抗菌药相比，联合使用人血白蛋白，可降低SBP患者的死亡及肾损伤风险{5}\n● 与单用特利加压素相比，联合使用人血白蛋白，可显著改善HRS患者生存率，改善肾功能23\n● 在失代偿期肝硬化患者中长期使用人血白蛋白可显著降低死亡风险达38%，显著降低顽固型腹水发生风险达57%，降低患者SBP发生风险达67%，降低{1}型肝肾综合征发生风险达61%{6},{7}\n● 人血白蛋白联合标准医学治疗，可使全因住院率下降35%，住院时间下降45%{6}"
+    "support_info": "●中国《人血白蛋白在危重症患者应用专家共识》{1}推荐人血白蛋白在多种危重症患者中使用，包括腹部外科手术患者、烧伤患者、创伤患者、失血性休克患者、ARDS患者等\n●低白蛋白血症会影响高蛋白结合率的抗菌药物，可致抗菌治疗失败风险升高，增加患者感染风险\n一项对危重症患者的研究显示，血清白蛋白水平每降低{1}g/dL，抗菌治疗失败风险升高37%；院内死亡患者的血清白蛋白水平（26g/L）显著低于院内存活患者（ 29g/L ）{2}\n●脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学"
   },
   "focus_point": {
     "items": [
       {
-        "title": "人血白蛋白属于血液制品，是否存在病毒感染传播的风险？是否能少用就少用？",
-        "content": "-"
-      }
-    ],
-    "literatures": null
-  },
-  "phase3_flag": true
-}
-```
-- 断言结果：
-```json
-{
-  "passed": true,
-  "total_checks": 12,
-  "passed_checks": 12,
-  "failed_fields": [],
-  "checks": [
-    {
-      "field_name": "doctor_type",
-      "expected": "合理用药管理者",
-      "actual": "合理用药管理者",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "doctor_grade",
-      "expected": "知道",
-      "actual": "知道",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "trans_info",
-      "expected": "在重症监护室/肝病科减少并发症发生率、降低死亡率、减少重症监护室停留时长与反复住院的频次",
-      "actual": "在重症监护室/肝病科减少并发症发生率、降低死亡率、减少重症监护室停留时长与反复住院的频次",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "support_info",
-      "expected": "1. 白蛋白的多种生理功能\n● 白蛋白独特的三级结构决定其具有多重生理功能，除了血浆扩容、维持渗透压的胶体功能之外，还具有结合转运、抗氧化、抗炎、维持血管内皮完整性等多种非胶体功能。\n● 基于其维持血浆胶体渗透压的作用，白蛋白用于不同的临床适应症：①危重患者的循环支持；②肝硬化及其并发症（腹水和大量放腹水，自发性细菌性腹膜炎，肝肾综合征，腹水）\n● 此外，低白蛋白血症是危重疾病、肝病等常见的伴发状态，与患者不良预后相关，可显著延长患者的住院时长、延长在重症监护室的停留时长、增加并发症发生风险，甚至显著升高死亡风险。而人血白蛋白输注正是纠正低白蛋白血症的特异性疗法\n\n2. 人血白蛋白用于重症患者的临床价值\n人血白蛋白被各国指南推荐用于脓毒症、烧伤等危重患者，目前是临床应用最多的胶体溶液。人血白蛋白在危重症患者液体复苏治疗中的临床优势包括：\n● 减少液体过负荷，更易促进血流动力学稳定\n● 对脓毒症休克患者，与晶体液相比，人血白蛋白可显著降低患者90天死亡风险，降幅高达19%，且具有良好的肾脏安全性1,2.3\n●对重症烧伤患者，24h内使用人血白蛋白可显著降低死亡率、减少机械通气时间，减少患者输液量，从而减少重症监护室的停留时长4\n●此外，人血白蛋白还有潜在的维持血管完整性，改善微循环和抗氧化等益处\n\n3. 人血白蛋白用于肝病患者的临床价值\n●《2023 肝硬化腹水诊疗指南》11建议短期或紧急补充人血白蛋白以改善肝硬化腹水患者的预后\n●《2018 EASL临床实践指南》7推荐顽固型腹水患者LVP后输注人血白蛋白，可降低PCD的发生和死亡风险与单用抗菌药相比，联合使用人血白蛋白，可降低SBP患者的死亡及肾损伤风险5\n● 与单用特利加压素相比，联合使用人血白蛋白，可显著改善HRS患者生存率，改善肾功能23\n● 在失代偿期肝硬化患者中长期使用人血白蛋白可显著降低死亡风险达38%，显著降低顽固型腹水发生风险达57%，降低患者SBP发生风险达67%，降低1型肝肾综合征发生风险达61%6,7\n● 人血白蛋白联合标准医学治疗，可使全因住院率下降35%，住院时间下降45%6",
-      "actual": "{1}. 白蛋白的多种生理功能\n● 白蛋白独特的三级结构决定其具有多重生理功能，除了血浆扩容、维持渗透压的胶体功能之外，还具有结合转运、抗氧化、抗炎、维持血管内皮完整性等多种非胶体功能。\n● 基于其维持血浆胶体渗透压的作用，白蛋白用于不同的临床适应症：①危重患者的循环支持；②肝硬化及其并发症（腹水和大量放腹水，自发性细菌性腹膜炎，肝肾综合征，腹水）\n● 此外，低白蛋白血症是危重疾病、肝病等常见的伴发状态，与患者不良预后相关，可显著延长患者的住院时长、延长在重症监护室的停留时长、增加并发症发生风险，甚至显著升高死亡风险。而人血白蛋白输注正是纠正低白蛋白血症的特异性疗法\n\n{2}. 人血白蛋白用于重症患者的临床价值\n人血白蛋白被各国指南推荐用于脓毒症、烧伤等危重患者，目前是临床应用最多的胶体溶液。人血白蛋白在危重症患者液体复苏治疗中的临床优势包括：\n● 减少液体过负荷，更易促进血流动力学稳定\n● 对脓毒症休克患者，与晶体液相比，人血白蛋白可显著降低患者90天死亡风险，降幅高达19%，且具有良好的肾脏安全性{1},{2}.3\n●对重症烧伤患者，24h内使用人血白蛋白可显著降低死亡率、减少机械通气时间，减少患者输液量，从而减少重症监护室的停留时长{4}\n●此外，人血白蛋白还有潜在的维持血管完整性，改善微循环和抗氧化等益处\n\n{3}. 人血白蛋白用于肝病患者的临床价值\n●《2023 肝硬化腹水诊疗指南》11建议短期或紧急补充人血白蛋白以改善肝硬化腹水患者的预后\n●《2018 EASL临床实践指南》{7}推荐顽固型腹水患者LVP后输注人血白蛋白，可降低PCD的发生和死亡风险与单用抗菌药相比，联合使用人血白蛋白，可降低SBP患者的死亡及肾损伤风险{5}\n● 与单用特利加压素相比，联合使用人血白蛋白，可显著改善HRS患者生存率，改善肾功能23\n● 在失代偿期肝硬化患者中长期使用人血白蛋白可显著降低死亡风险达38%，显著降低顽固型腹水发生风险达57%，降低患者SBP发生风险达67%，降低{1}型肝肾综合征发生风险达61%{6},{7}\n● 人血白蛋白联合标准医学治疗，可使全因住院率下降35%，住院时间下降45%{6}",
-      "passed": true,
-      "match_mode": "contains"
-    },
-    {
-      "field_name": "comm_literature_titles",
-      "expected": "1. Finfer S,et al. N Engl J Med. 2004;350(22):2247-2256；\n2. SAFE Study Investigators, Intensive Care Med. 2011 Jan;37 (1):86-96\n3. Xu JY, et al. Crit Care, 2014, 18(6): 702\n4. Park, Sandra H et al. J Trauma Acute Care Surg. 2012;73(5):1294-1297.\n5. Salerno F, et al. Clinical Gastroenterology & Hepatology. 2013,11(2):123-130\n6. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.\n7. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）",
-      "actual": "1. Finfer S,et al. N Engl J Med. 2004;350(22):2247-2256；\n2. SAFE Study Investigators, Intensive Care Med. 2011 Jan;37 (1):86-96\n3. Xu JY, et al. Crit Care, 2014, 18(6): 702\n4. Park, Sandra H et al. J Trauma Acute Care Surg. 2012;73(5):1294-1297.\n5. Salerno F, et al. Clinical Gastroenterology & Hepatology. 2013,11(2):123-130\n6. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.\n7. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）",
-      "passed": true,
-      "match_mode": "list_exact"
-    },
-    {
-      "field_name": "comm_literature_summaries",
-      "expected": "1-2. SAFE研究是一项随机对照研究，纳入澳大利亚和新西兰16家ICU中6997例需容量治疗的患者，分为杰特贝林4%人血白蛋白组（3497例）和生理盐水组（3500例）。亚组分析纳入1218例严重脓毒症患者，最终多变量分析样本为白蛋白组452例，生理盐水组467例，主要评估两种液体复苏对器官功能和死亡率的影响。结果：白蛋白显著降低严重脓毒症患者28天死亡风险29%（p=0.03），对肾功能障碍无显著影响（p=0.92）。白蛋白在复苏早期显著降低净正液平衡，提升中心静脉压，更易促进血流动力学稳定。\n3. 一项荟萃分析评估了白蛋白与晶体液对严重脓毒症和脓毒症休克患者液体复苏的效果，共纳入5项研究，涉及3658例严重脓毒症和2180例脓毒症休克患者。结果：白蛋白相比晶体液显著降低脓毒症休克患者90天死亡风险19%（RR=0.81）。\n4. 一项单中心研究纳入2003-2011年间ICU收治的烧伤患者。2007年3月前的患者在第一个24h内输注乳酸林格液；2007年3月后的患者在第一个24h内添加5％人血白蛋白。结果：烧伤后最初24h内使用人血白蛋白显著降低死亡率（10% vs 26%, P＜0.01）、减少机械通气时间（10天 vs 20天，P＜0.05），输液量也有所下降（输液量＞6ml/kg/%TBS的患者比例：9% vs 18%）。\n5. 一项荟萃分析纳入4项随机对照研究，共288位SBP患者，所有患者均接受抗生素治疗，研究中输注20%人血白蛋白，评估人血白蛋白对SBP患者肾损伤及死亡率的影响。结果：抗生素联合白蛋白治疗显著降低死亡风险66%（OR=0.34,）和肾损伤风险79%（OR=0.21）。\n6-7. ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
-      "actual": "SAFE研究是一项随机对照研究，纳入澳大利亚和新西兰16家ICU中6997例需容量治疗的患者，分为杰特贝林4%人血白蛋白组（3497例）和生理盐水组（3500例）。亚组分析纳入1218例严重脓毒症患者，最终多变量分析样本为白蛋白组452例，生理盐水组467例，主要评估两种液体复苏对器官功能和死亡率的影响。结果：白蛋白显著降低严重脓毒症患者28天死亡风险29%（p=0.03），对肾功能障碍无显著影响（p=0.92）。白蛋白在复苏早期显著降低净正液平衡，提升中心静脉压，更易促进血流动力学稳定。\nSAFE研究是一项随机对照研究，纳入澳大利亚和新西兰16家ICU中6997例需容量治疗的患者，分为杰特贝林4%人血白蛋白组（3497例）和生理盐水组（3500例）。亚组分析纳入1218例严重脓毒症患者，最终多变量分析样本为白蛋白组452例，生理盐水组467例，主要评估两种液体复苏对器官功能和死亡率的影响。结果：白蛋白显著降低严重脓毒症患者28天死亡风险29%（p=0.03），对肾功能障碍无显著影响（p=0.92）。白蛋白在复苏早期显著降低净正液平衡，提升中心静脉压，更易促进血流动力学稳定。\n一项荟萃分析评估了白蛋白与晶体液对严重脓毒症和脓毒症休克患者液体复苏的效果，共纳入5项研究，涉及3658例严重脓毒症和2180例脓毒症休克患者。结果：白蛋白相比晶体液显著降低脓毒症休克患者90天死亡风险19%（RR=0.81）。\n一项单中心研究纳入2003-2011年间ICU收治的烧伤患者。2007年3月前的患者在第一个24h内输注乳酸林格液；2007年3月后的患者在第一个24h内添加5％人血白蛋白。结果：烧伤后最初24h内使用人血白蛋白显著降低死亡率（10% vs 26%, P＜0.01）、减少机械通气时间（10天 vs 20天，P＜0.05），输液量也有所下降（输液量＞6ml/kg/%TBS的患者比例：9% vs 18%）。\n一项荟萃分析纳入4项随机对照研究，共288位SBP患者，所有患者均接受抗生素治疗，研究中输注20%人血白蛋白，评估人血白蛋白对SBP患者肾损伤及死亡率的影响。结果：抗生素联合白蛋白治疗显著降低死亡风险66%（OR=0.34,）和肾损伤风险79%（OR=0.21）。\nANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。\nANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
-      "passed": true,
-      "match_mode": "contains"
-    },
-    {
-      "field_name": "digest.department",
-      "expected": "医院管理层/药剂科",
-      "actual": "医院管理层/药剂科",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.rank",
-      "expected": "主任医师",
-      "actual": "主任医师",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.type",
-      "expected": "合理用药管理者",
-      "actual": "合理用药管理者",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.grade",
-      "expected": "知道",
-      "actual": "知道",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "focus_branch",
-      "expected": "F1",
-      "actual": "F1",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "focus_title",
-      "expected": "人血白蛋白属于血液制品，是否存在病毒感染传播的风险？是否能少用就少用？",
-      "actual": "人血白蛋白属于血液制品，是否存在病毒感染传播的风险？是否能少用就少用？",
-      "passed": true,
-      "match_mode": "contains"
-    }
-  ]
-}
-```
-
-## P031 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 尝试
-- 状态：DONE
-- session_id：05e58c61-4dd1-4186-9465-532f349df4c7
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-- 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
-- 测试回答：主任医师
-- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 外科[/OPTIONS][/QUESTION]
-- 测试回答：医院管理层/药剂科
-- 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
-- 测试回答：既往拜访过
-- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
-- 测试回答：≥50%
-- 系统提问：临床医生如何看待白蛋白在临床应用中的获益？临床应用是否合理？
-[QUESTION]请选择或描述：[OPTIONS]A. 白蛋白目前大部分是滥用，需要减少整体使用 B. 认可白蛋白在重症监护室/肝病科的应用，但认为外科滥用严重，需要减少使用 C. 目前，对人血白蛋白总
-体上管理较好，Alb<30g/L
-的患者可以使用 D. 人血白蛋白应用合理，并未重点监控，但考虑到白蛋白价格高，MDL/DRG下带来医保资金压力 E. 人血白蛋白应用合理，并未重点监控，MDL/DRG的执行也不会影响白蛋白的临床应用[/OPTIONS][/QUESTION]
-- 测试回答：B
-- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 外科围手术期使用人血白蛋白是否过度，Alb>30g/L或术后是否应减少使用？ B. 人血白蛋白如何具体降低外科患者围手术期并发症和死亡风险？ C. 心脏外科和腹部外科应用人血白蛋白的循证依据及指南推荐有哪些？ D. 使用人血白蛋白能否提升病床周转率，对DRG/MDL下的科室运营有何实际影响？[/OPTIONS][/QUESTION]
-- 测试回答：A
-- 关注点执行结果：
-```json
-[
-  {
-    "planned_branch": "F1",
-    "actual_branch": "F1",
-    "answer": "A",
-    "fixed_option_label": "A",
-    "fixed_option_text": "外科围手术期使用人血白蛋白是否过度，Alb>30g/L或术后是否应减少使用？",
-    "selected_option_label": "A",
-    "selected_option_text": "外科围手术期使用人血白蛋白是否过度，Alb>30g/L或术后是否应减少使用？",
-    "custom_input": "",
-    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 外科围手术期使用人血白蛋白是否过度，Alb>30g/L或术后是否应减少使用？ B. 人血白蛋白如何具体降低外科患者围手术期并发症和死亡风险？ C. 心脏外科和腹部外科应用人血白蛋白的循证依据及指南推荐有哪些？ D. 使用人血白蛋白能否提升病床周转率，对DRG/MDL下的科室运营有何实际影响？[/OPTIONS][/QUESTION]"
-  }
-]
-```
-- 接口耗时记录：
-```json
-[
-  {
-    "api_name": "start_conversation",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/start",
-    "request_identifier": "P031",
-    "case_id": "P031",
-    "session_id": "",
-    "elapsed_ms": 66.51,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "case_id": "P031",
-    "session_id": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "elapsed_ms": 2256.74,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "case_id": "P031",
-    "session_id": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "elapsed_ms": 2236.09,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "case_id": "P031",
-    "session_id": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "elapsed_ms": 951.48,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "case_id": "P031",
-    "session_id": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "elapsed_ms": 1065.43,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "case_id": "P031",
-    "session_id": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "elapsed_ms": 3887.88,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "call_focus_match_llm",
-    "request_method": "POST",
-    "request_path": "https://api.deepseek.com/chat/completions",
-    "request_identifier": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "case_id": "P031",
-    "session_id": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "elapsed_ms": 1996.7,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "case_id": "P031",
-    "session_id": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "elapsed_ms": 1565.71,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "fetch_visit_plan_detail_once",
-    "request_method": "GET",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/history/05e58c61-4dd1-4186-9465-532f349df4c7",
-    "request_identifier": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "case_id": "P031",
-    "session_id": "05e58c61-4dd1-4186-9465-532f349df4c7",
-    "elapsed_ms": 81.45,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  }
-]
-```
-- 最终拜访计划：
-```json
-{
-  "literatures": [
-    {
-      "id": "614d32b7c458abe70fe51c660500fc3f",
-      "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
-      "type": "INNER",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该研究针对医疗机构人血白蛋白合理用药管理提供了多学科专家共识，明确建议通过处方权限审批、处方审核规则制定及专项处方点评等措施加强监管，为规范外科围手术期白蛋白使用提供了权威管理依据。",
-      "file_key": "24a5eb52596a20afe11ce38f7b41e094"
-    },
-    {
-      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-2fd7b663c82748ae99c1eac5efe70fa7",
-      "title": "我院人血白蛋白合理使用分析及干预措施",
-      "type": "EXTERNAL",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该研究通过回顾性分析发现54.72%的人血白蛋白使用存在不合理现象，其中38.58%用于无指征的营养支持，提示需针对Alb>30g/L患者强化用药指征审核，为制定精准管控措施提供了现实数据支持。",
-      "file_key": null
-    }
-  ],
-  "user_id": null,
-  "session_id": "05e58c61-4dd1-4186-9465-532f349df4c7",
-  "visit_plan_digest": {
-    "notion": "医生作为合理用药管理者，当前认为人血白蛋白在外科围手术期存在过度使用，尤其关注Alb>30g/L或术后是否应减少使用，主张通过重点监管减少滥用。",
-    "doctorInfo": {
-      "department": "医院管理层/药剂科",
-      "type": "合理用药管理者",
-      "grade": "尝试",
-      "rank": "主任医师"
-    },
-    "goal": "围绕人血白蛋白在特定外科场景（心脏/腹部手术）中降低并发症与死亡风险的核心价值，推动医生从'尝试'向'使用'阶段进阶；'使用'阶段意味着建立基于指南的合理用药标准（如Alb<30g/L适用），优化管理策略而非单纯限制用量。",
-    "strategy": "以最新心脏外科共识为切入点，通过指南支持的Alb阈值管理与并发症降低数据，论证合理使用对医疗质量提升的协同效应，推动建立基于临床获益的精准管理标准。"
-  },
-  "comm_suggest": {
-    "literatures": [
-      {
-        "id": null,
-        "title": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.)",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "2021人血白蛋白在危重症患者应用专家共识\n● 人血白蛋白溶液作为脓毒症患者复苏液体是安全的（Grade 2+）\n● 在脓毒症休克患者液体复苏中使用人血白蛋白可能改善病死率（Grade 2+）\n●当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)\n● 低浓度（4%或5%）和高浓度（20%或25%）人血白蛋白溶液都可用于脓毒症患者液体复苏（Expert opinion）\n●脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n●推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）\n●为减少严重烧伤患者休克复苏期间晶体液的需求量，并降低休克复苏期死亡率，可使用人血白蛋白溶液（Grade 2+）\n●建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n●急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）\n●ECMO支持期间实施液体复苏的患者，推荐联合使用人血白蛋白和晶体液（Expert opinion）\n●ICU内重症肝硬化伴大量腹水患者，腹腔穿刺大量放液（LVP）术后推荐输注白蛋白（Grade2+）\n● 建议人血白蛋白联合特利加压素治疗肝肾综合征（HRS），减轻急性肾损伤（AKI）（Grade2+）",
-        "file_key": null
+        "title": "低白蛋白通过改变药物结合和分布影响高蛋白结合抗菌药物的PK/PD",
+        "content": "低白蛋白会减少抗菌药物与白蛋白的结合位点，改变药物的游离/结合比例，进而影响表观分布容积 (Vd) 和清除率 (CL)。对于高蛋白结合的抗菌药物，这种PK变化会使游离有效药浓度偏离预期的PK/PD目标，从而可能影响临床疗效。{962cba24724cb3a5c4d0253a959d3a9b}{708813232a7328edbbe299f67f2eeb2b}"
       },
       {
-        "id": null,
-        "title": "2. Fei Xiang, et al. Chin Med J (Engl).2023 May 20;136(10):1135-1143.",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "2023 人血白蛋白在成人心脏手术中的应用专家共识\n●推对于血容量正常的患者，输注人血白蛋白纠正术前低白蛋白血症是合理的（COR IIb, LOE B-NR）。\n●对于血容量正常的患者，输注人血白蛋白纠正术后低白蛋白血症是有益的（COR IIb, LOE C-EO）。\n●对于心脏手术期间和术后需要进一步补充血容量的患者，在晶体液复苏后使用人血白蛋白以避免出现过度的正体液平衡是合理的（COR IIb,LOE B-NR）",
-        "file_key": null
-      }
-    ],
-    "transitional_info": [
-      "减少外科围手术期并发症的发生率、降低死亡风险、提高病床周转率"
-    ],
-    "support_info": "{1}. 人血白蛋白用于心脏外科等患者的临床价值\n● 人血白蛋白在大型的心外科手术中，主要用于体外循环（CPB）的预充、液体复苏以及纠正低蛋白血症等\n●人血白蛋白有助于维持心脏手术患者液体平衡，纠正低白蛋白血症，降低患者死亡风险和30天内再住院的风险39\n●人血白蛋白在心脏外科患者中的应用获得权威指南或共识推荐\n▶《 2021 人血白蛋白在危重症患者应用专家共识》{1}推荐人血白蛋白用于心脏外科围手术期休克患者的液体复苏治疗\n▶《 2023 人血白蛋白在成人心脏手术中的应用专家共识》{2}推荐对于血容量正常的患者，输注人血白蛋白纠正术前和\n术后低白蛋白血症是合理的\n\n{2}. 人血白蛋白用于腹部外科等患者的临床价值\n● 腹部外科手术患者处于高代谢状态，蛋白分解代谢增加、合成代谢下降，加之胃肠功能减退引起营养不良，手术应激反应和术中失血等因素，极易造成低白蛋白血症的发生\n● 腹部手术患者加用人血白蛋白可改善肠道功能，促进疾病康复，促进肠鸣音恢复和肛门排气时间显著缩短；白蛋白联合地塞米松可显著降低术后并发症发生率，尤其是肺部并发症的发生率\n● 人血白蛋白在腹部外科患者中的应用获得权威指南或共识推荐\n▶《 2021 人血白蛋白在危重症患者应用专家共识》{1}推荐腹部外科手术重症患者围手术期血清白蛋白<30g/L时，可输注人血白蛋白，并应将围手术期白蛋白水平维持在30g /L以上"
-  },
-  "focus_point": {
-    "items": [
+        "title": "指南与研究一致建议：脓毒症中使用高蛋白结合抗生素时应考虑补充白蛋白",
+        "content": "专家共识/指南对脓毒症患者在使用高蛋白结合抗生素时，提出了补充人血白蛋白的建议，以改善这些药物的药代动力学与药效学（等级评价为弱推荐）。大型研究和荟萃分析在纠正白蛋白水平并以达到目标（常以≥30 g/L为参考）时，显示出血流动力学改善并有并发症发生率下降的趋势，支持在特定危重患者中考虑纠正低白蛋白。{708813232a7328edbbe299f67f2eeb2b}{9cc700a4f25774804e52057c71543800}{f60555cc5e13ecc211ec6b6bb43a93dc}"
+      },
       {
-        "title": "人血白蛋白目前在外科的用量过大，Alb>30g/L或术后是否应减少使用？",
-        "content": "《2023 人血白蛋白在成人心脏手术中的应用专家共识》{1} 指出，对于血容量正常的患者，输注人血白蛋白纠正术前和术后低白蛋白血（Alb<35g/L）是合理和有益的；对于心脏手术期间和术后需要进一步补充血容量的患者，在晶体液复苏后使用人血白蛋白以避免出现过度的正体液平衡是合理的。\n●  对低白蛋白血症患者，无论是30 ~ 34g/dL 还是< 30g/L 的患者，在心脏手术术前输注白蛋白纠正低蛋白血症，均可显著降低术后AKI 发生风险。\n● 容量负荷过重与心脏手术患者并发症（如肺水肿、AKI 和充血性心力衰竭）和死亡风险的增加密切相关。对于基线白蛋白35g/L 的患者，在心脏手术期间和术后，使用少量的人血白蛋白相比于晶体液，能更持久地改善血流动力学，减少液体积累，降低栓塞治疗的需求，以及减少去甲肾上腺素的使用和缩短其使用时间\n\n肝癌合并肝硬化患者术后常发生腹腔积液，导致机体白蛋白丢失、电解质紊乱，诱发腹腔感染、肝功能不全等并发症。因此控制输液量、合理使用白蛋白及其他胶体溶液并结合适当的利尿等措施有助于减少肝脏外科术后并发症。《2017 肝切除术后加速康复中国专家共识》{2} 特别推荐对于有肝硬化、门静脉高压症等基础病变的患者，肝切除术后合理使用多种方式预防和治疗腹腔积液，包括控制性补液、输注白蛋白提升胶体渗透压、应用小剂量利尿剂和特利加压素。\n● 在失代偿期肝硬化患者中，治疗期间白蛋白≥30g/L 的患者仍有从联合白蛋白长期输注中获益的机会，相较未输注白蛋白仅接受标准治疗的患者，死亡风险降低57%{3},{4}"
+        "title": "临床可操作点：对Alb<30 g/L患者评估补白蛋白以优化抗菌治疗效果并按指标停输",
+        "content": "在存在低白蛋白的脓毒症或危重症患者，临床上可将白蛋白补充作为优化高蛋白结合抗菌药物疗效的一项措施；既有研究把纠正目标与≥30 g/L联系在一起，且当血清白蛋白达到或超过这一水平且血流动力学稳定时，可考虑停止输注。将此纳入抗菌治疗路径，有助于在药代药效学层面减少剂量/暴露不达标的风险。{9cc700a4f25774804e52057c71543800}{f60555cc5e13ecc211ec6b6bb43a93dc}{708813232a7328edbbe299f67f2eeb2b}"
       }
     ],
     "literatures": [
       {
-        "id": null,
-        "title": "1. Fei Xiang, et al. Chin Med J (Engl).2023 May 20;136(10):1135-1143.",
-        "type": "CSL",
-        "chunk_ids": null,
+        "id": "b71901973a6930e4031c50bb2e4d93ab",
+        "title": "专家幻灯-脓毒症休克患者的微循环及内皮细胞屏障功能的监测-CHN-ALB-0378.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "962cba24724cb3a5c4d0253a959d3a9b"
+        ],
         "file_name": null,
-        "research_summary": "2023 人血白蛋白在成人心脏手术中的应用专家共识\n●推对于血容量正常的患者，输注人血白蛋白纠正术前低白蛋白血症是合理的（COR IIb, LOE B-NR）。\n●对于血容量正常的患者，输注人血白蛋白纠正术后低白蛋白血症是有益的（COR IIb, LOE C-EO）。\n●对于心脏手术期间和术后需要进一步补充血容量的患者，在晶体液复苏后使用人血白蛋白以避免出现过度的正体液平衡是合理的（COR IIb,LOE B-NR）",
-        "file_key": null
+        "research_summary": null,
+        "file_key": "7502623d18f854013b142b58cbf06e12"
       },
       {
-        "id": null,
-        "title": "2. 中华医学会外科学分会外科手术学学组. 临床肝胆病杂志,2017,33(10):1876-1882",
-        "type": "CSL",
-        "chunk_ids": null,
+        "id": "5b03a70bd53a7f819fd6aae36e9d3217",
+        "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "708813232a7328edbbe299f67f2eeb2b",
+          "708813232a7328edbbe299f67f2eeb2b",
+          "9cc700a4f25774804e52057c71543800",
+          "f60555cc5e13ecc211ec6b6bb43a93dc",
+          "9cc700a4f25774804e52057c71543800",
+          "f60555cc5e13ecc211ec6b6bb43a93dc",
+          "708813232a7328edbbe299f67f2eeb2b"
+        ],
         "file_name": null,
-        "research_summary": "2017 肝切除术后加速康复中国专家共识\n● 对于具有肝硬化、门静脉高压症等基础病变的患者，肝切除术后合理使用多种方式预防和治疗腹腔积液（证据等级：中；推荐等级：强烈推荐）",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "3. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "4. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
-        "file_key": null
+        "research_summary": null,
+        "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
       }
     ]
   },
@@ -664,56 +310,56 @@
 ```json
 {
   "passed": true,
-  "total_checks": 14,
-  "passed_checks": 14,
+  "total_checks": 13,
+  "passed_checks": 13,
   "failed_fields": [],
   "checks": [
     {
       "field_name": "doctor_type",
-      "expected": "合理用药管理者",
-      "actual": "合理用药管理者",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
       "passed": true,
       "match_mode": "exact"
     },
     {
       "field_name": "doctor_grade",
-      "expected": "尝试",
-      "actual": "尝试",
+      "expected": "使用",
+      "actual": "使用",
       "passed": true,
       "match_mode": "exact"
     },
     {
       "field_name": "trans_info",
-      "expected": "减少外科围手术期并发症的发生率、降低死亡风险、提高病床周转率",
-      "actual": "减少外科围手术期并发症的发生率、降低死亡风险、提高病床周转率",
+      "expected": "强调对Alb＜30 g/L的患者纠正低白蛋白血症有权威指南推荐以及纠正低白蛋白血症有助于提高抗菌药物治疗的有效性，降低感染风险等积极的临床获益。",
+      "actual": "强调对Alb＜30 g/L的患者纠正低白蛋白血症有权威指南推荐以及纠正低白蛋白血症有助于提高抗菌药物治疗的有效性，降低感染风险等积极的临床获益。",
       "passed": true,
       "match_mode": "exact"
     },
     {
       "field_name": "support_info",
-      "expected": "1. 人血白蛋白用于心脏外科等患者的临床价值\n● 人血白蛋白在大型的心外科手术中，主要用于体外循环（CPB）的预充、液体复苏以及纠正低蛋白血症等\n●人血白蛋白有助于维持心脏手术患者液体平衡，纠正低白蛋白血症，降低患者死亡风险和30天内再住院的风险39\n●人血白蛋白在心脏外科患者中的应用获得权威指南或共识推荐\n▶《 2021 人血白蛋白在危重症患者应用专家共识》1推荐人血白蛋白用于心脏外科围手术期休克患者的液体复苏治疗\n▶《 2023 人血白蛋白在成人心脏手术中的应用专家共识》2推荐对于血容量正常的患者，输注人血白蛋白纠正术前和\n术后低白蛋白血症是合理的\n\n2. 人血白蛋白用于腹部外科等患者的临床价值\n● 腹部外科手术患者处于高代谢状态，蛋白分解代谢增加、合成代谢下降，加之胃肠功能减退引起营养不良，手术应激反应和术中失血等因素，极易造成低白蛋白血症的发生\n● 腹部手术患者加用人血白蛋白可改善肠道功能，促进疾病康复，促进肠鸣音恢复和肛门排气时间显著缩短；白蛋白联合地塞米松可显著降低术后并发症发生率，尤其是肺部并发症的发生率\n● 人血白蛋白在腹部外科患者中的应用获得权威指南或共识推荐\n▶《 2021 人血白蛋白在危重症患者应用专家共识》1推荐腹部外科手术重症患者围手术期血清白蛋白<30g/L时，可输注人血白蛋白，并应将围手术期白蛋白水平维持在30g /L以上",
-      "actual": "{1}. 人血白蛋白用于心脏外科等患者的临床价值\n● 人血白蛋白在大型的心外科手术中，主要用于体外循环（CPB）的预充、液体复苏以及纠正低蛋白血症等\n●人血白蛋白有助于维持心脏手术患者液体平衡，纠正低白蛋白血症，降低患者死亡风险和30天内再住院的风险39\n●人血白蛋白在心脏外科患者中的应用获得权威指南或共识推荐\n▶《 2021 人血白蛋白在危重症患者应用专家共识》{1}推荐人血白蛋白用于心脏外科围手术期休克患者的液体复苏治疗\n▶《 2023 人血白蛋白在成人心脏手术中的应用专家共识》{2}推荐对于血容量正常的患者，输注人血白蛋白纠正术前和\n术后低白蛋白血症是合理的\n\n{2}. 人血白蛋白用于腹部外科等患者的临床价值\n● 腹部外科手术患者处于高代谢状态，蛋白分解代谢增加、合成代谢下降，加之胃肠功能减退引起营养不良，手术应激反应和术中失血等因素，极易造成低白蛋白血症的发生\n● 腹部手术患者加用人血白蛋白可改善肠道功能，促进疾病康复，促进肠鸣音恢复和肛门排气时间显著缩短；白蛋白联合地塞米松可显著降低术后并发症发生率，尤其是肺部并发症的发生率\n● 人血白蛋白在腹部外科患者中的应用获得权威指南或共识推荐\n▶《 2021 人血白蛋白在危重症患者应用专家共识》{1}推荐腹部外科手术重症患者围手术期血清白蛋白<30g/L时，可输注人血白蛋白，并应将围手术期白蛋白水平维持在30g /L以上",
+      "expected": "●中国《人血白蛋白在危重症患者应用专家共识》1推荐人血白蛋白在多种危重症患者中使用，包括腹部外科手术患者、烧伤患者、创伤患者、失血性休克患者、ARDS患者等\n●低白蛋白血症会影响高蛋白结合率的抗菌药物，可致抗菌治疗失败风险升高，增加患者感染风险\n▶一项对危重症患者的研究显示，血清白蛋白水平每降低1g/dL，抗菌治疗失败风险升高37%；院内死亡患者的血清白蛋白水平（26g/L）显著低于院内存活患者（ 29g/L ）2\n●脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学",
+      "actual": "●中国《人血白蛋白在危重症患者应用专家共识》{1}推荐人血白蛋白在多种危重症患者中使用，包括腹部外科手术患者、烧伤患者、创伤患者、失血性休克患者、ARDS患者等\n●低白蛋白血症会影响高蛋白结合率的抗菌药物，可致抗菌治疗失败风险升高，增加患者感染风险\n一项对危重症患者的研究显示，血清白蛋白水平每降低{1}g/dL，抗菌治疗失败风险升高37%；院内死亡患者的血清白蛋白水平（26g/L）显著低于院内存活患者（ 29g/L ）{2}\n●脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学",
       "passed": true,
       "match_mode": "contains"
     },
     {
       "field_name": "comm_literature_titles",
-      "expected": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.)\n2. Fei Xiang, et al. Chin Med J (Engl).2023 May 20;136(10):1135-1143.",
-      "actual": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.)\n2. Fei Xiang, et al. Chin Med J (Engl).2023 May 20;136(10):1135-1143.",
+      "expected": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.\n2. Ibrahim, E.H., et al.,Chest, 2000. 118(1):146-155.",
+      "actual": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.\n2. Ibrahim, E.H., et al.,Chest, 2000. 118(1):146-155.",
       "passed": true,
       "match_mode": "list_exact"
     },
     {
       "field_name": "comm_literature_summaries",
-      "expected": "1. 2021人血白蛋白在危重症患者应用专家共识\n● 人血白蛋白溶液作为脓毒症患者复苏液体是安全的（Grade 2+）\n● 在脓毒症休克患者液体复苏中使用人血白蛋白可能改善病死率（Grade 2+）\n●当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)\n● 低浓度（4%或5%）和高浓度（20%或25%）人血白蛋白溶液都可用于脓毒症患者液体复苏（Expert opinion）\n●脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n●推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）\n●为减少严重烧伤患者休克复苏期间晶体液的需求量，并降低休克复苏期死亡率，可使用人血白蛋白溶液（Grade 2+）\n●建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n●急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）\n●ECMO支持期间实施液体复苏的患者，推荐联合使用人血白蛋白和晶体液（Expert opinion）\n●ICU内重症肝硬化伴大量腹水患者，腹腔穿刺大量放液（LVP）术后推荐输注白蛋白（Grade2+）\n● 建议人血白蛋白联合特利加压素治疗肝肾综合征（HRS），减轻急性肾损伤（AKI）（Grade2+）\n2. 2023 人血白蛋白在成人心脏手术中的应用专家共识\n●推对于血容量正常的患者，输注人血白蛋白纠正术前低白蛋白血症是合理的（COR IIb, LOE B-NR）。\n●对于血容量正常的患者，输注人血白蛋白纠正术后低白蛋白血症是有益的（COR IIb, LOE C-EO）。\n●对于心脏手术期间和术后需要进一步补充血容量的患者，在晶体液复苏后使用人血白蛋白以避免出现过度的正体液平衡是合理的（COR IIb,LOE B-NR）",
-      "actual": "2021人血白蛋白在危重症患者应用专家共识\n● 人血白蛋白溶液作为脓毒症患者复苏液体是安全的（Grade 2+）\n● 在脓毒症休克患者液体复苏中使用人血白蛋白可能改善病死率（Grade 2+）\n●当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)\n● 低浓度（4%或5%）和高浓度（20%或25%）人血白蛋白溶液都可用于脓毒症患者液体复苏（Expert opinion）\n●脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n●推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）\n●为减少严重烧伤患者休克复苏期间晶体液的需求量，并降低休克复苏期死亡率，可使用人血白蛋白溶液（Grade 2+）\n●建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n●急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）\n●ECMO支持期间实施液体复苏的患者，推荐联合使用人血白蛋白和晶体液（Expert opinion）\n●ICU内重症肝硬化伴大量腹水患者，腹腔穿刺大量放液（LVP）术后推荐输注白蛋白（Grade2+）\n● 建议人血白蛋白联合特利加压素治疗肝肾综合征（HRS），减轻急性肾损伤（AKI）（Grade2+）\n2023 人血白蛋白在成人心脏手术中的应用专家共识\n●推对于血容量正常的患者，输注人血白蛋白纠正术前低白蛋白血症是合理的（COR IIb, LOE B-NR）。\n●对于血容量正常的患者，输注人血白蛋白纠正术后低白蛋白血症是有益的（COR IIb, LOE C-EO）。\n●对于心脏手术期间和术后需要进一步补充血容量的患者，在晶体液复苏后使用人血白蛋白以避免出现过度的正体液平衡是合理的（COR IIb,LOE B-NR）",
+      "expected": "1. 2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）\n2. 一项前瞻性队列研究纳入492名ICU患者，评估抗菌治疗血流感染的充分性与临床结局关系。结果：院内死亡患者的血清白蛋白水平（2.6 g/dL）显著低于存活者（2.9 g/dL）；血清白蛋白每下降1 g/dL，抗菌治疗失败风险增加37%（AOR 1.37, p<0.014）。",
+      "actual": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）\n一项前瞻性队列研究纳入492名ICU患者，评估抗菌治疗血流感染的充分性与临床结局关系。结果：院内死亡患者的血清白蛋白水平（2.6 g/dL）显著低于存活者（2.9 g/dL）；血清白蛋白每下降1 g/dL，抗菌治疗失败风险增加37%（AOR 1.37, p<0.014）。",
       "passed": true,
       "match_mode": "contains"
     },
     {
       "field_name": "digest.department",
-      "expected": "医院管理层/药剂科",
-      "actual": "医院管理层/药剂科",
+      "expected": "ICU",
+      "actual": "ICU",
       "passed": true,
       "match_mode": "exact"
     },
@@ -726,45 +372,418 @@
     },
     {
       "field_name": "digest.type",
-      "expected": "合理用药管理者",
-      "actual": "合理用药管理者",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
       "passed": true,
       "match_mode": "exact"
     },
     {
       "field_name": "digest.grade",
-      "expected": "尝试",
-      "actual": "尝试",
+      "expected": "使用",
+      "actual": "使用",
       "passed": true,
       "match_mode": "exact"
     },
     {
       "field_name": "focus_branch",
-      "expected": "F1",
-      "actual": "F1",
+      "expected": "F2_OPTION",
+      "actual": "F2_OPTION",
       "passed": true,
       "match_mode": "exact"
     },
     {
-      "field_name": "focus_title",
-      "expected": "人血白蛋白目前在外科的用量过大，Alb>30g/L或术后是否应减少使用？",
-      "actual": "人血白蛋白目前在外科的用量过大，Alb>30g/L或术后是否应减少使用？",
+      "field_name": "focus_title.non_empty",
+      "expected": "非空",
+      "actual": "低白蛋白通过改变药物结合和分布影响高蛋白结合抗菌药物的PK/PD\n指南与研究一致建议：脓毒症中使用高蛋白结合抗生素时应考虑补充白蛋白\n临床可操作点：对Alb<30 g/L患者评估补白蛋白以优化抗菌治疗效果并按指标停输",
+      "passed": true,
+      "match_mode": "not_empty"
+    },
+    {
+      "field_name": "focus_content.non_empty",
+      "expected": "非空",
+      "actual": "低白蛋白会减少抗菌药物与白蛋白的结合位点，改变药物的游离/结合比例，进而影响表观分布容积 (Vd) 和清除率 (CL)。对于高蛋白结合的抗菌药物，这种PK变化会使游离有效药浓度偏离预期的PK/PD目标，从而可能影响临床疗效。{962cba24724cb3a5c4d0253a959d3a9b}{708813232a7328edbbe299f67f2eeb2b}\n专家共识/指南对脓毒症患者在使用高蛋白结合抗生素时，提出了补充人血白蛋白的建议，以改善这些药物的药代动力学与药效学（等级评价为弱推荐）。大型研究和荟萃分析在纠正白蛋白水平并以达到目标（常以≥30 g/L为参考）时，显示出血流动力学改善并有并发症发生率下降的趋势，支持在特定危重患者中考虑纠正低白蛋白。{708813232a7328edbbe299f67f2eeb2b}{9cc700a4f25774804e52057c71543800}{f60555cc5e13ecc211ec6b6bb43a93dc}\n在存在低白蛋白的脓毒症或危重症患者，临床上可将白蛋白补充作为优化高蛋白结合抗菌药物疗效的一项措施；既有研究把纠正目标与≥30 g/L联系在一起，且当血清白蛋白达到或超过这一水平且血流动力学稳定时，可考虑停止输注。将此纳入抗菌治疗路径，有助于在药代药效学层面减少剂量/暴露不达标的风险。{9cc700a4f25774804e52057c71543800}{f60555cc5e13ecc211ec6b6bb43a93dc}{708813232a7328edbbe299f67f2eeb2b}",
+      "passed": true,
+      "match_mode": "not_empty"
+    }
+  ]
+}
+```
+
+## P021 ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
+- 状态：DONE
+- session_id：76923a23-602d-4bfc-988a-49aa6a44bd16
+- 关注点策略：F2_CUSTOM
+- 首次出现can_stop=true的轮次：-
+- 实际调用stop的轮次：-
+- 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
+- 测试回答：主任医师
+- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 外科[/OPTIONS][/QUESTION]
+- 测试回答：ICU（现版本）
+- 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
+- 测试回答：既往拜访过
+- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
+- 测试回答：＜50%
+- 系统提问：您拜访的医生选择人血白蛋白品牌时，杰特贝林的选择占比大概是多少？主要关注哪些因素？
+[QUESTION]请选择或描述：[OPTIONS]A. 0%，不关心品牌 B. ＜20%，选择病原体安全性好的产品 C. 20%~40%，最关注安全性体系和显著的疗效 D. 40~50%，最关注产品高质量标准和较少的不良反应 E. 40~50%，并且经常在学术会议上分享经验[/OPTIONS][/QUESTION]
+- 测试回答：C
+- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 人血白蛋白供应是否稳定，能否保障ICU日益增长的临床需求 B. 杰特贝林白蛋白在严重脓毒症患者中改善血流动力学的具体机制 C. 杰特贝林整体病毒安全体系如何层层保障病原体清除效果 D. 与国内其他品牌相比，杰特贝林在降低脓毒症死亡风险方面的循证强度[/OPTIONS][/QUESTION]
+- 测试回答：医保政策
+- 关注点执行结果：
+```json
+[
+  {
+    "planned_branch": "F2_CUSTOM",
+    "actual_branch": "F2_CUSTOM",
+    "answer": "医保政策",
+    "fixed_option_label": "A",
+    "fixed_option_text": "人血白蛋白供应是否稳定，能否保障ICU日益增长的临床需求",
+    "selected_option_label": "",
+    "selected_option_text": "",
+    "custom_input": "医保政策",
+    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 人血白蛋白供应是否稳定，能否保障ICU日益增长的临床需求 B. 杰特贝林白蛋白在严重脓毒症患者中改善血流动力学的具体机制 C. 杰特贝林整体病毒安全体系如何层层保障病原体清除效果 D. 与国内其他品牌相比，杰特贝林在降低脓毒症死亡风险方面的循证强度[/OPTIONS][/QUESTION]"
+  }
+]
+```
+- 接口耗时记录：
+```json
+[
+  {
+    "api_name": "start_conversation",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/start",
+    "request_identifier": "P021",
+    "case_id": "P021",
+    "session_id": "",
+    "elapsed_ms": 132.12,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "case_id": "P021",
+    "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "elapsed_ms": 2295.24,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "case_id": "P021",
+    "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "elapsed_ms": 2134.64,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "case_id": "P021",
+    "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "elapsed_ms": 847.45,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "case_id": "P021",
+    "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "elapsed_ms": 1196.97,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "case_id": "P021",
+    "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "elapsed_ms": 3352.02,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "call_focus_match_llm",
+    "request_method": "POST",
+    "request_path": "https://api.deepseek.com/chat/completions",
+    "request_identifier": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "case_id": "P021",
+    "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "elapsed_ms": 2429.7,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "case_id": "P021",
+    "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "elapsed_ms": 1206.97,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "request_identifier": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "case_id": "P021",
+    "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "elapsed_ms": 21.83,
+    "success": false,
+    "status_code": 400,
+    "error": "400 Client Error: Bad Request for url: https://dev-ccet.cslbehring.com.cn/api/sale/chat/history/76923a23-602d-4bfc-988a-49aa6a44bd16"
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "request_identifier": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "case_id": "P021",
+    "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+    "elapsed_ms": 28.24,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  }
+]
+```
+- 最终拜访计划：
+```json
+{
+  "literatures": [
+    {
+      "id": "c389a91f6749729977b7d58a7c656075",
+      "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗_Final.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在严重脓毒症液体复苏场景中，该研究显示使用人血白蛋白可将患者28天死亡风险显著降低29%，并提供了数十年良好的病原体安全性记录，为临床应用提供了高价值的疗效与安全性依据。",
+      "file_key": "63cdcdc0be5a8ecce8d9c9aae6f855be"
+    },
+    {
+      "id": "0a7dbed30dd42082ad514c7d536f516d",
+      "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在医疗机构药品管理场景中，该共识针对政策顾虑给出了强推荐意见，明确不建议仅因重点监控等原因将人血白蛋白移除目录或限量供应，为保障院内合理用药需求提供了权威政策参考。",
+      "file_key": "24a5eb52596a20afe11ce38f7b41e094"
+    },
+    {
+      "id": "5b03a70bd53a7f819fd6aae36e9d3217",
+      "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在脓毒性休克治疗场景中，该研究通过荟萃分析证实人血白蛋白可显著降低患者90天死亡风险达19%，并能显著减少液体净平衡量，是证实其重症治疗获益的有力支持依据。",
+      "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+    }
+  ],
+  "user_id": null,
+  "session_id": "76923a23-602d-4bfc-988a-49aa6a44bd16",
+  "visit_plan_digest": {
+    "notion": "ICU主任，属品牌认知者·使用阶段（20–40%），明确重视可追溯的病原体安全体系与疗效，可推测对医保监管与可及性较为敏感。",
+    "doctorInfo": {
+      "department": "ICU",
+      "type": "品牌认知者",
+      "grade": "使用",
+      "rank": "主任医师"
+    },
+    "goal": "围绕“杰特贝林可改善重症脓毒症患者血流动力学并降低死亡风险”，推动医生从品牌认知者·使用向偏好进阶；偏好阶段意味着在ICU将把杰特贝林使用份额提升至约40–50%，并更明确基于高质量标准与较少不良反应优先选择该品牌。",
+    "strategy": "以可追溯质量体系与持续药物警戒为学术切入，先回应医保/院内可及性与供应保障顾虑，再结合脓毒症疗效价值，建议在高危ICU患者场景优先采用以稳步提升品牌占比并形成使用偏好。"
+  },
+  "comm_suggest": {
+    "literatures": null,
+    "transitional_info": [
+      "杰特贝林人血白蛋白改善严重脓毒症患者血流动力学，降低死亡风险。"
+    ],
+    "support_info": "● 杰特贝林开创性建立整体安全系统，从捐献者筛选⸺血浆检测⸺蛋白纯化⸺病毒灭活与清除⸺批次检验⸺药物警戒，全民保障人血白蛋白病原体安全性，安全可溯\n严格的捐献者筛选：捐献者必须捐献至少2次且复查结果为阴性\n血浆检测确保血浆安全：对五种病毒(HIV、HBV、HCV、HAV和细小病毒B19)多次血清学检测、NAT/PCR检测\n蛋白纯化得到高纯度的产品：使用改进的Cohn和Kistler-Nitschmann分馏方法病毒灭活与清除：最早运用巴氏消毒灭活血浆病毒，拥有良好的安全记录\n批次检验：关键质量指标优于中国与国际药典标准\n药物警戒：拥有对产品全生命周期的药物警戒体系以监测产品获益-风险平衡"
+  },
+  "focus_point": {
+    "items": [
+      {
+        "title": "医保监管下的可及性与证据平衡",
+        "content": "国家将人血白蛋白纳入重点监控后，医疗机构在供应与使用上已普遍采取管控措施并存在地区性短缺的现实；同时《专家共识》强烈建议不因监控而将人血白蛋白从机构目录移除，并推动建立院内临床应用标准。鉴于多项随机对照研究与亚组分析显示在人血白蛋白参与的液体复苏中，重症脓毒症患者的短期死亡率有显著降低，故在与院方或医保决策者沟通时，可以确保合理用药管理为前提，强调在保障临床获益的同时通过规范处方和供应管理维持药品可及性。 {a523a0b22ce05ced0e68a3aae78b011b}{eb7d821c35abc6f0aaefaf64813c43f9}{ac097230da30dbe1ed0b669e0f4b962d}{e871dc00d3de3fc9c235e85f3436e8e8}{ae90119dc2c78ae915a20cca8cb7e848}{07d19531158c447afba287b63d31fd42}"
+      },
+      {
+        "title": "可追溯的病原体控制与药物警戒支持医保决策",
+        "content": "产品在制程上采用改进的分馏与病毒灭活/清除工艺，并对关键病毒开展多次血清学与NAT/PCR检测，配合批次检验与覆盖全生命周期的药物警戒体系，这些要素形成了可追溯的病原体安全链。同时，长期上市后暴露数据中未证实的疑似传播事件少，体现稳定的安全记录。在医保或院内药事评估中，这类可验证的质量控制与持续药物安全监测，可作为减轻监管和付费方对血浆制品传播风险顾虑的重要依据。 {97988b2ea7eaf7e97eb966b45280d73a}{a4b2afdd5ffa60f2856f532f7dfd224d}{17c91d22357284bd61529c3921398f38}{911d8308a3848916aa40bb1aab17376e}"
+      }
+    ],
+    "literatures": [
+      {
+        "id": "0a7dbed30dd42082ad514c7d536f516d",
+        "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "a523a0b22ce05ced0e68a3aae78b011b",
+          "eb7d821c35abc6f0aaefaf64813c43f9",
+          "ac097230da30dbe1ed0b669e0f4b962d"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "24a5eb52596a20afe11ce38f7b41e094"
+      },
+      {
+        "id": "c389a91f6749729977b7d58a7c656075",
+        "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗_Final.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "e871dc00d3de3fc9c235e85f3436e8e8",
+          "17c91d22357284bd61529c3921398f38",
+          "17c91d22357284bd61529c3921398f38"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "63cdcdc0be5a8ecce8d9c9aae6f855be"
+      },
+      {
+        "id": "5b03a70bd53a7f819fd6aae36e9d3217",
+        "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "ae90119dc2c78ae915a20cca8cb7e848"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+      },
+      {
+        "id": "c84096c0d7d4ad4cd7474fb4e0d94d2c",
+        "title": "DA-人血白蛋白--优化脓毒症和脓毒症休克患者的液体治疗-CHN-ALB-0535.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "07d19531158c447afba287b63d31fd42"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "89de8b287fbfa74b28bf9826e9efd40a"
+      },
+      {
+        "id": "c471aa8e7471218753aac3f01aa32abb",
+        "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "97988b2ea7eaf7e97eb966b45280d73a",
+          "a4b2afdd5ffa60f2856f532f7dfd224d",
+          "a4b2afdd5ffa60f2856f532f7dfd224d",
+          "911d8308a3848916aa40bb1aab17376e"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "92fca00cad9674414d7882c518635033"
+      }
+    ]
+  },
+  "phase3_flag": true
+}
+```
+- 断言结果：
+```json
+{
+  "passed": true,
+  "total_checks": 11,
+  "passed_checks": 11,
+  "failed_fields": [],
+  "checks": [
+    {
+      "field_name": "doctor_type",
+      "expected": "品牌认知者",
+      "actual": "品牌认知者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "doctor_grade",
+      "expected": "使用",
+      "actual": "使用",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "trans_info",
+      "expected": "杰特贝林人血白蛋白改善严重脓毒症患者血流动力学，降低死亡风险。",
+      "actual": "杰特贝林人血白蛋白改善严重脓毒症患者血流动力学，降低死亡风险。",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "support_info",
+      "expected": "● 杰特贝林开创性建立整体安全系统，从捐献者筛选⸺血浆检测⸺蛋白纯化⸺病毒灭活与清除⸺批次检验⸺药物警戒，全民保障人血白蛋白病原体安全性，安全可溯\n▶严格的捐献者筛选：捐献者必须捐献至少2次且复查结果为阴性\n▶血浆检测确保血浆安全：对五种病毒(HIV、HBV、HCV、HAV和细小病毒B19)多次血清学检测、NAT/PCR检测\n▶蛋白纯化得到高纯度的产品：使用改进的Cohn和Kistler-Nitschmann分馏方法病毒灭活与清除：最早运用巴氏消毒灭活血浆病毒，拥有良好的安全记录\n▶批次检验：关键质量指标优于中国与国际药典标准\n▶药物警戒：拥有对产品全生命周期的药物警戒体系以监测产品获益-风险平衡",
+      "actual": "● 杰特贝林开创性建立整体安全系统，从捐献者筛选⸺血浆检测⸺蛋白纯化⸺病毒灭活与清除⸺批次检验⸺药物警戒，全民保障人血白蛋白病原体安全性，安全可溯\n严格的捐献者筛选：捐献者必须捐献至少2次且复查结果为阴性\n血浆检测确保血浆安全：对五种病毒(HIV、HBV、HCV、HAV和细小病毒B19)多次血清学检测、NAT/PCR检测\n蛋白纯化得到高纯度的产品：使用改进的Cohn和Kistler-Nitschmann分馏方法病毒灭活与清除：最早运用巴氏消毒灭活血浆病毒，拥有良好的安全记录\n批次检验：关键质量指标优于中国与国际药典标准\n药物警戒：拥有对产品全生命周期的药物警戒体系以监测产品获益-风险平衡",
       "passed": true,
       "match_mode": "contains"
     },
     {
-      "field_name": "focus_content",
-      "expected": "《2023 人血白蛋白在成人心脏手术中的应用专家共识》1 指出，对于血容量正常的患者，输注人血白蛋白纠正术前和术后低白蛋白血（Alb<35g/L）是合理和有益的；对于心脏手术期间和术后需要进一步补充血容量的患者，在晶体液复苏后使用人血白蛋白以避免出现过度的正体液平衡是合理的。\n● 对低白蛋白血症患者，无论是30 ~ 34g/dL 还是< 30g/L 的患者，在心脏手术术前输注白蛋白纠正低蛋白血症，均可显著降低术后AKI 发生风险。\n● 容量负荷过重与心脏手术患者并发症（如肺水肿、AKI 和充血性心力衰竭）和死亡风险的增加密切相关。对于基线白蛋白35g/L 的患者，在心脏手术期间和术后，使用少量的人血白蛋白相比于晶体液，能更持久地改善血流动力学，减少液体积累，降低栓塞治疗的需求，以及减少去甲肾上腺素的使用和缩短其使用时间\n肝癌合并肝硬化患者术后常发生腹腔积液，导致机体白蛋白丢失、电解质紊乱，诱发腹腔感染、肝功能不全等并发症。因此控制输液量、合理使用白蛋白及其他胶体溶液并结合适当的利尿等措施有助于减少肝脏外科术后并发症。《2017 肝切除术后加速康复中国专家共识》2 特别推荐对于有肝硬化、门静脉高压症等基础病变的患者，肝切除术后合理使用多种方式预防和治疗腹腔积液，包括控制性补液、输注白蛋白提升胶体渗透压、应用小剂量利尿剂和特利加压素。\n● 在失代偿期肝硬化患者中，治疗期间白蛋白≥30g/L 的患者仍有从联合白蛋白长期输注中获益的机会，相较未输注白蛋白仅接受标准治疗的患者，死亡风险降低57%3,4",
-      "actual": "《2023 人血白蛋白在成人心脏手术中的应用专家共识》{1} 指出，对于血容量正常的患者，输注人血白蛋白纠正术前和术后低白蛋白血（Alb<35g/L）是合理和有益的；对于心脏手术期间和术后需要进一步补充血容量的患者，在晶体液复苏后使用人血白蛋白以避免出现过度的正体液平衡是合理的。\n●  对低白蛋白血症患者，无论是30 ~ 34g/dL 还是< 30g/L 的患者，在心脏手术术前输注白蛋白纠正低蛋白血症，均可显著降低术后AKI 发生风险。\n● 容量负荷过重与心脏手术患者并发症（如肺水肿、AKI 和充血性心力衰竭）和死亡风险的增加密切相关。对于基线白蛋白35g/L 的患者，在心脏手术期间和术后，使用少量的人血白蛋白相比于晶体液，能更持久地改善血流动力学，减少液体积累，降低栓塞治疗的需求，以及减少去甲肾上腺素的使用和缩短其使用时间\n\n肝癌合并肝硬化患者术后常发生腹腔积液，导致机体白蛋白丢失、电解质紊乱，诱发腹腔感染、肝功能不全等并发症。因此控制输液量、合理使用白蛋白及其他胶体溶液并结合适当的利尿等措施有助于减少肝脏外科术后并发症。《2017 肝切除术后加速康复中国专家共识》{2} 特别推荐对于有肝硬化、门静脉高压症等基础病变的患者，肝切除术后合理使用多种方式预防和治疗腹腔积液，包括控制性补液、输注白蛋白提升胶体渗透压、应用小剂量利尿剂和特利加压素。\n● 在失代偿期肝硬化患者中，治疗期间白蛋白≥30g/L 的患者仍有从联合白蛋白长期输注中获益的机会，相较未输注白蛋白仅接受标准治疗的患者，死亡风险降低57%{3},{4}",
+      "field_name": "digest.department",
+      "expected": "ICU",
+      "actual": "ICU",
       "passed": true,
-      "match_mode": "contains"
+      "match_mode": "exact"
     },
     {
-      "field_name": "focus_literature_titles",
-      "expected": "1. Fei Xiang, et al. Chin Med J (Engl).2023 May 20;136(10):1135-1143.\n2. 中华医学会外科学分会外科手术学学组. 临床肝胆病杂志,2017,33(10):1876-1882\n3. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.\n4. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）",
-      "actual": "1. Fei Xiang, et al. Chin Med J (Engl).2023 May 20;136(10):1135-1143.\n2. 中华医学会外科学分会外科手术学学组. 临床肝胆病杂志,2017,33(10):1876-1882\n3. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.\n4. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）",
+      "field_name": "digest.rank",
+      "expected": "主任医师",
+      "actual": "主任医师",
       "passed": true,
-      "match_mode": "list_exact"
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.type",
+      "expected": "品牌认知者",
+      "actual": "品牌认知者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.grade",
+      "expected": "使用",
+      "actual": "使用",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_branch",
+      "expected": "F2_CUSTOM",
+      "actual": "F2_CUSTOM",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_title.non_empty",
+      "expected": "非空",
+      "actual": "医保监管下的可及性与证据平衡\n可追溯的病原体控制与药物警戒支持医保决策",
+      "passed": true,
+      "match_mode": "not_empty"
+    },
+    {
+      "field_name": "focus_content.non_empty",
+      "expected": "非空",
+      "actual": "国家将人血白蛋白纳入重点监控后，医疗机构在供应与使用上已普遍采取管控措施并存在地区性短缺的现实；同时《专家共识》强烈建议不因监控而将人血白蛋白从机构目录移除，并推动建立院内临床应用标准。鉴于多项随机对照研究与亚组分析显示在人血白蛋白参与的液体复苏中，重症脓毒症患者的短期死亡率有显著降低，故在与院方或医保决策者沟通时，可以确保合理用药管理为前提，强调在保障临床获益的同时通过规范处方和供应管理维持药品可及性。 {a523a0b22ce05ced0e68a3aae78b011b}{eb7d821c35abc6f0aaefaf64813c43f9}{ac097230da30dbe1ed0b669e0f4b962d}{e871dc00d3de3fc9c235e85f3436e8e8}{ae90119dc2c78ae915a20cca8cb7e848}{07d19531158c447afba287b63d31fd42}\n产品在制程上采用改进的分馏与病毒灭活/清除工艺，并对关键病毒开展多次血清学与NAT/PCR检测，配合批次检验与覆盖全生命周期的药物警戒体系，这些要素形成了可追溯的病原体安全链。同时，长期上市后暴露数据中未证实的疑似传播事件少，体现稳定的安全记录。在医保或院内药事评估中，这类可验证的质量控制与持续药物安全监测，可作为减轻监管和付费方对血浆制品传播风险顾虑的重要依据。 {97988b2ea7eaf7e97eb966b45280d73a}{a4b2afdd5ffa60f2856f532f7dfd224d}{17c91d22357284bd61529c3921398f38}{911d8308a3848916aa40bb1aab17376e}",
+      "passed": true,
+      "match_mode": "not_empty"
     }
   ]
 }
@@ -772,7 +791,7 @@
 
 ## P032 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 使用
 - 状态：DONE
-- session_id：6d2189c0-a230-4650-bcf9-bc123d6aae3a
+- session_id：f7ff23e6-2fa5-4923-bba8-10eab83b8b25
 - 关注点策略：F2_OPTION
 - 首次出现can_stop=true的轮次：-
 - 实际调用stop的轮次：-
@@ -785,9 +804,7 @@
 - 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
 - 测试回答：≥50%
 - 系统提问：临床医生如何看待白蛋白在临床应用中的获益？临床应用是否合理？
-[QUESTION]请选择或描述：[OPTIONS]A. 白蛋白目前大部分是滥用，需要减少整体使用 B. 认可白蛋白在重症监护室/肝病科的应用，但认为外科滥用严重，需要减少使用 C. 目前，对人血白蛋白总
-体上管理较好，Alb<30g/L
-的患者可以使用 D. 人血白蛋白应用合理，并未重点监控，但考虑到白蛋白价格高，MDL/DRG下带来医保资金压力 E. 人血白蛋白应用合理，并未重点监控，MDL/DRG的执行也不会影响白蛋白的临床应用[/OPTIONS][/QUESTION]
+[QUESTION]请选择或描述：[OPTIONS]A. 白蛋白目前大部分是滥用，需要减少整体使用 B. 认可白蛋白在重症监护室/肝病科的应用，但认为外科滥用严重，需要减少使用 C. 目前，对人血白蛋白总体上管理较好，Alb<30g/L的患者可以使用 D. 人血白蛋白应用合理，并未重点监控，但考虑到白蛋白价格高，MDL/DRG下带来医保资金压力 E. 人血白蛋白应用合理，并未重点监控，MDL/DRG的执行也不会影响白蛋白的临床应用[/OPTIONS][/QUESTION]
 - 测试回答：C
 - 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. Alb≥30g/L患者使用白蛋白是否符合医保报销和管理规范？ B. 白蛋白在重症患者液体复苏中相比晶体液的临床获益和指南推荐依据？ C. 肝硬化患者即使Alb≥30g/L，长期输注白蛋白能否改善死亡风险和器官功能？ D. 心外科患者术前/术后Alb<35g/L时，白蛋白应用对AKI预防和预后的影响？[/OPTIONS][/QUESTION]
 - 测试回答：C
@@ -813,11 +830,11 @@
   {
     "api_name": "start_conversation",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/start",
+    "request_path": "/api/sale/chat/start",
     "request_identifier": "P032",
     "case_id": "P032",
     "session_id": "",
-    "elapsed_ms": 364.7,
+    "elapsed_ms": 129.84,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -825,11 +842,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
     "case_id": "P032",
-    "session_id": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
-    "elapsed_ms": 2377.23,
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 2379.49,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -837,11 +854,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
     "case_id": "P032",
-    "session_id": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
-    "elapsed_ms": 2000.9,
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 2044.38,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -849,11 +866,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
     "case_id": "P032",
-    "session_id": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
-    "elapsed_ms": 945.79,
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 843.11,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -861,11 +878,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
     "case_id": "P032",
-    "session_id": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
-    "elapsed_ms": 920.59,
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 960.0,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -873,11 +890,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
     "case_id": "P032",
-    "session_id": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
-    "elapsed_ms": 3377.8,
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 3290.53,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -886,10 +903,10 @@
     "api_name": "call_focus_match_llm",
     "request_method": "POST",
     "request_path": "https://api.deepseek.com/chat/completions",
-    "request_identifier": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
     "case_id": "P032",
-    "session_id": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
-    "elapsed_ms": 1644.49,
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 2590.03,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -897,11 +914,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
     "case_id": "P032",
-    "session_id": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
-    "elapsed_ms": 1702.76,
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 3897.55,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -909,11 +926,35 @@
   {
     "api_name": "fetch_visit_plan_detail_once",
     "request_method": "GET",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/history/6d2189c0-a230-4650-bcf9-bc123d6aae3a",
-    "request_identifier": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
+    "request_path": "/api/sale/chat/history/f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
     "case_id": "P032",
-    "session_id": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
-    "elapsed_ms": 351.42,
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 30.95,
+    "success": false,
+    "status_code": 400,
+    "error": "400 Client Error: Bad Request for url: https://dev-ccet.cslbehring.com.cn/api/sale/chat/history/f7ff23e6-2fa5-4923-bba8-10eab83b8b25"
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "case_id": "P032",
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 26.23,
+    "success": false,
+    "status_code": 400,
+    "error": "400 Client Error: Bad Request for url: https://dev-ccet.cslbehring.com.cn/api/sale/chat/history/f7ff23e6-2fa5-4923-bba8-10eab83b8b25"
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "request_identifier": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "case_id": "P032",
+    "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
+    "elapsed_ms": 46.18,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -925,45 +966,36 @@
 {
   "literatures": [
     {
-      "id": "bf3d5fc5f35c07e01a6d947c1e3933ef",
-      "title": "专家幻灯-《人血白蛋白在ICU重症肝硬化中的应用》-CHN-ALB-0681.pdf",
-      "type": "INNER",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "在重症肝硬化患者的治疗中，该研究显示人血白蛋白联合标准治疗可显著提高失代偿肝硬化患者的整体生存率，并降低腹腔穿刺术后循环功能障碍发生率，为长期使用提供了高阶临床证据。",
-      "file_key": "b14ddd5ebddc8c6cee42cf54b6718fda"
-    },
-    {
-      "id": "1f66fc243b5fa83f61f167f2a17e9d33",
-      "title": "1_Yu YT_et al._Chin Med J (Engl)_2021_134(14)_1639-1654 (1).pdf",
-      "type": "INNER",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "在肝硬化合并自发性腹膜炎患者中，该研究证实人血白蛋白能有效提高生存率，为特定感染并发症下的生存获益提供了直接证据。",
-      "file_key": "0b8e6629ac557fb4bcf5daa6bbedbb1c"
-    },
-    {
-      "id": "614d32b7c458abe70fe51c660500fc3f",
+      "id": "0a7dbed30dd42082ad514c7d536f516d",
       "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
       "type": "INNER",
       "chunk_ids": [],
       "file_name": null,
-      "research_summary": "该共识针对医疗机构提出人血白蛋白临床应用标准和管理措施，为DRG政策下的合理用药规范及医保管理提供了权威指导依据。",
+      "research_summary": "在院内药事管理与合规使用场景中，该共识为人血白蛋白的临床应用标准、处方审核及医保支付监管提供了权威指导，并强调不应仅因重点监控等原因限量供应，为临床合理用药提供了有价值的参考依据。",
       "file_key": "24a5eb52596a20afe11ce38f7b41e094"
+    },
+    {
+      "id": "aa147e9a607f33a444436570c1c4c578",
+      "title": "专家幻灯-《人血白蛋白在ICU重症肝硬化中的应用》-CHN-ALB-0681.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在肝硬化失代偿期管理场景中，该研究显示在标准治疗基础上长期应用人血白蛋白可将患者18个月生存率显著提升至77%，且能有效改善有效血容量并降低肝肾综合征风险，为临床应用提供了有价值的参考依据。",
+      "file_key": "17c93876a28fb2d7a2aa67ce34131575"
     }
   ],
   "user_id": null,
-  "session_id": "6d2189c0-a230-4650-bcf9-bc123d6aae3a",
+  "session_id": "f7ff23e6-2fa5-4923-bba8-10eab83b8b25",
   "visit_plan_digest": {
-    "notion": "该主任医师作为合理用药管理者，已建立'人血白蛋白主要补充白蛋白缺乏，且Alb<30g/L适用'的认知体系，当前医院管理规范但应用场景相对保守。其关注肝硬化患者Alb≥30g/L时长期输注的生存获益机制，提示对白蛋白功能认知存在深化需求。",
+    "notion": "药剂科管理者，认同院内对白蛋白管理较好、Alb<30g/L可用；杰特贝林使用比例高（≥50%），并关注失代偿期肝硬化长期白蛋白的生存获益（为其关注点）。",
     "doctorInfo": {
       "department": "医院管理层/药剂科",
       "type": "合理用药管理者",
       "grade": "使用",
       "rank": "主任医师"
     },
-    "goal": "围绕'人血白蛋白通过提升有效白蛋白浓度改善肝硬化患者预后'的核心信息，推动医生从'使用'向'偏好'阶段进阶；下一阶段意味着医生将认可白蛋白作为兼具容量复苏与器官保护功能的治疗药物，并在费用冲突时优先保障其合理使用。",
-    "strategy": "以肝硬化患者长期生存获益为切入点，结合DRG管理规范，通过结构功能修复机制与57%死亡风险降低数据，论证Alb≥30g/L患者持续输注的临床合理性与管理合规性。"
+    "goal": "围绕“危重患者需快速稳定有效循环容量，且白蛋白可维持胶体渗透压、保护器官功能并在失代偿肝硬化中带来长期获益”的核心信息，推动医生从合理用药管理者的“使用”阶段向“偏好”阶段进阶；下一阶段意味着在院内更认可白蛋白作为重要的复苏与长期补充手段，院内用药管理趋于宽松、对有明确指征的患者更倾向于优先批准并减少限制性审批。",
+    "strategy": "先从承认其当前管理规范切入，围绕肝硬化长期输注与白蛋白对有效白蛋白/器官保护的证据承接危重患者容量需求，最终建议形成明确指征清单并讨论医保/用药流程保障以推动院内倾向性使用。"
   },
   "comm_suggest": {
     "literatures": [
@@ -1048,35 +1080,35 @@
   "focus_point": {
     "items": [
       {
-        "title": "长期白蛋白输注显著降低肝硬化患者死亡风险",
-        "content": "研究显示，对于Alb≥30g/L的失代偿期肝硬化患者，长期联合白蛋白输注相较标准治疗可降低57%死亡风险。这种生存获益可能与白蛋白结构功能修复相关，肝硬化患者存在广泛的白蛋白分子结构改变，输注外源性白蛋白可提升有效白蛋白浓度，改善循环稳定性和器官功能。{cc5338cf73d0d468d2f91a8d9a35536e}{b708f2ed31041dd4d901c56e8b2d8249}{dd8bcad71d2174596abb303d6a985802}"
+        "title": "长期白蛋白联合治疗能显著提高失代偿期肝硬化患者中长期生存率",
+        "content": "随机/观察数据表明，在失代偿期肝硬化的治疗方案中，标准治疗联合长期白蛋白输注组在18个月生存率上显著优于仅接受标准治疗的对照组（示例数据：77% vs 66%，P=0.028），提示白蛋白的长期补充可带来可测的生存获益。对于ICU中并发症多、死亡率高且需快速稳定循环容量的患者，这一生存改善具有直接的临床相关性，应作为评估是否开展长期白蛋白干预的重要依据。 {bc08e5506ca11f9133b27a54538a236e}"
       },
       {
-        "title": "有效白蛋白浓度提升是改善预后的关键机制",
-        "content": "肝硬化患者因氧化应激导致循环白蛋白结构损伤，即使总白蛋白水平≥30g/L，有效白蛋白浓度仍可能不足。输注人血白蛋白1周后，有效白蛋白浓度显著提升，有助于改善肠道水肿、维持血流动力学稳定，这与重症患者器官功能保护需求高度契合。{cc5338cf73d0d468d2f91a8d9a35536e}{dd8bcad71d2174596abb303d6a985802}"
+        "title": "输注白蛋白可提升“有效白蛋白”并与短期死亡率相关，提供器官功能保护的生物学机制支持",
+        "content": "研究显示白蛋白输注后可短期提高总白蛋白浓度，并能明显增加被测为“有效白蛋白”的含量；有效白蛋白水平的高低与短期（如90天）累计死亡率存在相关性。由此可见，白蛋白的功能性恢复（而非仅数值恢复）是其潜在改善器官功能和预后的关键路径之一，为在表面白蛋白接近或超过一定阈值时仍考虑长期输注提供了可检验的机制学依据。{f36e91fcf120714ad2401741711b3291}{a6e62eaddb1b1e1bc51ab15bf896daab}"
       },
       {
-        "title": "权威共识支持白蛋白在重症肝硬化的长期应用",
-        "content": "最新指南明确指出，对于重症伴大量腹水患者，腹腔穿刺术后推荐输注白蛋白预防循环功能障碍。长期高剂量输注方案可显著提升有效白蛋白浓度，缓解疾病严重程度，这与ICU患者降低并发症发生率和改善预后的治疗目标一致。{af1cdb1668469448a077da77f88ad73a}{b708f2ed31041dd4d901c56e8b2d8249}"
+        "title": "对容量相关并发症和肝肾综合征的预防证据，支持通过维持有效容量来保护器官功能",
+        "content": "荟萃分析与专家共识均提示：在大量腹水放液后，使用人血白蛋白能显著降低术后循环功能障碍的发生率，且指南级建议在腹腔穿刺大量放液后输注白蛋白并在肝肾综合征时与血管收缩剂联用。维持血浆胶体渗透压和有效循环容量是防止肝硬化患者继发肾功能损害和其他器官功能衰竭的重要手段，这一结论直接回应了在重症环境下保障器官功能的临床需要。{4a5892ad72f9941a23b97be7ad81ee29}{eadbd744a32285870056b02d94027f96}{eefb8d36e9db8e48fb417b56d39b8aff}"
       }
     ],
     "literatures": [
       {
-        "id": "bf3d5fc5f35c07e01a6d947c1e3933ef",
+        "id": "aa147e9a607f33a444436570c1c4c578",
         "title": "专家幻灯-《人血白蛋白在ICU重症肝硬化中的应用》-CHN-ALB-0681.pdf",
         "type": "INNER",
         "chunk_ids": [
-          "cc5338cf73d0d468d2f91a8d9a35536e",
-          "b708f2ed31041dd4d901c56e8b2d8249",
-          "dd8bcad71d2174596abb303d6a985802",
-          "cc5338cf73d0d468d2f91a8d9a35536e",
-          "dd8bcad71d2174596abb303d6a985802",
-          "af1cdb1668469448a077da77f88ad73a",
-          "b708f2ed31041dd4d901c56e8b2d8249"
+          "bc08e5506ca11f9133b27a54538a236e",
+          "f36e91fcf120714ad2401741711b3291",
+          "f36e91fcf120714ad2401741711b3291",
+          "a6e62eaddb1b1e1bc51ab15bf896daab",
+          "4a5892ad72f9941a23b97be7ad81ee29",
+          "eadbd744a32285870056b02d94027f96",
+          "eefb8d36e9db8e48fb417b56d39b8aff"
         ],
         "file_name": null,
         "research_summary": null,
-        "file_key": "b14ddd5ebddc8c6cee42cf54b6718fda"
+        "file_key": "17c93876a28fb2d7a2aa67ce34131575"
       }
     ]
   },
@@ -1171,826 +1203,43 @@
     {
       "field_name": "focus_title.non_empty",
       "expected": "非空",
-      "actual": "长期白蛋白输注显著降低肝硬化患者死亡风险\n有效白蛋白浓度提升是改善预后的关键机制\n权威共识支持白蛋白在重症肝硬化的长期应用",
+      "actual": "长期白蛋白联合治疗能显著提高失代偿期肝硬化患者中长期生存率\n输注白蛋白可提升“有效白蛋白”并与短期死亡率相关，提供器官功能保护的生物学机制支持\n对容量相关并发症和肝肾综合征的预防证据，支持通过维持有效容量来保护器官功能",
       "passed": true,
       "match_mode": "not_empty"
     },
     {
       "field_name": "focus_content.non_empty",
       "expected": "非空",
-      "actual": "研究显示，对于Alb≥30g/L的失代偿期肝硬化患者，长期联合白蛋白输注相较标准治疗可降低57%死亡风险。这种生存获益可能与白蛋白结构功能修复相关，肝硬化患者存在广泛的白蛋白分子结构改变，输注外源性白蛋白可提升有效白蛋白浓度，改善循环稳定性和器官功能。{cc5338cf73d0d468d2f91a8d9a35536e}{b708f2ed31041dd4d901c56e8b2d8249}{dd8bcad71d2174596abb303d6a985802}\n肝硬化患者因氧化应激导致循环白蛋白结构损伤，即使总白蛋白水平≥30g/L，有效白蛋白浓度仍可能不足。输注人血白蛋白1周后，有效白蛋白浓度显著提升，有助于改善肠道水肿、维持血流动力学稳定，这与重症患者器官功能保护需求高度契合。{cc5338cf73d0d468d2f91a8d9a35536e}{dd8bcad71d2174596abb303d6a985802}\n最新指南明确指出，对于重症伴大量腹水患者，腹腔穿刺术后推荐输注白蛋白预防循环功能障碍。长期高剂量输注方案可显著提升有效白蛋白浓度，缓解疾病严重程度，这与ICU患者降低并发症发生率和改善预后的治疗目标一致。{af1cdb1668469448a077da77f88ad73a}{b708f2ed31041dd4d901c56e8b2d8249}",
+      "actual": "随机/观察数据表明，在失代偿期肝硬化的治疗方案中，标准治疗联合长期白蛋白输注组在18个月生存率上显著优于仅接受标准治疗的对照组（示例数据：77% vs 66%，P=0.028），提示白蛋白的长期补充可带来可测的生存获益。对于ICU中并发症多、死亡率高且需快速稳定循环容量的患者，这一生存改善具有直接的临床相关性，应作为评估是否开展长期白蛋白干预的重要依据。 {bc08e5506ca11f9133b27a54538a236e}\n研究显示白蛋白输注后可短期提高总白蛋白浓度，并能明显增加被测为“有效白蛋白”的含量；有效白蛋白水平的高低与短期（如90天）累计死亡率存在相关性。由此可见，白蛋白的功能性恢复（而非仅数值恢复）是其潜在改善器官功能和预后的关键路径之一，为在表面白蛋白接近或超过一定阈值时仍考虑长期输注提供了可检验的机制学依据。{f36e91fcf120714ad2401741711b3291}{a6e62eaddb1b1e1bc51ab15bf896daab}\n荟萃分析与专家共识均提示：在大量腹水放液后，使用人血白蛋白能显著降低术后循环功能障碍的发生率，且指南级建议在腹腔穿刺大量放液后输注白蛋白并在肝肾综合征时与血管收缩剂联用。维持血浆胶体渗透压和有效循环容量是防止肝硬化患者继发肾功能损害和其他器官功能衰竭的重要手段，这一结论直接回应了在重症环境下保障器官功能的临床需要。{4a5892ad72f9941a23b97be7ad81ee29}{eadbd744a32285870056b02d94027f96}{eefb8d36e9db8e48fb417b56d39b8aff}",
       "passed": true,
       "match_mode": "not_empty"
     }
   ]
 }
 ```
-
-## P033 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 偏好
-- 状态：DONE
-- session_id：2d8f9695-f2f7-4ffe-8b59-143069508075
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-- 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
-- 测试回答：主任医师
-- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 外科[/OPTIONS][/QUESTION]
-- 测试回答：医院管理层/药剂科
-- 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
-- 测试回答：既往拜访过
-- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
-- 测试回答：≥50%
-- 系统提问：临床医生如何看待白蛋白在临床应用中的获益？临床应用是否合理？
-[QUESTION]请选择或描述：[OPTIONS]A. 白蛋白目前大部分是滥用，需要减少整体使用 B. 认可白蛋白在重症监护室/肝病科的应用，但认为外科滥用严重，需要减少使用 C. 目前，对人血白蛋白总
-体上管理较好，Alb<30g/L
-的患者可以使用 D. 人血白蛋白应用合理，并未重点监控，但考虑到白蛋白价格高，MDL/DRG下带来医保资金压力 E. 人血白蛋白应用合理，并未重点监控，MDL/DRG的执行也不会影响白蛋白的临床应用[/OPTIONS][/QUESTION]
-- 测试回答：D
-- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. MDL/DRG控费背景下，白蛋白使用受限与临床获益之间的平衡问题 B. 白蛋白应用如何具体支持CMI值提升和医院绩效考核目标 C. 白蛋白在危重症患者救治中的循证依据及对降低死亡率/并发症的实际影响 D. 白蛋白在复杂大手术（如心脏、肝移植）围术期的应用价值与资源优化效果[/OPTIONS][/QUESTION]
-- 测试回答：A
-- 关注点执行结果：
-```json
-[
-  {
-    "planned_branch": "F1",
-    "actual_branch": "F1",
-    "answer": "A",
-    "fixed_option_label": "A",
-    "fixed_option_text": "MDL/DRG控费背景下，白蛋白使用受限与临床获益之间的平衡问题",
-    "selected_option_label": "A",
-    "selected_option_text": "MDL/DRG控费背景下，白蛋白使用受限与临床获益之间的平衡问题",
-    "custom_input": "",
-    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. MDL/DRG控费背景下，白蛋白使用受限与临床获益之间的平衡问题 B. 白蛋白应用如何具体支持CMI值提升和医院绩效考核目标 C. 白蛋白在危重症患者救治中的循证依据及对降低死亡率/并发症的实际影响 D. 白蛋白在复杂大手术（如心脏、肝移植）围术期的应用价值与资源优化效果[/OPTIONS][/QUESTION]"
-  }
-]
-```
-- 接口耗时记录：
-```json
-[
-  {
-    "api_name": "start_conversation",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/start",
-    "request_identifier": "P033",
-    "case_id": "P033",
-    "session_id": "",
-    "elapsed_ms": 90.09,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "case_id": "P033",
-    "session_id": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "elapsed_ms": 2294.61,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "case_id": "P033",
-    "session_id": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "elapsed_ms": 1855.52,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "case_id": "P033",
-    "session_id": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "elapsed_ms": 773.17,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "case_id": "P033",
-    "session_id": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "elapsed_ms": 1074.11,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "case_id": "P033",
-    "session_id": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "elapsed_ms": 3498.23,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "call_focus_match_llm",
-    "request_method": "POST",
-    "request_path": "https://api.deepseek.com/chat/completions",
-    "request_identifier": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "case_id": "P033",
-    "session_id": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "elapsed_ms": 2170.98,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "case_id": "P033",
-    "session_id": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "elapsed_ms": 1915.41,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "fetch_visit_plan_detail_once",
-    "request_method": "GET",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/history/2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "request_identifier": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "case_id": "P033",
-    "session_id": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-    "elapsed_ms": 55.81,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  }
-]
-```
-- 最终拜访计划：
-```json
-{
-  "literatures": [
-    {
-      "id": "614d32b7c458abe70fe51c660500fc3f",
-      "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
-      "type": "INNER",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该研究针对医疗机构人血白蛋白合理用药管理问题，明确提出反对仅因控费原因限制人血白蛋白供应，并建议结合临床需求制定使用标准，为平衡医保管理与治疗必要性提供了权威管理策略依据。",
-      "file_key": "24a5eb52596a20afe11ce38f7b41e094"
-    },
-    {
-      "id": "634e50aff29c41665848f2becdfc9628",
-      "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
-      "type": "INNER",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该研究显示当脓毒症患者血清白蛋白水平≥30g/L时停用可降低并发症发生趋势，为界定Alb<30g/L的治疗阈值提供了循证依据，符合临床合理使用边界的论证需求。",
-      "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
-    },
-    {
-      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-3a3471fd9223404d9c21a9acc1c7e011",
-      "title": "人血白蛋白临床应用管理中国专家共识",
-      "type": "EXTERNAL",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该共识系统规范了人血白蛋白的临床应用标准与超说明书用药管理策略，强调在保障合理用药需求前提下实施重点管控，为医疗机构制定药物经济学管理方案提供了直接参考框架。",
-      "file_key": null
-    }
-  ],
-  "user_id": null,
-  "session_id": "2d8f9695-f2f7-4ffe-8b59-143069508075",
-  "visit_plan_digest": {
-    "notion": "该主任医师作为合理用药管理者，已认可人血白蛋白的临床价值且未重点监控使用，但关注MDL/DRG控费压力下白蛋白使用受限与临床获益的平衡问题。",
-    "doctorInfo": {
-      "department": "医院管理层/药剂科",
-      "type": "合理用药管理者",
-      "grade": "偏好",
-      "rank": "主任医师"
-    },
-    "goal": "围绕人血白蛋白提升危重症救治效率与医院CMI值的核心价值，推动医生从‘偏好’向‘提倡’阶段进阶；下一阶段意味着在医保控费压力下，医生将通过调整其他药物使用优先保障人血白蛋白的合理应用。",
-    "strategy": "以MDL/DRG控费压力为切入点，结合药物经济学数据论证白蛋白通过降低并发症、缩短住院周期带来的资源优化效益，推动其将白蛋白使用纳入医院高质量发展战略考量。"
-  },
-  "comm_suggest": {
-    "literatures": [
-      {
-        "id": null,
-        "title": "1. Vincent, J.-L., et al.,Annals of surgery, 2003. 237(3): 319‒334）",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "2. Xu JY, et al. Crit Care, 2014, 18(6): 702",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "一项荟萃分析评估了白蛋白与晶体液对严重脓毒症和脓毒症休克患者液体复苏的效果，共纳入5项研究，涉及3658例严重脓毒症和2180例脓毒症休克患者。结果：白蛋白相比晶体液显著降低脓毒症休克患者90天死亡风险19%（RR=0.81）。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "3. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "4. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "5. Kingeter AJet al. Can J Anaesth. 2018;65 (11):1218-1227",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "一项大型观察性研究纳入6,188例心脏体外循环手术患者，对1,095例使用5%白蛋白联合晶体液与1,095例仅用晶体液的患者进行倾向评分匹配分析。结果：与单用晶体液相比，联合使用人血白蛋白可降低心脏体外循环手术患者院内死亡风险50%和30天全因再入院风险30%。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "6. 薛欣, 等. 中华移植杂志（电子版）2016, 10(4):169-173.",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "一项回顾性研究探讨了肝移植术中应用人血白蛋白或羟乙基淀粉（HES）与术后早期肺部并发症的关系，纳入60例肝移植受者进行评估。结果：人血白蛋白组的肺动脉压和肺毛细血管楔压显著低于HES组（P<0.05），且人血白蛋白组的机械通气时间、ICU停留时间、肺部感染和急性肺损伤发生率均显著低于HES组（P<0.05）。",
-        "file_key": null
-      },
-      {
-        "id": null,
-        "title": "7. Haynes GR, et al. Eur JAnaesthesiol 2003;20 (10):771-793.",
-        "type": "CSL",
-        "chunk_ids": null,
-        "file_name": null,
-        "research_summary": "一项荟萃分析纳入共79项随机试验的4755例患者（包括心脏手术，非心脏手术，低蛋白血症，腹水，败血症，烧伤和脑损伤患者）。结果：心脏手术中，白蛋白与晶体液相比可减少液体需求、提高胶体渗透压、减少肺水肿和呼吸功能障碍，同时增加血液稀释程度；羟乙基淀粉则增加术后出血。非心脏手术中，白蛋白可减少液体需求及肺、肠水肿。",
-        "file_key": null
-      }
-    ],
-    "transitional_info": [
-      "提升医院运营效率 | 提高CMI值 | 提升危重症患者救治 | 提升复杂/重大患者大手术"
-    ],
-    "support_info": "{1}. 人血白蛋白对危重症患者救治的临床价值\n低白蛋白血症与重症患者的不良预后密切相关\n● 血清白蛋白浓度每下降10g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%{1}\n白蛋白降低显著增加脓毒症患者的死亡风险\n● 与晶体液相比，人血白蛋白可显著降低脓毒性休克患者90天死亡风险，降幅高达19%{2}\n白蛋白不足会增加肝硬化患者的住院负担\n● 人血白蛋白联合标准医学治疗，可使失代偿期肝硬化患者全因住院比率下降35%，住院时间下降45%{3},{4}\n\n{2}. 人血白蛋白对高难度手术患者的临床价值\n容量负荷过重与心脏手术患者并发症（如肺水肿、AKI 和充血性心力衰竭）和死亡风险的增加密切相关。\n● 在心脏手术患者中，与单用晶体液相比，联合使用人血白蛋白可降低心脏体外循环手术患者院内死亡风险50%和30天全因再入院风险30%{5}\n腹部手术术前术后低白蛋白血症会引起并发症风险和院内死亡率升高\n● 在肝移植术患者中，人血白蛋白可减少术后肺部并发症的发生{6}\n● 在围手术期间维持白蛋白水平可降低患者液体需求量、提高血液渗透压，减少术后失血量，减轻术中肠道水肿，减少临床并发症，保护器官功能，降低死亡风险{7}\n以上益处均有利于医院学科发展、CMI提高、医院绩效考核与高质量发展"
-  },
-  "focus_point": {
-    "items": [
-      {
-        "title": "尽管人血白蛋白的临床疗效优异，但MDL/DRG医保控费背景下，白蛋白的使用受到限制。",
-        "content": "-"
-      }
-    ],
-    "literatures": null
-  },
-  "phase3_flag": true
-}
-```
-- 断言结果：
-```json
-{
-  "passed": true,
-  "total_checks": 12,
-  "passed_checks": 12,
-  "failed_fields": [],
-  "checks": [
-    {
-      "field_name": "doctor_type",
-      "expected": "合理用药管理者",
-      "actual": "合理用药管理者",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "doctor_grade",
-      "expected": "偏好",
-      "actual": "偏好",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "trans_info",
-      "expected": "提升医院运营效率 | 提高CMI值 | 提升危重症患者救治 | 提升复杂/重大患者大手术",
-      "actual": "提升医院运营效率 | 提高CMI值 | 提升危重症患者救治 | 提升复杂/重大患者大手术",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "support_info",
-      "expected": "1. 人血白蛋白对危重症患者救治的临床价值\n低白蛋白血症与重症患者的不良预后密切相关\n● 血清白蛋白浓度每下降10g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%1\n白蛋白降低显著增加脓毒症患者的死亡风险\n● 与晶体液相比，人血白蛋白可显著降低脓毒性休克患者90天死亡风险，降幅高达19%2\n白蛋白不足会增加肝硬化患者的住院负担\n● 人血白蛋白联合标准医学治疗，可使失代偿期肝硬化患者全因住院比率下降35%，住院时间下降45%3,4\n\n2. 人血白蛋白对高难度手术患者的临床价值\n容量负荷过重与心脏手术患者并发症（如肺水肿、AKI 和充血性心力衰竭）和死亡风险的增加密切相关。\n● 在心脏手术患者中，与单用晶体液相比，联合使用人血白蛋白可降低心脏体外循环手术患者院内死亡风险50%和30天全因再入院风险30%5\n腹部手术术前术后低白蛋白血症会引起并发症风险和院内死亡率升高\n● 在肝移植术患者中，人血白蛋白可减少术后肺部并发症的发生6\n● 在围手术期间维持白蛋白水平可降低患者液体需求量、提高血液渗透压，减少术后失血量，减轻术中肠道水肿，减少临床并发症，保护器官功能，降低死亡风险7\n以上益处均有利于医院学科发展、CMI提高、医院绩效考核与高质量发展",
-      "actual": "{1}. 人血白蛋白对危重症患者救治的临床价值\n低白蛋白血症与重症患者的不良预后密切相关\n● 血清白蛋白浓度每下降10g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%{1}\n白蛋白降低显著增加脓毒症患者的死亡风险\n● 与晶体液相比，人血白蛋白可显著降低脓毒性休克患者90天死亡风险，降幅高达19%{2}\n白蛋白不足会增加肝硬化患者的住院负担\n● 人血白蛋白联合标准医学治疗，可使失代偿期肝硬化患者全因住院比率下降35%，住院时间下降45%{3},{4}\n\n{2}. 人血白蛋白对高难度手术患者的临床价值\n容量负荷过重与心脏手术患者并发症（如肺水肿、AKI 和充血性心力衰竭）和死亡风险的增加密切相关。\n● 在心脏手术患者中，与单用晶体液相比，联合使用人血白蛋白可降低心脏体外循环手术患者院内死亡风险50%和30天全因再入院风险30%{5}\n腹部手术术前术后低白蛋白血症会引起并发症风险和院内死亡率升高\n● 在肝移植术患者中，人血白蛋白可减少术后肺部并发症的发生{6}\n● 在围手术期间维持白蛋白水平可降低患者液体需求量、提高血液渗透压，减少术后失血量，减轻术中肠道水肿，减少临床并发症，保护器官功能，降低死亡风险{7}\n以上益处均有利于医院学科发展、CMI提高、医院绩效考核与高质量发展",
-      "passed": true,
-      "match_mode": "contains"
-    },
-    {
-      "field_name": "comm_literature_titles",
-      "expected": "1. Vincent, J.-L., et al.,Annals of surgery, 2003. 237(3): 319‒334）\n2. Xu JY, et al. Crit Care, 2014, 18(6): 702\n3. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.\n4. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）\n5. Kingeter AJet al. Can J Anaesth. 2018;65 (11):1218-1227\n6. 薛欣, 等. 中华移植杂志（电子版）2016, 10(4):169-173.\n7. Haynes GR, et al. Eur JAnaesthesiol 2003;20 (10):771-793.",
-      "actual": "1. Vincent, J.-L., et al.,Annals of surgery, 2003. 237(3): 319‒334）\n2. Xu JY, et al. Crit Care, 2014, 18(6): 702\n3. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.\n4. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）\n5. Kingeter AJet al. Can J Anaesth. 2018;65 (11):1218-1227\n6. 薛欣, 等. 中华移植杂志（电子版）2016, 10(4):169-173.\n7. Haynes GR, et al. Eur JAnaesthesiol 2003;20 (10):771-793.",
-      "passed": true,
-      "match_mode": "list_exact"
-    },
-    {
-      "field_name": "comm_literature_summaries",
-      "expected": "1. 一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。\n2. 一项荟萃分析评估了白蛋白与晶体液对严重脓毒症和脓毒症休克患者液体复苏的效果，共纳入5项研究，涉及3658例严重脓毒症和2180例脓毒症休克患者。结果：白蛋白相比晶体液显著降低脓毒症休克患者90天死亡风险19%（RR=0.81）。\n3-4. ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。\n5. 一项大型观察性研究纳入6,188例心脏体外循环手术患者，对1,095例使用5%白蛋白联合晶体液与1,095例仅用晶体液的患者进行倾向评分匹配分析。结果：与单用晶体液相比，联合使用人血白蛋白可降低心脏体外循环手术患者院内死亡风险50%和30天全因再入院风险30%。\n6. 一项回顾性研究探讨了肝移植术中应用人血白蛋白或羟乙基淀粉（HES）与术后早期肺部并发症的关系，纳入60例肝移植受者进行评估。结果：人血白蛋白组的肺动脉压和肺毛细血管楔压显著低于HES组（P<0.05），且人血白蛋白组的机械通气时间、ICU停留时间、肺部感染和急性肺损伤发生率均显著低于HES组（P<0.05）。\n7. 一项荟萃分析纳入共79项随机试验的4755例患者（包括心脏手术，非心脏手术，低蛋白血症，腹水，败血症，烧伤和脑损伤患者）。结果：心脏手术中，白蛋白与晶体液相比可减少液体需求、提高胶体渗透压、减少肺水肿和呼吸功能障碍，同时增加血液稀释程度；羟乙基淀粉则增加术后出血。非心脏手术中，白蛋白可减少液体需求及肺、肠水肿。",
-      "actual": "一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。\n一项荟萃分析评估了白蛋白与晶体液对严重脓毒症和脓毒症休克患者液体复苏的效果，共纳入5项研究，涉及3658例严重脓毒症和2180例脓毒症休克患者。结果：白蛋白相比晶体液显著降低脓毒症休克患者90天死亡风险19%（RR=0.81）。\nANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。\nANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。\n一项大型观察性研究纳入6,188例心脏体外循环手术患者，对1,095例使用5%白蛋白联合晶体液与1,095例仅用晶体液的患者进行倾向评分匹配分析。结果：与单用晶体液相比，联合使用人血白蛋白可降低心脏体外循环手术患者院内死亡风险50%和30天全因再入院风险30%。\n一项回顾性研究探讨了肝移植术中应用人血白蛋白或羟乙基淀粉（HES）与术后早期肺部并发症的关系，纳入60例肝移植受者进行评估。结果：人血白蛋白组的肺动脉压和肺毛细血管楔压显著低于HES组（P<0.05），且人血白蛋白组的机械通气时间、ICU停留时间、肺部感染和急性肺损伤发生率均显著低于HES组（P<0.05）。\n一项荟萃分析纳入共79项随机试验的4755例患者（包括心脏手术，非心脏手术，低蛋白血症，腹水，败血症，烧伤和脑损伤患者）。结果：心脏手术中，白蛋白与晶体液相比可减少液体需求、提高胶体渗透压、减少肺水肿和呼吸功能障碍，同时增加血液稀释程度；羟乙基淀粉则增加术后出血。非心脏手术中，白蛋白可减少液体需求及肺、肠水肿。",
-      "passed": true,
-      "match_mode": "contains"
-    },
-    {
-      "field_name": "digest.department",
-      "expected": "医院管理层/药剂科",
-      "actual": "医院管理层/药剂科",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.rank",
-      "expected": "主任医师",
-      "actual": "主任医师",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.type",
-      "expected": "合理用药管理者",
-      "actual": "合理用药管理者",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.grade",
-      "expected": "偏好",
-      "actual": "偏好",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "focus_branch",
-      "expected": "F1",
-      "actual": "F1",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "focus_title",
-      "expected": "尽管人血白蛋白的临床疗效优异，但MDL/DRG医保控费背景下，白蛋白的使用受到限制。",
-      "actual": "尽管人血白蛋白的临床疗效优异，但MDL/DRG医保控费背景下，白蛋白的使用受到限制。",
-      "passed": true,
-      "match_mode": "contains"
-    }
-  ]
-}
-```
-
-## P034 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 提倡
-- 状态：DONE
-- session_id：c89a14a1-dca0-4b91-810b-ccd872e8892a
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-- 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
-- 测试回答：主任医师
-- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 外科[/OPTIONS][/QUESTION]
-- 测试回答：医院管理层/药剂科
-- 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
-- 测试回答：既往拜访过
-- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
-- 测试回答：≥50%
-- 系统提问：临床医生如何看待白蛋白在临床应用中的获益？临床应用是否合理？
-[QUESTION]请选择或描述：[OPTIONS]A. 白蛋白目前大部分是滥用，需要减少整体使用 B. 认可白蛋白在重症监护室/肝病科的应用，但认为外科滥用严重，需要减少使用 C. 目前，对人血白蛋白总
-体上管理较好，Alb<30g/L
-的患者可以使用 D. 人血白蛋白应用合理，并未重点监控，但考虑到白蛋白价格高，MDL/DRG下带来医保资金压力 E. 人血白蛋白应用合理，并未重点监控，MDL/DRG的执行也不会影响白蛋白的临床应用[/OPTIONS][/QUESTION]
-- 测试回答：E
-- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 白蛋白应用合理，无需重点监控，DRG/MDL执行不影响临床使用 B. 如何通过白蛋白规范使用降低危重症及大手术患者死亡率与并发症 C. 如何借助白蛋白优化ICU及住院时长，提升CMI值与床位周转率 D. 在DRG/MDL支付下，白蛋白使用如何助力医保资金实现正向结余[/OPTIONS][/QUESTION]
-- 测试回答：A
-- 关注点执行结果：
-```json
-[
-  {
-    "planned_branch": "F1",
-    "actual_branch": "F2_OPTION",
-    "answer": "A",
-    "fixed_option_label": "",
-    "fixed_option_text": "",
-    "selected_option_label": "A",
-    "selected_option_text": "白蛋白应用合理，无需重点监控，DRG/MDL执行不影响临床使用",
-    "custom_input": "",
-    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 白蛋白应用合理，无需重点监控，DRG/MDL执行不影响临床使用 B. 如何通过白蛋白规范使用降低危重症及大手术患者死亡率与并发症 C. 如何借助白蛋白优化ICU及住院时长，提升CMI值与床位周转率 D. 在DRG/MDL支付下，白蛋白使用如何助力医保资金实现正向结余[/OPTIONS][/QUESTION]"
-  }
-]
-```
-- 接口耗时记录：
-```json
-[
-  {
-    "api_name": "start_conversation",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/start",
-    "request_identifier": "P034",
-    "case_id": "P034",
-    "session_id": "",
-    "elapsed_ms": 66.34,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "case_id": "P034",
-    "session_id": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "elapsed_ms": 2181.98,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "case_id": "P034",
-    "session_id": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "elapsed_ms": 2399.06,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "case_id": "P034",
-    "session_id": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "elapsed_ms": 902.9,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "case_id": "P034",
-    "session_id": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "elapsed_ms": 1125.95,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "case_id": "P034",
-    "session_id": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "elapsed_ms": 3048.14,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "call_focus_match_llm",
-    "request_method": "POST",
-    "request_path": "https://api.deepseek.com/chat/completions",
-    "request_identifier": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "case_id": "P034",
-    "session_id": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "elapsed_ms": 2013.38,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "send_message",
-    "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "case_id": "P034",
-    "session_id": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "elapsed_ms": 1655.29,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  },
-  {
-    "api_name": "fetch_visit_plan_detail_once",
-    "request_method": "GET",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/history/c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "request_identifier": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "case_id": "P034",
-    "session_id": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-    "elapsed_ms": 51.65,
-    "success": true,
-    "status_code": 200,
-    "error": ""
-  }
-]
-```
-- 最终拜访计划：
-```json
-{
-  "literatures": [
-    {
-      "id": "614d32b7c458abe70fe51c660500fc3f",
-      "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
-      "type": "INNER",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该研究针对医疗机构人血白蛋白管理需求，提供了建立临床应用标准、超说明书用药审批流程及处方监管等系统性管理框架，为DRG/MDL支付框架下的药物资源优化提供了强证据支持。",
-      "file_key": "24a5eb52596a20afe11ce38f7b41e094"
-    },
-    {
-      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-c05a5c72dc18400db0f8c1706d218786",
-      "title": "Establishing a hospital transfusion management system promotes appropriate clinical use of human albumin in Japan: a nationwide retrospective study.",
-      "type": "EXTERNAL",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该研究在急症患者管理中证实，建立输血管理部门可使人血白蛋白使用量降低30%且不影响护理质量，为支付改革背景下优化药物使用效率提供了国际实践依据。",
-      "file_key": null
-    },
-    {
-      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-82f9523109954142b30b3d323bf764a0",
-      "title": "住院患者人血白蛋白临床使用分析与评价",
-      "type": "EXTERNAL",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该研究通过多科室用药分析提出前置审方系统建设、用药标准制定等具体干预措施，为医疗机构实施精准用药管控提供了可操作性管理策略参考。",
-      "file_key": null
-    }
-  ],
-  "user_id": null,
-  "session_id": "c89a14a1-dca0-4b91-810b-ccd872e8892a",
-  "visit_plan_digest": {
-    "notion": "医生已明确认可人血白蛋白在DRG/MDL政策下的合理应用价值，认为无需重点监控且政策执行不影响临床使用，处于主动维护白蛋白临床地位的认知阶段。",
-    "doctorInfo": {
-      "department": "医院管理层/药剂科",
-      "type": "合理用药管理者",
-      "grade": "提倡",
-      "rank": "主任医师"
-    },
-    "goal": "围绕‘人血白蛋白通过改善危重症预后指标实现DRG/MDL下临床价值与医保控费平衡’的核心信息，巩固医生在‘提倡’阶段的认知与实践，并支持其通过多学科协作管理经验分享带动医院白蛋白规范使用体系的持续优化。",
-    "strategy": "以多学科协作管理案例为切入点，结合权威共识与循证数据，论证白蛋白在DRG框架下的临床经济学价值，推动其将管理实践转化为可复制的科室协作经验。"
-  },
-  "comm_suggest": {
-    "literatures": null,
-    "transitional_info": [
-      "降低危重症及大手术患者死亡率与并发症，缩短ICU及住院时间，提升CMI值与床位周转率，实现DRG/MDL下医保资金正向结余"
-    ],
-    "support_info": ""
-  },
-  "focus_point": {
-    "items": [
-      {
-        "title": "权威共识明确反对重点监控限制白蛋白合理使用",
-        "content": "《人血白蛋白临床应用管理中国专家共识》强推荐医疗机构不应仅因重点监控原因将白蛋白移出药品目录或限量供应，强调应在保障合理用药需求前提下实施管控，为DRG/MDL政策下规范使用提供依据。{458373203320c7498b94ea28cc79df71}{2e4548c9fcb8b540402739de7758f7aa}"
-      },
-      {
-        "title": "多学科协作管理确保DRG下临床使用规范性",
-        "content": "通过建立临床医学、药学、信息多学科协作体系，结合医疗机构实际制定白蛋白临床应用标准，可有效实现危重症患者救治与DRG控费目标的平衡，相关管理措施已被证实可行且有效。{458373203320c7498b94ea28cc79df71}{2e4548c9fcb8b540402739de7758f7aa}"
-      },
-      {
-        "title": "循证医学支持白蛋白改善危重症预后指标",
-        "content": "Meta分析显示白蛋白较晶体液显著改善危重症患者血流动力学参数，提升CVP、MAP及心脏指数，为缩短ICU停留时间、降低并发症发生率提供生理学基础。{0d3412fa4a8a648b32823de4a2a2e93f}"
-      }
-    ],
-    "literatures": [
-      {
-        "id": "614d32b7c458abe70fe51c660500fc3f",
-        "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
-        "type": "INNER",
-        "chunk_ids": [
-          "458373203320c7498b94ea28cc79df71",
-          "458373203320c7498b94ea28cc79df71",
-          "2e4548c9fcb8b540402739de7758f7aa",
-          "458373203320c7498b94ea28cc79df71",
-          "458373203320c7498b94ea28cc79df71",
-          "2e4548c9fcb8b540402739de7758f7aa"
-        ],
-        "file_name": null,
-        "research_summary": null,
-        "file_key": "24a5eb52596a20afe11ce38f7b41e094"
-      },
-      {
-        "id": "634e50aff29c41665848f2becdfc9628",
-        "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
-        "type": "INNER",
-        "chunk_ids": [
-          "0d3412fa4a8a648b32823de4a2a2e93f"
-        ],
-        "file_name": null,
-        "research_summary": null,
-        "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
-      }
-    ]
-  },
-  "phase3_flag": true
-}
-```
-- 断言结果：
-```json
-{
-  "passed": true,
-  "total_checks": 8,
-  "passed_checks": 8,
-  "failed_fields": [],
-  "checks": [
-    {
-      "field_name": "doctor_type",
-      "expected": "合理用药管理者",
-      "actual": "合理用药管理者",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "doctor_grade",
-      "expected": "提倡",
-      "actual": "提倡",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.department",
-      "expected": "医院管理层/药剂科",
-      "actual": "医院管理层/药剂科",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.rank",
-      "expected": "主任医师",
-      "actual": "主任医师",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.type",
-      "expected": "合理用药管理者",
-      "actual": "合理用药管理者",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "digest.grade",
-      "expected": "提倡",
-      "actual": "提倡",
-      "passed": true,
-      "match_mode": "exact"
-    },
-    {
-      "field_name": "focus_title.non_empty",
-      "expected": "非空",
-      "actual": "权威共识明确反对重点监控限制白蛋白合理使用\n多学科协作管理确保DRG下临床使用规范性\n循证医学支持白蛋白改善危重症预后指标",
-      "passed": true,
-      "match_mode": "not_empty"
-    },
-    {
-      "field_name": "focus_content.non_empty",
-      "expected": "非空",
-      "actual": "《人血白蛋白临床应用管理中国专家共识》强推荐医疗机构不应仅因重点监控原因将白蛋白移出药品目录或限量供应，强调应在保障合理用药需求前提下实施管控，为DRG/MDL政策下规范使用提供依据。{458373203320c7498b94ea28cc79df71}{2e4548c9fcb8b540402739de7758f7aa}\n通过建立临床医学、药学、信息多学科协作体系，结合医疗机构实际制定白蛋白临床应用标准，可有效实现危重症患者救治与DRG控费目标的平衡，相关管理措施已被证实可行且有效。{458373203320c7498b94ea28cc79df71}{2e4548c9fcb8b540402739de7758f7aa}\nMeta分析显示白蛋白较晶体液显著改善危重症患者血流动力学参数，提升CVP、MAP及心脏指数，为缩短ICU停留时间、降低并发症发生率提供生理学基础。{0d3412fa4a8a648b32823de4a2a2e93f}",
-      "passed": true,
-      "match_mode": "not_empty"
-    }
-  ]
-}
-```
-
-## P035 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 梯度未收集到 -> 知道
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F3
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P036 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 梯度未收集到 -> 尝试
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P037 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 梯度未收集到 -> 使用
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P038 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 梯度未收集到 -> 偏好
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P039 医院管理层/药剂科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P040 医院管理层/药剂科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P041 医院管理层/药剂科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F2_CUSTOM
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P042 医院管理层/药剂科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P043 医院管理层/药剂科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P044 医院管理层/药剂科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F3
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P045 医院管理层/药剂科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P046 医院管理层/药剂科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P047 医院管理层/药剂科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：F1
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
 
 ## P048 医院管理层/药剂科 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
-- 状态：EXECUTION_FAILED
-- session_id：-
-- 关注点策略：-
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
-
-## P049 医院管理层/药剂科 -> 首次拜访 -> 原始 AI 问询路径
 - 状态：DONE
-- session_id：8d6893f8-c504-4790-b2e2-a856007769f3
+- session_id：9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0
 - 关注点策略：-
-- 首次出现can_stop=true的轮次：-
-- 实际调用stop的轮次：-
+- 首次出现can_stop=true的轮次：5
+- 实际调用stop的轮次：8
+- stop接口异常：HTTPSConnectionPool(host='dev-ccet.cslbehring.com.cn', port=443): Max retries exceeded with url: /api/sale/chat/stop (Caused by ResponseError('too many 500 error responses'))
 - 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
 - 测试回答：主任医师
 - 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 外科[/OPTIONS][/QUESTION]
 - 测试回答：医院管理层/药剂科
 - 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
-- 测试回答：首次拜访
-- 系统提问：[QUESTION]为了找到共同话题，根据了解，这位医生最可能关注哪类患者或领域？[OPTIONS]A. 杰特贝林人血白蛋白适应症相关患者 B. 科室常见基础病 C. 学术前沿/科研方向 D. 我不确定/需要建议 [/OPTIONS][/QUESTION]
-- 测试回答：D
-- 系统提问：[QUESTION]结合医生情况，您希望本次初次拜访达成什么核心效果？[OPTIONS]A. 仅建立初步联系，混个脸熟 B. 了解医生对该领域的观念 C. 传递一个关键的产品/治疗信息 D. 我不确定，请帮我推荐 [/OPTIONS][/QUESTION]
+- 测试回答：既往拜访过
+- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
+- 测试回答：不清楚
+- 系统提问：[QUESTION]您与这位主任医师以往的互动情况如何？他/她对杰特贝林人血白蛋白（贝林/安博美/安博灵）的认知和使用经验属于哪种情况？[OPTIONS]A. 关系熟，产品认知和使用经验丰富 B. 关系熟，但产品认知较浅 C. 关系一般，产品认知和使用较少 D. 初次深入交流，不了解具体认知[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 系统提问：[QUESTION]基于您与医生的关系及产品认知（关系熟、产品认知深），这次拜访您最想聚焦解决哪个具体问题？[OPTIONS]A. 传递新适应症或临床应用数据 B. 讨论低白蛋白血症患者的优化使用方案 C. 巩固客情关系，了解近期用药反馈 D. 争取在特定科室或患者群中扩大使用[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 系统提问：[QUESTION]您计划重点传递以下哪条核心信息？[OPTIONS]A. 产品在低白蛋白血症优化使用方案中的临床获益 B. 产品在心肺分流术或特殊血液透析中的辅助治疗价值 C. 产品的品质与安全数据相比竞品的差异[/OPTIONS][/QUESTION]
+- 测试回答：C
+- 系统提问：[QUESTION]您计划重点传递以下哪条核心信息？[OPTIONS]A. 杰特贝林人血白蛋白在品质管控（如原料筛选、病毒灭活工艺）方面相较于其他品牌的具体优势数据 B. 产品在低白蛋白血症优化使用方案中的临床获益 C. 产品在心肺分流术或特殊血液透析中的辅助治疗价值[/OPTIONS][/QUESTION]
 - 测试回答：A
 - 接口耗时记录：
 ```json
@@ -1998,11 +1247,11 @@
   {
     "api_name": "start_conversation",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/start",
-    "request_identifier": "P049",
-    "case_id": "P049",
+    "request_path": "/api/sale/chat/start",
+    "request_identifier": "P048",
+    "case_id": "P048",
     "session_id": "",
-    "elapsed_ms": 4202.17,
+    "elapsed_ms": 627.6,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -2010,11 +1259,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "case_id": "P049",
-    "session_id": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "elapsed_ms": 1999.8,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 2344.7,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -2022,11 +1271,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "case_id": "P049",
-    "session_id": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "elapsed_ms": 2106.51,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 1908.05,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -2034,11 +1283,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "case_id": "P049",
-    "session_id": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "elapsed_ms": 8824.34,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 931.93,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -2046,11 +1295,11 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "case_id": "P049",
-    "session_id": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "elapsed_ms": 9208.2,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 11367.47,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -2058,23 +1307,83 @@
   {
     "api_name": "send_message",
     "request_method": "POST",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "case_id": "P049",
-    "session_id": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "elapsed_ms": 8224.74,
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 10590.98,
     "success": true,
     "status_code": 200,
     "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 25456.52,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 20378.11,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 24718.12,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "stop_conversation",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/stop",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 2390.13,
+    "success": false,
+    "status_code": 0,
+    "error": "HTTPSConnectionPool(host='dev-ccet.cslbehring.com.cn', port=443): Max retries exceeded with url: /api/sale/chat/stop (Caused by ResponseError('too many 500 error responses'))"
   },
   {
     "api_name": "fetch_visit_plan_detail_once",
     "request_method": "GET",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/history/8d6893f8-c504-4790-b2e2-a856007769f3",
-    "request_identifier": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "case_id": "P049",
-    "session_id": "8d6893f8-c504-4790-b2e2-a856007769f3",
-    "elapsed_ms": 157.97,
+    "request_path": "/api/sale/chat/history/9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 24.15,
+    "success": false,
+    "status_code": 400,
+    "error": "400 Client Error: Bad Request for url: https://dev-ccet.cslbehring.com.cn/api/sale/chat/history/9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0"
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "request_identifier": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "case_id": "P048",
+    "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
+    "elapsed_ms": 25.94,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -2086,35 +1395,35 @@
 {
   "literatures": [
     {
-      "id": "614d32b7c458abe70fe51c660500fc3f",
+      "id": "c389a91f6749729977b7d58a7c656075",
+      "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗_Final.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "该研究针对人血白蛋白的病原体安全管理提供了从捐献者筛选、多重病毒检测（NAT/PCR）到巴氏消毒灭活的系统性证据，提示其具备良好的安全性记录与可溯源性，值得优先推荐。",
+      "file_key": "63cdcdc0be5a8ecce8d9c9aae6f855be"
+    },
+    {
+      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-a66534bf797946789dff2ad241509117",
+      "title": "基于特征肽液质联用技术的人血白蛋白鉴定与定量分析",
+      "type": "EXTERNAL",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "该研究在人血白蛋白品质验收场景中观察到，利用特征肽液质联用技术可准确识别种属来源并进行定量分析，为药剂科解决原料筛选与真实性验证疑虑提供了有价值的参考依据。",
+      "file_key": null
+    },
+    {
+      "id": "0a7dbed30dd42082ad514c7d536f516d",
       "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
       "type": "INNER",
       "chunk_ids": [],
       "file_name": null,
-      "research_summary": "该研究针对医疗机构人血白蛋白临床应用管理提供了多学科专家共识，涵盖供应管理、处方审核、超说明书用药监管等关键环节，为建立规范化用药管理体系提供了权威参考依据。",
+      "research_summary": "该研究针对人血白蛋白的供应管理、临床应用标准及准入流程提供了权威的专家建议，有助于医疗机构建立规范的质量验收与合理用药体系，可作为优先参考的文献依据。",
       "file_key": "24a5eb52596a20afe11ce38f7b41e094"
-    },
-    {
-      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-565aefb2731c4288921c722e598ed691",
-      "title": "人血白蛋白输注改善脓毒症性凝血病患者病死率：基于MIMIC-Ⅳ数据库的倾向性评分匹配分析",
-      "type": "EXTERNAL",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "在脓毒症性凝血病治疗中，该研究显示人血白蛋白可显著降低28天（P<0.001）及1年病死率（P<0.001），为优化重症患者治疗策略提供了高质量循证依据。",
-      "file_key": null
-    },
-    {
-      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-3a3471fd9223404d9c21a9acc1c7e011",
-      "title": "人血白蛋白临床应用管理中国专家共识",
-      "type": "EXTERNAL",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该研究系统构建了人血白蛋白临床应用管理的多维度框架，包括重点监控目录管理、处方权限设置和信息化监管措施，为医疗机构制定合理用药政策提供了标准化模板。",
-      "file_key": null
     }
   ],
   "user_id": null,
-  "session_id": "8d6893f8-c504-4790-b2e2-a856007769f3",
+  "session_id": "9a2f1d2a-3cfe-4d23-801e-acdcf62e10d0",
   "visit_plan_digest": {
     "notion": null,
     "doctorInfo": {
@@ -2123,77 +1432,77 @@
       "grade": null,
       "rank": "主任医师"
     },
-    "goal": "通过专业学术交流建立初步信任，为后续人血白蛋白合理用药管理合作奠定基础。",
+    "goal": "向药剂科及医院管理层传递杰特贝林人血白蛋白在品质管控、原料筛选及病原体安全领域的核心竞争优势。",
     "strategy": null
   },
   "comm_suggest": {
     "literatures": [
       {
-        "id": "614d32b7c458abe70fe51c660500fc3f",
-        "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
+        "id": "c389a91f6749729977b7d58a7c656075",
+        "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗_Final.pdf",
         "type": "INNER",
         "chunk_ids": [
-          "d7e0d1bb2a160c248bfd6fc15fde4203",
-          "458373203320c7498b94ea28cc79df71"
+          "27a0b1418e4c0619cd3fb9c185852c00",
+          "27a0b1418e4c0619cd3fb9c185852c00",
+          "500064b5c1366fa93eb97ca1eb6e4bc2",
+          "17c91d22357284bd61529c3921398f38"
         ],
         "file_name": null,
         "research_summary": null,
-        "file_key": "24a5eb52596a20afe11ce38f7b41e094"
+        "file_key": "63cdcdc0be5a8ecce8d9c9aae6f855be"
       },
       {
-        "id": "634e50aff29c41665848f2becdfc9628",
-        "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+        "id": "c471aa8e7471218753aac3f01aa32abb",
+        "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
         "type": "INNER",
         "chunk_ids": [
-          "67f065aec71cd654f002416a81cecd0d"
+          "97988b2ea7eaf7e97eb966b45280d73a",
+          "97988b2ea7eaf7e97eb966b45280d73a",
+          "97988b2ea7eaf7e97eb966b45280d73a",
+          "a4b2afdd5ffa60f2856f532f7dfd224d"
         ],
         "file_name": null,
         "research_summary": null,
-        "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
-      },
-      {
-        "id": "e8ae87bb3367889ca7eaf1b62c43550e",
-        "title": "8_中国医师协会急诊医师分会_临床急诊杂志_2018_19(9)_567-588.pdf",
-        "type": "INNER",
-        "chunk_ids": [
-          "d85812b0780db7443c38daaf942de5d3"
-        ],
-        "file_name": null,
-        "research_summary": null,
-        "file_key": "a93964071af3c21592cb30971bd259b4"
+        "file_key": "92fca00cad9674414d7882c518635033"
       }
     ],
     "transitional_info": [
-      "根据2024年专家共识，建立人血白蛋白临床应用标准可使不合理用药率降低36%，建议通过多学科协作管理体系实现精准用药监管。{d7e0d1bb2a160c248bfd6fc15fde4203}{458373203320c7498b94ea28cc79df71}",
-      "脓毒症液体复苏指南显示，当血清白蛋白≥30g/L时并发症发生率显著降低，这与共识推荐的临床监测指标形成管理闭环。{67f065aec71cd654f002416a81cecd0d}{d85812b0780db7443c38daaf942de5d3}"
+      "杰特贝林旗下三款人血白蛋白产品的质量标准均高于中国与国际药典标准。在工艺上，采用改进的Cohn和Kistler-Nitschmann分馏方法，利用低温乙醇分馏技术有效辅助去除病毒，确保产品的高纯度。 {27a0b1418e4c0619cd3fb9c185852c00}{97988b2ea7eaf7e97eb966b45280d73a}",
+      "企业建立了严苛的整体安全系统，涵盖六步保障：在原料端，捐献者必须捐献至少2次且复查结果为阴性以把控血浆安全；在检测端，通过多次血清学检测及NAT/PCR核酸检测覆盖HIV、HBV、HCV、HAV和细小病毒B19五种病毒，其中国内法规外的额外B19V监测，能有效保护免疫缺陷及妊娠期等特殊患者群体。{27a0b1418e4c0619cd3fb9c185852c00}{500064b5c1366fa93eb97ca1eb6e4bc2}{97988b2ea7eaf7e97eb966b45280d73a}",
+      "杰特贝林拥有长达数十年的良好病原体安全性记录。根据1992年至2022年的上市后监测数据，全球累计约数千万次单剂量暴露中，所有疑似传播事件均未确认与产品相关，为药剂科提供了极高的安全信心。{17c91d22357284bd61529c3921398f38}{a4b2afdd5ffa60f2856f532f7dfd224d}"
     ],
     "support_info": null
   },
   "focus_point": {
     "items": [
       {
-        "title": "重点监控药品管理新思路",
-        "content": "专家共识明确指出，医疗机构应建立处方权限分级制度，60%受访专家支持通过培训考核授予处方权，同时建议采用信息化手段实现全流程处方审核。{f79831e340def1819d00cc6be02db638}{26a00cabb73d857c786c01f8d95a62c8}"
-      },
-      {
-        "title": "超说明书用药管理策略",
-        "content": "针对36%存在的超适应症使用现象，共识提出建立超说明书用药备案制度，要求提供高级别循证依据并通过药事会审批，保障用药安全边界。{d7e0d1bb2a160c248bfd6fc15fde4203}"
+        "title": "全生命周期药物警戒与病毒灭活工艺",
+        "content": "杰特贝林是最早运用巴氏消毒法的企业之一，该工艺在病毒灭活方面拥有良好的历史安全记录。同时，企业建立了覆盖产品全生命周期的药物警戒体系，能够实时监测产品的获益与风险平衡，确保临床使用的安全性与可追溯性。{500064b5c1366fa93eb97ca1eb6e4bc2}{97988b2ea7eaf7e97eb966b45280d73a}"
       }
     ],
     "literatures": [
       {
-        "id": "614d32b7c458abe70fe51c660500fc3f",
-        "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
+        "id": "c389a91f6749729977b7d58a7c656075",
+        "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗_Final.pdf",
         "type": "INNER",
         "chunk_ids": [
-          "f79831e340def1819d00cc6be02db638",
-          "26a00cabb73d857c786c01f8d95a62c8",
-          "d7e0d1bb2a160c248bfd6fc15fde4203",
-          "d7e0d1bb2a160c248bfd6fc15fde4203"
+          "500064b5c1366fa93eb97ca1eb6e4bc2"
         ],
         "file_name": null,
         "research_summary": null,
-        "file_key": "24a5eb52596a20afe11ce38f7b41e094"
+        "file_key": "63cdcdc0be5a8ecce8d9c9aae6f855be"
+      },
+      {
+        "id": "c471aa8e7471218753aac3f01aa32abb",
+        "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "97988b2ea7eaf7e97eb966b45280d73a",
+          "97988b2ea7eaf7e97eb966b45280d73a"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "92fca00cad9674414d7882c518635033"
       }
     ]
   },
@@ -2225,16 +1534,859 @@
     {
       "field_name": "focus_title.non_empty",
       "expected": "非空",
-      "actual": "重点监控药品管理新思路\n超说明书用药管理策略",
+      "actual": "全生命周期药物警戒与病毒灭活工艺",
       "passed": true,
       "match_mode": "not_empty"
     },
     {
       "field_name": "focus_content.non_empty",
       "expected": "非空",
-      "actual": "专家共识明确指出，医疗机构应建立处方权限分级制度，60%受访专家支持通过培训考核授予处方权，同时建议采用信息化手段实现全流程处方审核。{f79831e340def1819d00cc6be02db638}{26a00cabb73d857c786c01f8d95a62c8}\n针对36%存在的超适应症使用现象，共识提出建立超说明书用药备案制度，要求提供高级别循证依据并通过药事会审批，保障用药安全边界。{d7e0d1bb2a160c248bfd6fc15fde4203}",
+      "actual": "杰特贝林是最早运用巴氏消毒法的企业之一，该工艺在病毒灭活方面拥有良好的历史安全记录。同时，企业建立了覆盖产品全生命周期的药物警戒体系，能够实时监测产品的获益与风险平衡，确保临床使用的安全性与可追溯性。{500064b5c1366fa93eb97ca1eb6e4bc2}{97988b2ea7eaf7e97eb966b45280d73a}",
       "passed": true,
       "match_mode": "not_empty"
+    }
+  ]
+}
+```
+
+## P061 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
+- 状态：DONE
+- session_id：f0953f49-c89f-4732-a908-3f2e4034c136
+- 关注点策略：F2_CUSTOM
+- 首次出现can_stop=true的轮次：-
+- 实际调用stop的轮次：-
+- 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
+- 测试回答：主任医师
+- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 外科[/OPTIONS][/QUESTION]
+- 测试回答：肝病
+- 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
+- 测试回答：既往拜访过
+- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
+- 测试回答：≥50%
+- 系统提问：您拜访的医生属于下列哪种类型？
+[QUESTION]请选择：[OPTIONS]A. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例<70% B. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例≥70%[/OPTIONS][/QUESTION]
+- 测试回答：B
+- 系统提问：病人中，通常有多少会使用人血白蛋白进行容量治疗？
+[QUESTION]请选择或描述：[OPTIONS]A. <20% B. 20%~40% C.  40%~60% D. ＞60% E. ＞60%，同时会向其他医生主动推荐在这类患者中优先使用白蛋白[/OPTIONS][/QUESTION]
+- 测试回答：C
+- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 长期使用白蛋白可能面临药剂科或医院管理部门的合规性挑战 B. 白蛋白长期治疗在失代偿肝硬化患者中降低死亡风险的具体证据强度 C. 血清白蛋白达到40 g/L目标值后是否还需继续维持输注 D. 顽固型肝腹水患者接受白蛋白长期输注对再入院率的实际改善幅度[/OPTIONS][/QUESTION]
+- 测试回答：不良反应
+- 关注点执行结果：
+```json
+[
+  {
+    "planned_branch": "F2_CUSTOM",
+    "actual_branch": "F2_CUSTOM",
+    "answer": "不良反应",
+    "fixed_option_label": "A",
+    "fixed_option_text": "长期使用白蛋白可能面临药剂科或医院管理部门的合规性挑战",
+    "selected_option_label": "",
+    "selected_option_text": "",
+    "custom_input": "不良反应",
+    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 长期使用白蛋白可能面临药剂科或医院管理部门的合规性挑战 B. 白蛋白长期治疗在失代偿肝硬化患者中降低死亡风险的具体证据强度 C. 血清白蛋白达到40 g/L目标值后是否还需继续维持输注 D. 顽固型肝腹水患者接受白蛋白长期输注对再入院率的实际改善幅度[/OPTIONS][/QUESTION]"
+  }
+]
+```
+- 接口耗时记录：
+```json
+[
+  {
+    "api_name": "start_conversation",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/start",
+    "request_identifier": "P061",
+    "case_id": "P061",
+    "session_id": "",
+    "elapsed_ms": 133.21,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 2154.93,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 2002.59,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 837.12,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 1210.45,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 114.78,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 3438.97,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "call_focus_match_llm",
+    "request_method": "POST",
+    "request_path": "https://api.deepseek.com/chat/completions",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 2377.79,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 1494.96,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/f0953f49-c89f-4732-a908-3f2e4034c136",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 27.54,
+    "success": false,
+    "status_code": 400,
+    "error": "400 Client Error: Bad Request for url: https://dev-ccet.cslbehring.com.cn/api/sale/chat/history/f0953f49-c89f-4732-a908-3f2e4034c136"
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/f0953f49-c89f-4732-a908-3f2e4034c136",
+    "request_identifier": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "case_id": "P061",
+    "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+    "elapsed_ms": 24.45,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  }
+]
+```
+- 最终拜访计划：
+```json
+{
+  "literatures": [
+    {
+      "id": "aa147e9a607f33a444436570c1c4c578",
+      "title": "专家幻灯-《人血白蛋白在ICU重症肝硬化中的应用》-CHN-ALB-0681.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在肝硬化腹水及穿刺放液治疗场景中，该研究显示人血白蛋白可显著降低穿刺术后循环功能障碍（PCD）风险，并能将患者18个月生存率从66%提升至77%，为临床应用提供了有价值的参考依据。",
+      "file_key": "17c93876a28fb2d7a2aa67ce34131575"
+    },
+    {
+      "id": "5b03a70bd53a7f819fd6aae36e9d3217",
+      "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在脓毒性休克液体复苏中，该研究显示使用20%人血白蛋白可显著降低患者90天死亡风险达19%，并能更有效地减少液体过负荷，为临床应用提供了有价值的参考依据。",
+      "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+    },
+    {
+      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-9bf58aefad504ddd8d59b4eec7d738de",
+      "title": "Hyperoncotic colloids and acute kidney injury: a meta-analysis of randomized trials.",
+      "type": "EXTERNAL",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在肝硬化腹水及重症复苏场景中，该研究证实人血白蛋白可显著降低76%的急性肾损伤（AKI）风险及48%的死亡风险，其肾脏保护价值显著优于羟乙基淀粉，可作为优先参考的文献依据。",
+      "file_key": null
+    }
+  ],
+  "user_id": null,
+  "session_id": "f0953f49-c89f-4732-a908-3f2e4034c136",
+  "visit_plan_digest": {
+    "notion": "该肝病科主任为“白蛋白笃信者”（当前梯度：使用），对低白蛋白患者使用率偏高（已选择≥70%），容量治疗中白蛋白使用约40%~60%，并明确关注长期输注相关不良反应；可推测其重视疗效同时强调安全监测。",
+    "doctorInfo": {
+      "department": "肝病",
+      "type": "白蛋白笃信者",
+      "grade": "使用",
+      "rank": "主任医师"
+    },
+    "goal": "围绕“人血白蛋白在失代偿肝硬化患者中长期输注的临床价值”，推动医生从当前“使用”向“偏好”进阶；下一阶段意味着在Alb≥30g/L的容量治疗患者中将白蛋白常规化使用（使用率>60%），并在处方流程中明确常规的输注安全、容量与肾功能监测以降低不良反应并稳定获益。",
+    "strategy": "以肝病临床场景和真实病例切入，先确认并加固其对长期输注获益的认知，再用现有循证针对降低死亡/再入院的价值回应，并重点提出可执行的输注不良反应识别、减速/停止及容量/肾功能监测路径，进而推动在容量治疗中将使用率向>60%的“偏好”转化。"
+  },
+  "comm_suggest": {
+    "literatures": [
+      {
+        "id": null,
+        "title": "1. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "2. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "3. Di Pascoli M, et al. Liver Int. 2019 Jan;39 (1):98-105.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项意大利非随机前瞻性研究纳入70例肝硬化顽固性腹水患者，评估长期白蛋白治疗（20g，每周2次）对急诊住院和死亡率的影响。结果：长期应用白蛋白治疗患者急诊住院时间显著短于SOC组（P=0.008）；长期应用白蛋白治疗患者24个月累积死亡率显著低于SOC组（P=0.032）",
+        "file_key": null
+      }
+    ],
+    "transitional_info": [
+      "介绍人血白蛋白在肝硬化患者中长期使用的临床价值。"
+    ],
+    "support_info": "●  失代偿肝硬化患者接受白蛋白长期输注已有高质量的临床循证支持：\n对伴非复杂性腹水患者，治疗{1}个月血清白蛋白水平达到目标值40 g/L提示最佳临床获益；对于未达到目标值患者，依旧可从白蛋白长期治疗中获益：Alb30-35g /L的患者仍有从联合白蛋白长期输注中获益的机会，相较未输注白蛋白仅接受标准治疗的患者，死亡风险降低57%{1},{2}\n对顽固型肝腹水患者，相较标准治疗，接受白蛋白长期输注可显著降低24个月内因肝硬化并发症的入院率{3}"
+  },
+  "focus_point": {
+    "items": [
+      {
+        "title": "输注相关过敏反应与现场处置要点",
+        "content": "在人血白蛋白长期输注过程中可出现输注相关的不良反应（发生率低），常见表现包括潮红、皮疹、发热、寒战、恶心、呕吐、心动过速及低血压等；大多数在减慢输注速度或停药后可消失，但极少数可发生过敏性休克。建议随访时重点记录生命体征、尿量和电解质，发生疑似过敏或循环不稳时立即减速/停止输注并进行相应支持治疗与原因评估。{f1f16df898f8004940636d5799b98d73}"
+      },
+      {
+        "title": "液体潴留、容量负荷与肾功能风险提示（按临床情境分层监测）",
+        "content": "白蛋白可引起水肿或液体过载，其发生与输注总量、速度及患者基础情况密切相关；在进行液体复苏的休克患者中，使用20%或25%浓度白蛋白时需警惕急性肾损伤的可能性。既有重症/脓毒症研究显示整体未显著增加肾功能不良的证据，说明肾脏风险受临床情境、浓度和给药策略影响。拜访时可与医生讨论：为长期输注患者制定容量评估和肾功能监测计划（血流动力学/尿量/肌酐/电解质），并依据临床状态调整浓度、剂量和输注速度。{f1f16df898f8004940636d5799b98d73}{96ddb5285381500107f24ec7daaf8eaa}{a85d1463c9c9597c70eb1e0bc7d19320}"
+      },
+      {
+        "title": "腹腔大放液后并发症（PCD）发生率与白蛋白的安全性考量",
+        "content": "对于腹腔穿刺大量放液的患者，循证资料显示与其他血浆扩容剂或替代治疗相比，输注人血白蛋白可显著降低术后穿刺后循环功能障碍的发生率。因此在进行大体积放液时使用白蛋白不仅具备疗效意义，也有助于减少该类并发症的发生；同时仍需在长期治疗中关注容量状态与潜在不良反应并保持常规监测。{4a5892ad72f9941a23b97be7ad81ee29}{7d147e9430920e99f83f98d6c91a3ad0}"
+      }
+    ],
+    "literatures": [
+      {
+        "id": "0a7dbed30dd42082ad514c7d536f516d",
+        "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "f1f16df898f8004940636d5799b98d73",
+          "f1f16df898f8004940636d5799b98d73"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "24a5eb52596a20afe11ce38f7b41e094"
+      },
+      {
+        "id": "c389a91f6749729977b7d58a7c656075",
+        "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗_Final.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "96ddb5285381500107f24ec7daaf8eaa"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "63cdcdc0be5a8ecce8d9c9aae6f855be"
+      },
+      {
+        "id": "c84096c0d7d4ad4cd7474fb4e0d94d2c",
+        "title": "DA-人血白蛋白--优化脓毒症和脓毒症休克患者的液体治疗-CHN-ALB-0535.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "a85d1463c9c9597c70eb1e0bc7d19320"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "89de8b287fbfa74b28bf9826e9efd40a"
+      },
+      {
+        "id": "aa147e9a607f33a444436570c1c4c578",
+        "title": "专家幻灯-《人血白蛋白在ICU重症肝硬化中的应用》-CHN-ALB-0681.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "4a5892ad72f9941a23b97be7ad81ee29",
+          "7d147e9430920e99f83f98d6c91a3ad0"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "17c93876a28fb2d7a2aa67ce34131575"
+      }
+    ]
+  },
+  "phase3_flag": true
+}
+```
+- 断言结果：
+```json
+{
+  "passed": true,
+  "total_checks": 13,
+  "passed_checks": 13,
+  "failed_fields": [],
+  "checks": [
+    {
+      "field_name": "doctor_type",
+      "expected": "白蛋白笃信者",
+      "actual": "白蛋白笃信者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "doctor_grade",
+      "expected": "使用",
+      "actual": "使用",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "trans_info",
+      "expected": "介绍人血白蛋白在肝硬化患者中长期使用的临床价值。",
+      "actual": "介绍人血白蛋白在肝硬化患者中长期使用的临床价值。",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "support_info",
+      "expected": "●  失代偿肝硬化患者接受白蛋白长期输注已有高质量的临床循证支持：\n▶对伴非复杂性腹水患者，治疗1个月血清白蛋白水平达到目标值40 g/L提示最佳临床获益；对于未达到目标值患者，依旧可从白蛋白长期治疗中获益：Alb30-35g /L的患者仍有从联合白蛋白长期输注中获益的机会，相较未输注白蛋白仅接受标准治疗的患者，死亡风险降低57%1,2\n▶对顽固型肝腹水患者，相较标准治疗，接受白蛋白长期输注可显著降低24个月内因肝硬化并发症的入院率3",
+      "actual": "●  失代偿肝硬化患者接受白蛋白长期输注已有高质量的临床循证支持：\n对伴非复杂性腹水患者，治疗{1}个月血清白蛋白水平达到目标值40 g/L提示最佳临床获益；对于未达到目标值患者，依旧可从白蛋白长期治疗中获益：Alb30-35g /L的患者仍有从联合白蛋白长期输注中获益的机会，相较未输注白蛋白仅接受标准治疗的患者，死亡风险降低57%{1},{2}\n对顽固型肝腹水患者，相较标准治疗，接受白蛋白长期输注可显著降低24个月内因肝硬化并发症的入院率{3}",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "comm_literature_titles",
+      "expected": "1. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.\n2. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）\n3. Di Pascoli M, et al. Liver Int. 2019 Jan;39 (1):98-105.",
+      "actual": "1. Caraceni P, et al. Lancet, 2018 Jun 16;391 (10138):2417-2429.\n2. Caraceni P, et al. J Hepatol. 2020 Aug 24;S0168-8278 (20)33551-0）\n3. Di Pascoli M, et al. Liver Int. 2019 Jan;39 (1):98-105.",
+      "passed": true,
+      "match_mode": "list_exact"
+    },
+    {
+      "field_name": "comm_literature_summaries",
+      "expected": "1-2. ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。\n3. 一项意大利非随机前瞻性研究纳入70例肝硬化顽固性腹水患者，评估长期白蛋白治疗（20g，每周2次）对急诊住院和死亡率的影响。结果：长期应用白蛋白治疗患者急诊住院时间显著短于SOC组（P=0.008）；长期应用白蛋白治疗患者24个月累积死亡率显著低于SOC组（P=0.032）",
+      "actual": "ANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。\nANSWER研究是一项多中心随机开放标签研究，纳入431例肝硬化合并无并发症腹水患者，比较标准药物治疗（SMT）与SMT+人血白蛋白（治疗18个月）的效果。结果：白蛋白联合SMT治疗可显著提高18个月生存率（77% vs. 66%，P=0.0285），降低死亡风险38%（HR0.62），降低腹腔穿刺风险52%（HR 0.48），降低顽固型腹水风险57%（HR 0.43），降低SBP风险67%（p<0.001），降低1型肝肾综合征风险61%（p=0.004）；降低全因住院率35%，降低住院天数45%。事后分析：Alb≥40 g/L患者死亡风险降低80%；Alb＜35 g/L患者仍可获益，死亡风险降低57%。经济分析：每位患者每年QALY增益0.117，节省495欧元。\n一项意大利非随机前瞻性研究纳入70例肝硬化顽固性腹水患者，评估长期白蛋白治疗（20g，每周2次）对急诊住院和死亡率的影响。结果：长期应用白蛋白治疗患者急诊住院时间显著短于SOC组（P=0.008）；长期应用白蛋白治疗患者24个月累积死亡率显著低于SOC组（P=0.032）",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "digest.department",
+      "expected": "肝病",
+      "actual": "肝病",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.rank",
+      "expected": "主任医师",
+      "actual": "主任医师",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.type",
+      "expected": "白蛋白笃信者",
+      "actual": "白蛋白笃信者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.grade",
+      "expected": "使用",
+      "actual": "使用",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_branch",
+      "expected": "F2_CUSTOM",
+      "actual": "F2_CUSTOM",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_title.non_empty",
+      "expected": "非空",
+      "actual": "输注相关过敏反应与现场处置要点\n液体潴留、容量负荷与肾功能风险提示（按临床情境分层监测）\n腹腔大放液后并发症（PCD）发生率与白蛋白的安全性考量",
+      "passed": true,
+      "match_mode": "not_empty"
+    },
+    {
+      "field_name": "focus_content.non_empty",
+      "expected": "非空",
+      "actual": "在人血白蛋白长期输注过程中可出现输注相关的不良反应（发生率低），常见表现包括潮红、皮疹、发热、寒战、恶心、呕吐、心动过速及低血压等；大多数在减慢输注速度或停药后可消失，但极少数可发生过敏性休克。建议随访时重点记录生命体征、尿量和电解质，发生疑似过敏或循环不稳时立即减速/停止输注并进行相应支持治疗与原因评估。{f1f16df898f8004940636d5799b98d73}\n白蛋白可引起水肿或液体过载，其发生与输注总量、速度及患者基础情况密切相关；在进行液体复苏的休克患者中，使用20%或25%浓度白蛋白时需警惕急性肾损伤的可能性。既有重症/脓毒症研究显示整体未显著增加肾功能不良的证据，说明肾脏风险受临床情境、浓度和给药策略影响。拜访时可与医生讨论：为长期输注患者制定容量评估和肾功能监测计划（血流动力学/尿量/肌酐/电解质），并依据临床状态调整浓度、剂量和输注速度。{f1f16df898f8004940636d5799b98d73}{96ddb5285381500107f24ec7daaf8eaa}{a85d1463c9c9597c70eb1e0bc7d19320}\n对于腹腔穿刺大量放液的患者，循证资料显示与其他血浆扩容剂或替代治疗相比，输注人血白蛋白可显著降低术后穿刺后循环功能障碍的发生率。因此在进行大体积放液时使用白蛋白不仅具备疗效意义，也有助于减少该类并发症的发生；同时仍需在长期治疗中关注容量状态与潜在不良反应并保持常规监测。{4a5892ad72f9941a23b97be7ad81ee29}{7d147e9430920e99f83f98d6c91a3ad0}",
+      "passed": true,
+      "match_mode": "not_empty"
+    }
+  ]
+}
+```
+
+## P084 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
+- 状态：DONE
+- session_id：fa07b795-71f6-4212-8602-2a62e33ef89b
+- 关注点策略：F3
+- 首次出现can_stop=true的轮次：-
+- 实际调用stop的轮次：-
+- 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
+- 测试回答：主任医师
+- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 外科[/OPTIONS][/QUESTION]
+- 测试回答：外科
+- 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
+- 测试回答：既往拜访过
+- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
+- 测试回答：≥50%
+- 系统提问：您拜访的医生属于下列哪种类型？
+[QUESTION]请选择：[OPTIONS]A. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例<70% B. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例≥70%[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 系统提问：低白蛋白血症的患者中，通常有多少使用人血白蛋白进行治疗？
+[QUESTION]请选择或描述：[OPTIONS]A. <20% B. 20%~40% C.  40%~60% D. ＞60% E. ＞60%，同时会向其他医生主动推荐在这类患者中优先使用白蛋白[/OPTIONS][/QUESTION]
+- 测试回答：不清楚
+- 系统提问：您本次拜访计划向其重点传递哪项关于杰特贝林产品的核心信息？
+[QUESTION]请选择：[OPTIONS]A. 传递白蛋白多种生理功能及低白蛋白血症对预后的不良影响，强调纠正的重要性 B. 传递人血白蛋白纠正低白蛋白血症，可降低死亡率、减少并发症的临床价值 C. 针对Alb＜30g/L患者，指南推荐纠正低白蛋白血症，并提高抗菌药有效性、降低感染风险 D. 纠正低白蛋白血症可通过减少并发症、缩短住院时间、降低再入院率，提高临床获益与效率[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 人血白蛋白作为血液制品，安全性是否可靠？ B. 白蛋白在围手术期发挥哪些关键生理功能？ C. 低白蛋白血症如何具体影响外科患者术后预后（如出血、感染、肾损伤等）？ D. 纠正低白蛋白血症对改善外科患者临床结局（如死亡率、并发症、住院时间）有何证据支持？[/OPTIONS][/QUESTION]
+- 测试回答：不知道
+- 关注点执行结果：
+```json
+[
+  {
+    "planned_branch": "F3",
+    "actual_branch": "F3",
+    "answer": "不知道",
+    "fixed_option_label": "A",
+    "fixed_option_text": "人血白蛋白作为血液制品，安全性是否可靠？",
+    "selected_option_label": "",
+    "selected_option_text": "",
+    "custom_input": "",
+    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 人血白蛋白作为血液制品，安全性是否可靠？ B. 白蛋白在围手术期发挥哪些关键生理功能？ C. 低白蛋白血症如何具体影响外科患者术后预后（如出血、感染、肾损伤等）？ D. 纠正低白蛋白血症对改善外科患者临床结局（如死亡率、并发症、住院时间）有何证据支持？[/OPTIONS][/QUESTION]"
+  }
+]
+```
+- 接口耗时记录：
+```json
+[
+  {
+    "api_name": "start_conversation",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/start",
+    "request_identifier": "P084",
+    "case_id": "P084",
+    "session_id": "",
+    "elapsed_ms": 207.46,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 2191.8,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 2495.72,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 918.16,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 903.32,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 74.15,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 68.05,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 3774.44,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "call_focus_match_llm",
+    "request_method": "POST",
+    "request_path": "https://api.deepseek.com/chat/completions",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 2436.33,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/api/sale/chat/message",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 1247.84,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 28.26,
+    "success": false,
+    "status_code": 400,
+    "error": "400 Client Error: Bad Request for url: https://dev-ccet.cslbehring.com.cn/api/sale/chat/history/fa07b795-71f6-4212-8602-2a62e33ef89b"
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/api/sale/chat/history/fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "request_identifier": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "case_id": "P084",
+    "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+    "elapsed_ms": 22.15,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  }
+]
+```
+- 最终拜访计划：
+```json
+{
+  "literatures": [
+    {
+      "id": "aa147e9a607f33a444436570c1c4c578",
+      "title": "专家幻灯-《人血白蛋白在ICU重症肝硬化中的应用》-CHN-ALB-0681.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在肝硬化大量放液术等外科处置场景中，该研究显示人血白蛋白可显著降低术后循环功能障碍风险及36%的死亡风险，可作为改善手术预后的优先参考依据。",
+      "file_key": "17c93876a28fb2d7a2aa67ce34131575"
+    },
+    {
+      "id": "5b03a70bd53a7f819fd6aae36e9d3217",
+      "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "该研究针对纠正低白蛋白血症的临床时机提供了依据，提示通过输注人血白蛋白使血清水平达到30g/L以上可降低并发症发生率，为围手术期纠正低白蛋白血症提供了参考依据。",
+      "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+    },
+    {
+      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-6a9cd9ac37e44af6bf3eb858a8fa549a",
+      "title": "静脉输注人血白蛋白对老年气胸患者的疗效分析",
+      "type": "EXTERNAL",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "该研究在老年患者行胸腔引流术的场景中观察到，应用人血白蛋白可显著缩短插管时间并降低继发感染风险，为减少术后并发症及改善预后提供了有价值的参考依据。",
+      "file_key": null
+    }
+  ],
+  "user_id": null,
+  "session_id": "fa07b795-71f6-4212-8602-2a62e33ef89b",
+  "visit_plan_digest": {
+    "notion": "外科主任，归类为低蛋白使用者（知道）；对纠正低白蛋白的临床实践认识有限，通常以营养支持为主，纠正意愿较低（可推测）。",
+    "doctorInfo": {
+      "department": "外科",
+      "type": "低蛋白使用者",
+      "grade": "知道",
+      "rank": "主任医师"
+    },
+    "goal": "围绕白蛋白的多重生理功能及低白蛋白对术后不良结局的影响，推动医生从“知道”向“尝试”进阶；“尝试”意味着在20%~40%的白蛋白<30g/L患者中、尤其是重症或围手术期高危患者，有选择性地启动白蛋白治疗（即在部分重症患者中开始使用，而非普遍采用营养支持替代）。",
+    "strategy": "以围手术期高危患者为切入，突出白蛋白生理功能与术后不良结局的关联，建议在重症/高危白蛋白<30g/L患者有选择地尝试使用杰特贝林并约定随访评估。"
+  },
+  "comm_suggest": {
+    "literatures": [
+      {
+        "id": null,
+        "title": "1. Ruoxin Xu, et al. Surg Today. 2023 Aug;53 (8):861-872.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项荟萃分析纳入20项研究（22553例心脏手术患者），评估血清白蛋白水平与预后的关系。结果：低白蛋白血症与长期全因死亡率（HR 1.95, P<0.00001）和死亡率增加（RR 1.91, P<0.00001）显著相关。低白蛋白患者术后并发症风险更高，且ICU住院时长（MD=1.18, P=0.0008）、住院时间（MD=3.34, P<0.00001）和体外循环时间（MD=12.40,P=0.03）均显著增加。",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "2. David Berbel-Franco, et al. J Cardiothorac Surg. 2020 May 11;15(1)78.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项前瞻性观察研究纳入2818例术前血清白蛋白≥3.5 g/dL且营养正常的心脏手术患者，评估术后不同白蛋白水平对死亡率、并发症和生存率的影响。结果：血清白蛋白较低的患者中，住院死亡率、脓毒症、出血相关并发症发生率及ICU停留时间均显著较高。",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "3. Lee JY, et al. Medicine (Baltimore). 2016 Aug;95 (35):e4530",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项回顾性研究分析了362例急诊胃肠道手术危重患者，评估术前术后低白蛋白血症对院内死亡的影响。结果：术前白蛋白水平＜2.7g/dL（OR 9.954, P=0.014）和术后白蛋白水平＜2.7g/dL（OR 3.540, P=0.09）均为院内死亡的独立危险因素。",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "4. 黎伟, 李楠, 李双玲. 中华危 重病急救医学. 2021;33 (8):955-961",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项回顾性队列研究探讨了腹部大手术危重患者术后即刻白蛋白（ALB）水平与急性肾损伤（AKI）的关系。结果：术后即刻ALB<32g/L是发生AKI的独立危险因素（OR 2.685, P=0.04）。与ALB≥32g/L组相比，ALB<32g/L组患者的机械通气比例、ICU住院时间、术后并发症数、住院时间和总住院费用均显著增加（P<0.01）。",
+        "file_key": null
+      }
+    ],
+    "transitional_info": [
+      "介绍白蛋白的多种生理功能以及低白蛋白血症对患者预后的不良影响，强调纠正低白蛋白血症的重要性。"
+    ],
+    "support_info": "● 人血白蛋白具有多重生理功能。\n如结合转运、抗炎、抗氧化、维持血管内皮细胞完整性等。\n\n● 围手术期低蛋白血症与心脏手术患者的不良预后相关：\n心脏手术前合并低蛋白血症，与患者心脏术后不良事件（如出血、脓毒症、肾损伤等）发生风险增加和长期生存率降低显著相关{1}\n心脏术后白蛋白水平更低与院内死亡率和长期死亡率的升高显著相关{2}\n\n●围手术期低蛋白血症与腹部手术患者的不良预后相关：\n术前术后低白蛋白血症是急诊胃肠外科手术后院内死亡的独立危险因素{3}\n腹部大手术后，即刻人血白蛋白低于32g/L可明显增加急性肾损伤的发生风险，且与患者不良预后相关{4}"
+  },
+  "focus_point": {
+    "items": [
+      {
+        "title": "人血白蛋白是血液制品，安全性可靠么？",
+        "content": "● 杰特贝林的人血白蛋白拥有良好的病原体安全性记录超过数十年。\n《2021年人血白蛋白在危重症患者应用专家共识》{1}指出作为从人血中提取的成分，虽然输注高浓度的白蛋白虽然不可避免地会出现不良反应，但仅约0.1%的患者会出现潮红、荨麻疹、发热、寒战、恶心、呕吐、心动过速、低血压等过敏反应，而这些不良反应通常在降低输注速度或停止输注后消失。"
+      }
+    ],
+    "literatures": [
+      {
+        "id": null,
+        "title": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）",
+        "file_key": null
+      }
+    ]
+  },
+  "phase3_flag": true
+}
+```
+- 断言结果：
+```json
+{
+  "passed": true,
+  "total_checks": 15,
+  "passed_checks": 15,
+  "failed_fields": [],
+  "checks": [
+    {
+      "field_name": "doctor_type",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "doctor_grade",
+      "expected": "知道",
+      "actual": "知道",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "trans_info",
+      "expected": "介绍白蛋白的多种生理功能以及低白蛋白血症对患者预后的不良影响，强调纠正低白蛋白血症的重要性。",
+      "actual": "介绍白蛋白的多种生理功能以及低白蛋白血症对患者预后的不良影响，强调纠正低白蛋白血症的重要性。",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "support_info",
+      "expected": "● 人血白蛋白具有多重生理功能。\n▶如结合转运、抗炎、抗氧化、维持血管内皮细胞完整性等。\n\n● 围手术期低蛋白血症与心脏手术患者的不良预后相关：\n▶心脏手术前合并低蛋白血症，与患者心脏术后不良事件（如出血、脓毒症、肾损伤等）发生风险增加和长期生存率降低显著相关1\n▶心脏术后白蛋白水平更低与院内死亡率和长期死亡率的升高显著相关2\n\n●围手术期低蛋白血症与腹部手术患者的不良预后相关：\n▶术前术后低白蛋白血症是急诊胃肠外科手术后院内死亡的独立危险因素3\n▶腹部大手术后，即刻人血白蛋白低于32g/L可明显增加急性肾损伤的发生风险，且与患者不良预后相关4",
+      "actual": "● 人血白蛋白具有多重生理功能。\n如结合转运、抗炎、抗氧化、维持血管内皮细胞完整性等。\n\n● 围手术期低蛋白血症与心脏手术患者的不良预后相关：\n心脏手术前合并低蛋白血症，与患者心脏术后不良事件（如出血、脓毒症、肾损伤等）发生风险增加和长期生存率降低显著相关{1}\n心脏术后白蛋白水平更低与院内死亡率和长期死亡率的升高显著相关{2}\n\n●围手术期低蛋白血症与腹部手术患者的不良预后相关：\n术前术后低白蛋白血症是急诊胃肠外科手术后院内死亡的独立危险因素{3}\n腹部大手术后，即刻人血白蛋白低于32g/L可明显增加急性肾损伤的发生风险，且与患者不良预后相关{4}",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "comm_literature_titles",
+      "expected": "1. Ruoxin Xu, et al. Surg Today. 2023 Aug;53 (8):861-872.\n2. David Berbel-Franco, et al. J Cardiothorac Surg. 2020 May 11;15(1)78.\n3. Lee JY, et al. Medicine (Baltimore). 2016 Aug;95 (35):e4530\n4. 黎伟, 李楠, 李双玲. 中华危 重病急救医学. 2021;33 (8):955-961",
+      "actual": "1. Ruoxin Xu, et al. Surg Today. 2023 Aug;53 (8):861-872.\n2. David Berbel-Franco, et al. J Cardiothorac Surg. 2020 May 11;15(1)78.\n3. Lee JY, et al. Medicine (Baltimore). 2016 Aug;95 (35):e4530\n4. 黎伟, 李楠, 李双玲. 中华危 重病急救医学. 2021;33 (8):955-961",
+      "passed": true,
+      "match_mode": "list_exact"
+    },
+    {
+      "field_name": "comm_literature_summaries",
+      "expected": "1. 一项荟萃分析纳入20项研究（22553例心脏手术患者），评估血清白蛋白水平与预后的关系。结果：低白蛋白血症与长期全因死亡率（HR 1.95, P<0.00001）和死亡率增加（RR 1.91, P<0.00001）显著相关。低白蛋白患者术后并发症风险更高，且ICU住院时长（MD=1.18, P=0.0008）、住院时间（MD=3.34, P<0.00001）和体外循环时间（MD=12.40,P=0.03）均显著增加。\n2. 一项前瞻性观察研究纳入2818例术前血清白蛋白≥3.5 g/dL且营养正常的心脏手术患者，评估术后不同白蛋白水平对死亡率、并发症和生存率的影响。结果：血清白蛋白较低的患者中，住院死亡率、脓毒症、出血相关并发症发生率及ICU停留时间均显著较高。\n3. 一项回顾性研究分析了362例急诊胃肠道手术危重患者，评估术前术后低白蛋白血症对院内死亡的影响。结果：术前白蛋白水平＜2.7g/dL（OR 9.954, P=0.014）和术后白蛋白水平＜2.7g/dL（OR 3.540, P=0.09）均为院内死亡的独立危险因素。\n4. 一项回顾性队列研究探讨了腹部大手术危重患者术后即刻白蛋白（ALB）水平与急性肾损伤（AKI）的关系。结果：术后即刻ALB<32g/L是发生AKI的独立危险因素（OR 2.685, P=0.04）。与ALB≥32g/L组相比，ALB<32g/L组患者的机械通气比例、ICU住院时间、术后并发症数、住院时间和总住院费用均显著增加（P<0.01）。",
+      "actual": "一项荟萃分析纳入20项研究（22553例心脏手术患者），评估血清白蛋白水平与预后的关系。结果：低白蛋白血症与长期全因死亡率（HR 1.95, P<0.00001）和死亡率增加（RR 1.91, P<0.00001）显著相关。低白蛋白患者术后并发症风险更高，且ICU住院时长（MD=1.18, P=0.0008）、住院时间（MD=3.34, P<0.00001）和体外循环时间（MD=12.40,P=0.03）均显著增加。\n一项前瞻性观察研究纳入2818例术前血清白蛋白≥3.5 g/dL且营养正常的心脏手术患者，评估术后不同白蛋白水平对死亡率、并发症和生存率的影响。结果：血清白蛋白较低的患者中，住院死亡率、脓毒症、出血相关并发症发生率及ICU停留时间均显著较高。\n一项回顾性研究分析了362例急诊胃肠道手术危重患者，评估术前术后低白蛋白血症对院内死亡的影响。结果：术前白蛋白水平＜2.7g/dL（OR 9.954, P=0.014）和术后白蛋白水平＜2.7g/dL（OR 3.540, P=0.09）均为院内死亡的独立危险因素。\n一项回顾性队列研究探讨了腹部大手术危重患者术后即刻白蛋白（ALB）水平与急性肾损伤（AKI）的关系。结果：术后即刻ALB<32g/L是发生AKI的独立危险因素（OR 2.685, P=0.04）。与ALB≥32g/L组相比，ALB<32g/L组患者的机械通气比例、ICU住院时间、术后并发症数、住院时间和总住院费用均显著增加（P<0.01）。",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "digest.department",
+      "expected": "外科",
+      "actual": "外科",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.rank",
+      "expected": "主任医师",
+      "actual": "主任医师",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.type",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.grade",
+      "expected": "知道",
+      "actual": "知道",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_branch",
+      "expected": "F3",
+      "actual": "F3",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_title",
+      "expected": "人血白蛋白是血液制品，安全性可靠么？",
+      "actual": "人血白蛋白是血液制品，安全性可靠么？",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "focus_content",
+      "expected": "● 杰特贝林的人血白蛋白拥有良好的病原体安全性记录超过数十年。\n▶《2021年人血白蛋白在危重症患者应用专家共识》1指出作为从人血中提取的成分，虽然输注高浓度的白蛋白虽然不可避免地会出现不良反应，但仅约0.1%的患者会出现潮红、荨麻疹、发热、寒战、恶心、呕吐、心动过速、低血压等过敏反应，而这些不良反应通常在降低输注速度或停止输注后消失。",
+      "actual": "● 杰特贝林的人血白蛋白拥有良好的病原体安全性记录超过数十年。\n《2021年人血白蛋白在危重症患者应用专家共识》{1}指出作为从人血中提取的成分，虽然输注高浓度的白蛋白虽然不可避免地会出现不良反应，但仅约0.1%的患者会出现潮红、荨麻疹、发热、寒战、恶心、呕吐、心动过速、低血压等过敏反应，而这些不良反应通常在降低输注速度或停止输注后消失。",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "focus_literature_titles",
+      "expected": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.",
+      "actual": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.",
+      "passed": true,
+      "match_mode": "list_exact"
+    },
+    {
+      "field_name": "focus_literature_summaries",
+      "expected": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）",
+      "actual": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）",
+      "passed": true,
+      "match_mode": "contains"
     }
   ]
 }

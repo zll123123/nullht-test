@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-from config.settings import DEV_ENV_FILE, ENV_FILE, LLM_CONFIG_FILE
+from config.settings import CONFIG_DIR, ENV_FILE, LLM_CONFIG_FILE
 from utils.yaml_loader import load_yaml_file
 
 
@@ -70,9 +70,13 @@ def load_env_files() -> None:
     """
     if ENV_FILE.exists():
         load_dotenv_file(ENV_FILE)
-        return
-    if DEV_ENV_FILE.exists():
-        load_dotenv_file(DEV_ENV_FILE)
+    active_env = os.getenv("ACTIVE_ENV", "").strip().lower()
+    if not active_env:
+        config_data = load_yaml_file(Path(__file__).resolve().parent / "config.yaml")
+        active_env = str(config_data.get("active_env", "dev")).strip().lower()
+    target_env_file = CONFIG_DIR / f"{active_env}.env"
+    if target_env_file.exists():
+        load_dotenv_file(target_env_file)
 
 
 def load_app_config(config_path: Path) -> AppConfig:

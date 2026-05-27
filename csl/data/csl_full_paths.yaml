@@ -1,11 +1,11 @@
 doctor_rank: 主任医师
 smoke_case_ids:
 - P003
-- P015
+- P021
 - P032
 - P061
 - P084
-- P106
+- P048
 cases:
 - case_id: P001
   scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道

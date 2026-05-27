@@ -46,9 +46,13 @@
 ### 配置加载
 - 默认配置文件为 [config/config.yaml](/Users/layla.zhang/workspace/nullht-test/csl/config/config.yaml)
 - LLM 配置文件为 [config/llm_config.yaml](/Users/layla.zhang/workspace/nullht-test/csl/config/llm_config.yaml)
-- 环境变量文件优先读取 `config/.env`，不存在时回退到 `config/dev.env`
-- 敏感信息与环境差异项通过 `env` 覆盖 YAML
-- 生产环境可手动 `source config/prod.env`
+- 当前激活环境由 `config.yaml` 中的 `active_env` 控制：
+  - `dev`
+  - `prod`
+- 启动时会按 `active_env` 自动加载对应环境文件：
+  - `dev` -> [config/dev.env](/Users/layla.zhang/workspace/nullht-test/csl/config/dev.env)
+  - `prod` -> [config/prod.env](/Users/layla.zhang/workspace/nullht-test/csl/config/prod.env)
+- 敏感信息与环境差异项放在对应的 `env` 文件中，普通运行配置放在 YAML 中
 
 ### 用例驱动
 - 主数据文件为 [data/csl_full_paths.yaml](/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml)
@@ -68,7 +72,11 @@
   - `message`
   - `stop`
   - `history`
-- 仅当最后一轮消息返回 `can_stop=true` 时才调用 `stop`
+- 仅当当前轮消息返回 `can_stop=true` 时才允许调用 `stop`
+- `stop` 失败只记录到 `stop_error`，不会阻断后续 `history` 拉取与断言
+- 当前会记录：
+  - 首次出现 `can_stop=true` 的轮次
+  - 实际调用 `stop` 的轮次
 
 ### 关注点处理
 - F1：选择固定关注点对应选项
@@ -81,6 +89,16 @@
 - 每条对话完成后先记录 `session_id`
 - 运行服务继续发起后续对话，不阻塞等待当前拜访计划生成
 - 到达轮询窗口后再调用 `history` 接口获取拜访计划
+
+### 失败重试
+- case 级失败重试由 `case_retry_times` 控制
+- 对应环境变量为：
+  - `CSL_CASE_RETRY_TIMES`
+- 只要 case 最终不是成功状态，就会按配置重试整条 case
+- 成功状态定义为：
+  - `status == DONE`
+  - 且 `validation.passed == true`
+- 重试只保留最终一次结果，不会把中间失败尝试重复写入正式报告
 
 ### 接口耗时记录
 - 公共计时装饰器位于 [utils/api_timing.py](/Users/layla.zhang/workspace/nullht-test/csl/utils/api_timing.py)
@@ -124,6 +142,14 @@ python3 run_csl_full_paths.py --case-id P017
 python3 run_csl_full_paths.py --smoke
 ```
 
+当前默认冒烟集覆盖：
+- ICU `≥50%` 低蛋白使用者路径
+- ICU `＜50%` 品牌认知者路径
+- 医院管理层/药剂科路径
+- 肝病路径
+- 外科梯度未收集路径
+- 原始 AI 问询路径
+
 ### 按科室执行
 ```bash
 python3 run_csl_full_paths.py --dept ICU
@@ -142,12 +168,22 @@ python3 run_csl_full_paths.py --dept ICU --smoke
 python3 run_csl_full_paths.py --seed 7
 ```
 
-### 使用生产环境
-```bash
-set -a
-source /Users/layla.zhang/workspace/nullht-test/csl/config/prod.env
-set +a
+### 切换激活环境
+直接修改 [config/config.yaml](/Users/layla.zhang/workspace/nullht-test/csl/config/config.yaml)：
 
+```yaml
+active_env: dev
+```
+
+切到生产环境时改为：
+
+```yaml
+active_env: prod
+```
+
+然后正常执行：
+
+```bash
 python3 run_csl_full_paths.py --smoke
 ```
 
@@ -181,8 +217,11 @@ python3 run_csl_full_paths.py --smoke
 ```bash
 output/qase-report/
 ├── run.json
+├── report.html
 └── results/
-    report.html
+    ├── P001.json
+    ├── P002.json
+    └── ...
 ```
 
 如果你本地已安装 `qase-report`，可以直接查看：
@@ -210,6 +249,9 @@ case 级结果当前会收集：
 - `final_data`
 - `visit_plan`
 - `stop_data`
+- `stop_error`
+- `first_can_stop_step_index`
+- `stop_called_step_index`
 - `detail_data`
 - `validation`
 - `status`
