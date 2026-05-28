@@ -1,11 +1,38 @@
 #!/usr/bin/env python3
+"""基于 Excel 中已有的 `ppt原文` 与 `日志中的pptstruct` 做独立语义对比。
+
+脚本定位：
+1. 不负责提取 PPT 原文。
+2. 不依赖本地 PPT 目录。
+3. 只消费 Excel 中现成的数据列，输出对比结果与 LLM 审核结果。
+
+输入列：
+1. 文件名称
+2. 页码
+3. ppt原文
+4. 日志中的pptstruct
+
+输出列：
+1. diff
+2. LLM错误类型
+3. LLM严重程度
+4. LLM判断依据
+5. 人工审核结果
+
+执行模式：
+1. all
+   - 先跑确定性 diff，再跑 LLM
+2. diff
+   - 只跑确定性 diff
+3. llm
+   - 只跑 LLM
+   - 依赖表中已存在 diff
+"""
+
 import argparse
 import json
 import re
-import shutil
-import subprocess
 import sys
-import tempfile
 import time
 from difflib import SequenceMatcher
 from pathlib import Path
@@ -15,15 +42,13 @@ import requests
 from loguru import logger
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
-from pptx import Presentation
 
 
 DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("ppt原文抽取结果_获取pptstruct对比.xlsx")
 DEFAULT_LOG_PATH = Path(__file__).resolve().with_name("review_pptstruct_semantics_to_excel.log")
-DEFAULT_PPT_DIR = Path("/Users/layla.zhang/测试用例/测试材料/az/验证case/")
-DEFAULT_LLM_BASE_URL = "https://api.minimaxi.com/v1"
-DEFAULT_LLM_MODEL = "MiniMax-M2.7"
-DEFAULT_LLM_API_KEY = "sk-cp-96ZlkfZNixQvYfwfs6Q1Po-4vFUuoFlJK497LBl2wCUwK5LIkB5aFNJ2REdK3htdvv90O4-TQM8VC04AK733IrqMRR25Wl98XFF6pE92kfzHjGCq2DsK9xk"
+DEFAULT_LLM_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+DEFAULT_LLM_MODEL = "deepseek-v4-flash"
+DEFAULT_LLM_API_KEY = "sk-433e97f12d014e2d9d74ce0669aa7155"
 DEFAULT_LLM_TIMEOUT_SECONDS = 120
 DEFAULT_LLM_MAX_RETRIES = 3
 
@@ -45,8 +70,20 @@ MAX_TEXT_SNIPPET_LENGTH = 80
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="基于 PPT 原文与 pptStruct 文本对齐结果审核语义完整性和文本差异。")
+    parser = argparse.ArgumentParser(description="基于 Excel 中已有的 PPT 原文与 pptStruct 文本做独立语义对比。")
     parser.add_argument("--sheet-name", help="可选，指定工作表名称；默认使用 active sheet")
+    parser.add_argument(
+        "--mode",
+        choices=("all", "diff", "llm"),
+        default="all",
+        help="all: 跑 diff + LLM；diff: 只跑 diff；llm: 只跑 LLM",
+    )
+    parser.add_argument(
+        "--save-batch-size",
+        type=int,
+        default=10,
+        help="每处理多少行保存一次 Excel，默认 10",
+    )
     return parser.parse_args()
 
 
@@ -88,205 +125,6 @@ def normalize_page_number(value) -> Optional[int]:
     if isinstance(value, str) and value.strip().isdigit():
         return int(value.strip())
     return None
-
-
-def build_ppt_index(ppt_dir: Path) -> Dict[str, Path]:
-    index: Dict[str, Path] = {}
-    for path in sorted(ppt_dir.rglob("*")):
-        if not path.is_file():
-            continue
-        if path.suffix.lower() not in {".ppt", ".pptx"}:
-            continue
-        index[normalize_name(path.name)] = path
-    return index
-
-
-def run_command(command: List[str]) -> None:
-    subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-
-def run_command_output(command: List[str]) -> str:
-    result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    return result.stdout
-
-
-def require_command(command_name: str) -> None:
-    if shutil.which(command_name) is None:
-        raise RuntimeError("缺少依赖命令: {}".format(command_name))
-
-
-def convert_ppt_to_pptx(ppt_path: Path, work_dir: Path) -> Path:
-    require_command("soffice")
-    output_dir = work_dir / "pptx"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    run_command(
-        [
-            "soffice",
-            "--headless",
-            "--convert-to",
-            "pptx",
-            "--outdir",
-            str(output_dir),
-            str(ppt_path),
-        ]
-    )
-    pptx_path = output_dir / "{}.pptx".format(ppt_path.stem)
-    if not pptx_path.exists():
-        raise RuntimeError("未生成 PPTX: {}".format(pptx_path))
-    return pptx_path
-
-
-def resolve_presentation_path(ppt_path: Path, work_dir: Path, converted_cache: Dict[Path, Path]) -> Path:
-    if ppt_path.suffix.lower() == ".pptx":
-        return ppt_path
-    cached = converted_cache.get(ppt_path)
-    if cached is not None:
-        return cached
-    converted = convert_ppt_to_pptx(ppt_path, work_dir)
-    converted_cache[ppt_path] = converted
-    return converted
-
-
-def safe_path_name(path: Path) -> str:
-    return re.sub(r"[^A-Za-z0-9._-]+", "_", path.stem)
-
-
-def render_presentation_to_pdf(presentation_path: Path, work_dir: Path, pdf_cache: Dict[Path, Path]) -> Path:
-    cached = pdf_cache.get(presentation_path)
-    if cached is not None:
-        return cached
-
-    require_command("soffice")
-    output_dir = work_dir / "pdf" / safe_path_name(presentation_path)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    run_command(
-        [
-            "soffice",
-            "--headless",
-            "--convert-to",
-            "pdf",
-            "--outdir",
-            str(output_dir),
-            str(presentation_path),
-        ]
-    )
-    pdf_path = output_dir / "{}.pdf".format(presentation_path.stem)
-    if not pdf_path.exists():
-        pdf_files = sorted(output_dir.glob("*.pdf"))
-        if not pdf_files:
-            raise RuntimeError("未生成 PDF: {}".format(pdf_path))
-        pdf_path = pdf_files[0]
-    pdf_cache[presentation_path] = pdf_path
-    return pdf_path
-
-
-def extract_pdf_page_text(pdf_path: Path, page_number: int) -> str:
-    require_command("pdftotext")
-    return run_command_output(
-        [
-            "pdftotext",
-            "-layout",
-            "-f",
-            str(page_number),
-            "-l",
-            str(page_number),
-            str(pdf_path),
-            "-",
-        ]
-    )
-
-
-def render_pdf_page_to_png(pdf_path: Path, page_number: int, work_dir: Path) -> Path:
-    require_command("pdftoppm")
-    output_dir = work_dir / "ocr" / "{}_{}".format(safe_path_name(pdf_path), page_number)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    output_prefix = output_dir / "page"
-    run_command(
-        [
-            "pdftoppm",
-            "-r",
-            "300",
-            "-png",
-            "-f",
-            str(page_number),
-            "-l",
-            str(page_number),
-            "-singlefile",
-            str(pdf_path),
-            str(output_prefix),
-        ]
-    )
-    png_path = output_dir / "page.png"
-    if not png_path.exists():
-        raise RuntimeError("未生成页面截图: {}".format(png_path))
-    return png_path
-
-
-def ocr_image_text(image_path: Path) -> str:
-    require_command("tesseract")
-    return run_command_output(["tesseract", str(image_path), "stdout", "-l", "chi_sim+eng", "--psm", "6"])
-
-
-def extract_slide_text_by_ocr(
-    presentation_path: Path,
-    page_number: int,
-    work_dir: Path,
-    pdf_cache: Dict[Path, Path],
-) -> str:
-    pdf_path = render_presentation_to_pdf(presentation_path, work_dir, pdf_cache)
-    texts = [extract_pdf_page_text(pdf_path, page_number)]
-    image_path = render_pdf_page_to_png(pdf_path, page_number, work_dir)
-    texts.append(ocr_image_text(image_path))
-    return normalize_text("\n".join(text for text in texts if text.strip()))
-
-
-def collect_shape_texts(shape) -> List[str]:
-    texts: List[str] = []
-    if hasattr(shape, "shapes"):
-        for child in shape.shapes:
-            texts.extend(collect_shape_texts(child))
-    if getattr(shape, "has_text_frame", False):
-        text = normalize_text(shape.text or "")
-        if text:
-            texts.append(text)
-    if getattr(shape, "has_table", False):
-        for row in shape.table.rows:
-            row_texts = []
-            for cell in row.cells:
-                cell_text = normalize_text(cell.text or "")
-                if cell_text:
-                    row_texts.append(cell_text)
-            if row_texts:
-                texts.append(" | ".join(row_texts))
-    return texts
-
-
-def extract_slide_source_text(
-    ppt_path: Path,
-    page_number: int,
-    work_dir: Path,
-    converted_cache: Dict[Path, Path],
-    pdf_cache: Dict[Path, Path],
-    presentation_cache: Dict[Path, Presentation],
-) -> str:
-    # 优先直接读取 PPT 页面中的文本对象，避免 OCR 带来的识别噪声。
-    presentation_path = resolve_presentation_path(ppt_path, work_dir, converted_cache)
-    presentation = presentation_cache.get(presentation_path)
-    if presentation is None:
-        presentation = Presentation(str(presentation_path))
-        presentation_cache[presentation_path] = presentation
-    if page_number < 1 or page_number > len(presentation.slides):
-        raise RuntimeError("页码超出范围: {} / {}".format(page_number, len(presentation.slides)))
-    slide = presentation.slides[page_number - 1]
-    texts: List[str] = []
-    for shape in slide.shapes:
-        texts.extend(collect_shape_texts(shape))
-    source_text = normalize_text("\n".join(texts))
-    if source_text:
-        return source_text
-
-    logger.info("page text is empty, fallback to OCR: file={} page={}", ppt_path.name, page_number)
-    return extract_slide_text_by_ocr(presentation_path, page_number, work_dir, pdf_cache)
 
 
 def collect_struct_texts(value) -> List[str]:
@@ -466,6 +304,8 @@ def review_semantics(source_text: str, ppt_struct_obj: Dict[str, object]) -> Dic
     if diff_items:
         diff_text_parts.append(short_join(diff_items, ""))
     diff_text = "\n".join(part for part in diff_text_parts if part)
+    if not diff_text:
+        diff_text = "无差异"
     return {
         "struct_text": struct_text,
         "diff_text": diff_text,
@@ -557,30 +397,6 @@ def call_llm_review(source_text: str, struct_text: str, compare_summary: str) ->
     raise RuntimeError(str(last_error))
 
 
-def extract_source_text_for_row(
-    ppt_path: Path,
-    page_number: int,
-    temp_root: Path,
-    converted_cache: Dict[Path, Path],
-    pdf_cache: Dict[Path, Path],
-    presentation_cache: Dict[Path, Presentation],
-    source_text_cache: Dict[Tuple[Path, int], str],
-) -> str:
-    cache_key = (ppt_path, page_number)
-    source_text = source_text_cache.get(cache_key)
-    if source_text is None:
-        source_text = extract_slide_source_text(
-            ppt_path=ppt_path,
-            page_number=page_number,
-            work_dir=temp_root,
-            converted_cache=converted_cache,
-            pdf_cache=pdf_cache,
-            presentation_cache=presentation_cache,
-        )
-        source_text_cache[cache_key] = source_text
-    return source_text
-
-
 def run_deterministic_compare(source_text: str, ppt_struct_obj: Dict[str, object]) -> Dict[str, object]:
     return review_semantics(source_text, ppt_struct_obj)
 
@@ -596,22 +412,26 @@ def run_llm_compare(source_text: str, struct_text: str, diff_text: str) -> Dict[
     return call_llm_review(source_text, struct_text, diff_text)
 
 
+def save_if_needed(workbook, excel_path: Path, processed_rows: int, batch_size: int) -> None:
+    if processed_rows % batch_size == 0:
+        workbook.save(excel_path)
+        logger.info("批量保存完成: processed_rows={} excel={}", processed_rows, excel_path)
+
+
 def main() -> int:
     setup_logging()
     args = parse_args()
+    if args.save_batch_size <= 0:
+        raise RuntimeError("--save-batch-size 必须大于 0")
     excel_path = DEFAULT_EXCEL_PATH.expanduser().resolve()
-    if "请在这里填写实际PPT目录" in str(DEFAULT_PPT_DIR):
-        raise RuntimeError("请先在代码中配置 DEFAULT_PPT_DIR")
-    ppt_dir = DEFAULT_PPT_DIR.expanduser().resolve()
-    if not ppt_dir.exists():
-        raise RuntimeError("PPT 目录不存在: {}".format(ppt_dir))
     workbook = load_workbook(excel_path)
     sheet = workbook[args.sheet_name] if args.sheet_name else workbook.active
-    ppt_index = build_ppt_index(ppt_dir)
     header_map = find_header_columns(sheet)
-    required_input_columns = require_columns(header_map, [FILE_NAME_HEADER, PAGE_NUMBER_HEADER, PPT_STRUCT_HEADER])
-    source_text_column = ensure_output_column(sheet, header_map, PPT_SOURCE_HEADER, sheet.max_column + 1)
-    diff_column = ensure_output_column(sheet, header_map, DIFF_HEADER, max(sheet.max_column + 1, source_text_column + 1))
+    required_headers = [FILE_NAME_HEADER, PAGE_NUMBER_HEADER, PPT_STRUCT_HEADER, PPT_SOURCE_HEADER]
+    if args.mode == "llm":
+        required_headers.append(DIFF_HEADER)
+    required_input_columns = require_columns(header_map, required_headers)
+    diff_column = ensure_output_column(sheet, header_map, DIFF_HEADER, sheet.max_column + 1)
     llm_error_type_column = ensure_output_column(sheet, header_map, LLM_ERROR_TYPE_HEADER, max(sheet.max_column + 1, diff_column + 1))
     llm_severity_column = ensure_output_column(sheet, header_map, LLM_SEVERITY_HEADER, max(sheet.max_column + 1, llm_error_type_column + 1))
     llm_basis_column = ensure_output_column(sheet, header_map, LLM_BASIS_HEADER, max(sheet.max_column + 1, llm_severity_column + 1))
@@ -621,108 +441,107 @@ def main() -> int:
     sheet.column_dimensions[get_column_letter(llm_severity_column)].width = 12
     sheet.column_dimensions[get_column_letter(llm_basis_column)].width = 60
     sheet.column_dimensions[get_column_letter(llm_result_column)].width = 40
+    processed_rows = 0
 
-    with tempfile.TemporaryDirectory(prefix="ppt-semantic-review-") as temp_dir:
-        temp_root = Path(temp_dir)
-        converted_cache: Dict[Path, Path] = {}
-        pdf_cache: Dict[Path, Path] = {}
-        presentation_cache: Dict[Path, Presentation] = {}
-        source_text_cache: Dict[Tuple[Path, int], str] = {}
+    for row_index in range(2, sheet.max_row + 1):
+        file_name = sheet.cell(row_index, required_input_columns[FILE_NAME_HEADER]).value
+        page_number = normalize_page_number(sheet.cell(row_index, required_input_columns[PAGE_NUMBER_HEADER]).value)
+        ppt_struct_raw = sheet.cell(row_index, required_input_columns[PPT_STRUCT_HEADER]).value
+        source_text_raw = sheet.cell(row_index, required_input_columns[PPT_SOURCE_HEADER]).value
+        if not file_name or page_number is None or not ppt_struct_raw:
+            continue
+        logger.info("processing row={} file={} page={}", row_index, file_name, page_number)
 
-        for row_index in range(2, sheet.max_row + 1):
-            file_name = sheet.cell(row_index, required_input_columns[FILE_NAME_HEADER]).value
-            page_number = normalize_page_number(sheet.cell(row_index, required_input_columns[PAGE_NUMBER_HEADER]).value)
-            ppt_struct_raw = sheet.cell(row_index, required_input_columns[PPT_STRUCT_HEADER]).value
-            if not file_name or page_number is None or not ppt_struct_raw:
-                continue
-            logger.info("processing row={} file={} page={}", row_index, file_name, page_number)
-
-            ppt_path = ppt_index.get(normalize_name(str(file_name)))
-            if not ppt_path:
-                sheet.cell(row_index, diff_column).value = "未找到源PPT文件"
-                sheet.cell(row_index, llm_error_type_column).value = "无法判断"
-                sheet.cell(row_index, llm_severity_column).value = "无法判断"
-                sheet.cell(row_index, llm_basis_column).value = "未找到源PPT文件"
-                sheet.cell(row_index, llm_result_column).value = "未执行LLM审核"
-                continue
-
-            try:
-                ppt_struct_obj = json.loads(str(ppt_struct_raw))
-            except Exception as exc:
+        try:
+            ppt_struct_obj = json.loads(str(ppt_struct_raw))
+        except Exception as exc:
+            if args.mode in {"all", "diff"}:
                 sheet.cell(row_index, diff_column).value = "pptStruct 解析失败: {}".format(exc)
+            if args.mode in {"all", "llm"}:
                 sheet.cell(row_index, llm_error_type_column).value = "无法判断"
                 sheet.cell(row_index, llm_severity_column).value = "无法判断"
                 sheet.cell(row_index, llm_basis_column).value = "pptStruct 解析失败: {}".format(exc)
                 sheet.cell(row_index, llm_result_column).value = "未执行LLM审核"
-                continue
+            processed_rows += 1
+            save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size)
+            continue
 
-            try:
-                # 第一步：提取 PPT 原文。这里失败，后面的确定性对比和 LLM 都不再执行。
-                source_text = extract_source_text_for_row(
-                    ppt_path=ppt_path,
-                    page_number=page_number,
-                    temp_root=temp_root,
-                    converted_cache=converted_cache,
-                    pdf_cache=pdf_cache,
-                    presentation_cache=presentation_cache,
-                    source_text_cache=source_text_cache,
-                )
-                sheet.cell(row_index, source_text_column).value = source_text
-            except Exception as exc:
-                sheet.cell(row_index, source_text_column).value = "PPT 原文提取失败: {}".format(exc)
-                diff_text = "审核失败: {}".format(exc)
-                llm_result = {
-                    "error_type": "无法判断",
-                    "severity": "无法判断",
-                    "basis": "PPT 原文提取失败: {}".format(exc),
-                    "result": "未执行LLM审核",
-                }
+        source_text = normalize_text(str(source_text_raw or ""))
+        if not source_text:
+            diff_text = "PPT 原文为空，无法对比"
+            llm_result = {
+                "error_type": "无法判断",
+                "severity": "无法判断",
+                "basis": "PPT 原文为空，无法对比",
+                "result": "未执行LLM审核",
+            }
+            if args.mode in {"all", "diff"}:
                 sheet.cell(row_index, diff_column).value = diff_text
+            if args.mode in {"all", "llm"}:
                 sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
                 sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
                 sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
                 sheet.cell(row_index, llm_result_column).value = llm_result["result"]
-                continue
+            processed_rows += 1
+            save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size)
+            continue
 
+        struct_text = build_ppt_struct_text(ppt_struct_obj)
+        diff_text = normalize_text(str(sheet.cell(row_index, diff_column).value or ""))
+
+        if args.mode in {"all", "diff"}:
             try:
-                # 第二步：确定性对比。这里失败，则不再执行 LLM。
                 compare_result = run_deterministic_compare(source_text, ppt_struct_obj)
                 struct_text = compare_result["struct_text"]
                 diff_text = compare_result["diff_text"]
+                sheet.cell(row_index, diff_column).value = diff_text
             except Exception as exc:
                 diff_text = "确定性对比失败: {}".format(exc)
-                llm_result = {
-                    "error_type": "无法判断",
-                    "severity": "无法判断",
-                    "basis": "确定性对比失败: {}".format(exc),
-                    "result": "未执行LLM审核",
-                }
                 sheet.cell(row_index, diff_column).value = diff_text
-                sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
-                sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
-                sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
-                sheet.cell(row_index, llm_result_column).value = llm_result["result"]
+                if args.mode == "all":
+                    llm_result = {
+                        "error_type": "无法判断",
+                        "severity": "无法判断",
+                        "basis": "确定性对比失败: {}".format(exc),
+                        "result": "未执行LLM审核",
+                    }
+                    sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
+                    sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
+                    sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
+                    sheet.cell(row_index, llm_result_column).value = llm_result["result"]
+                processed_rows += 1
+                save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size)
                 continue
 
-            try:
-                # 第三步：调用 LLM。只有前两步成功后才会进入这里。
-                llm_result = run_llm_compare(source_text, struct_text, diff_text)
-            except Exception as exc:
+        if args.mode in {"all", "llm"}:
+            if not diff_text:
                 llm_result = {
                     "error_type": "无法判断",
                     "severity": "无法判断",
-                    "basis": "LLM 调用失败: {}".format(exc),
+                    "basis": "diff 为空，请先运行 diff 模式",
                     "result": "未执行LLM审核",
                 }
+            else:
+                try:
+                    llm_result = run_llm_compare(source_text, struct_text, diff_text)
+                except Exception as exc:
+                    llm_result = {
+                        "error_type": "无法判断",
+                        "severity": "无法判断",
+                        "basis": "LLM 调用失败: {}".format(exc),
+                        "result": "未执行LLM审核",
+                    }
 
-            sheet.cell(row_index, diff_column).value = diff_text
             sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
             sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
             sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
             sheet.cell(row_index, llm_result_column).value = llm_result["result"]
+        processed_rows += 1
+        save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size)
 
     workbook.save(excel_path)
     logger.info("Excel 已更新: {}", excel_path)
+    logger.info("总处理行数: {}", processed_rows)
     return 0
 
 

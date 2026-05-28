@@ -1,23 +1,46 @@
 #!/usr/bin/env python3
+"""根据审核管理 API 回填 Excel 中的任务结果。
+
+脚本作用：
+1. 读取 `ppt原文抽取结果_获取pptstruct对比.xlsx` 中的 `文件名称` 列，去重后作为查询种子。
+2. 调用 `/api/audit/management/list`，按文件名查询最新审核记录。
+3. 再调用 `/api/audit/management/detail` 获取详情，抽取：
+   - `taskid`
+   - `detailId`
+   - 每页的 `报错审核点`
+   - 每页的 `审核点错误摘要`
+4. 按 `文件名称 + 页码` 回填到 Excel 的现有行中。
+5. 同名文件的所有行会统一写入相同的 `taskid` 和 `detailId`。
+
+当前执行模式：
+1. 默认模式：处理 active sheet。
+   用法：`python fill_audit_excel_from_api.py`
+2. 指定工作表模式：只切换目标 sheet，业务逻辑不变。
+   用法：`python fill_audit_excel_from_api.py --sheet-name <sheet_name>`
+
+补充说明：
+1. 这是固定流程脚本，没有类似 error-page/full-file 的业务模式切换。
+2. 脚本可直接通过 `python fill_audit_excel_from_api.py` 执行。
+"""
+
 import argparse
 import json
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-import pytest
 import requests
 from loguru import logger
 from openpyxl import load_workbook
 
 
-DEFAULT_BASE_URL = "https://dev-api-v3-az-mlr.nullht.com"
+DEFAULT_BASE_URL = "https://dev-az-ai-mlr-api.nullht.com"
 DEFAULT_LIST_PATH = "/api/audit/management/list"
 DEFAULT_DETAIL_PATH = "/api/audit/management/detail"
-DEFAULT_COOKIE = "acw_tc=65859a8117797802923522883ece507270179857a26c155d8f9fd417ddabdd"
 DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("ppt原文抽取结果_获取pptstruct对比.xlsx")
 DEFAULT_LOG_PATH = Path(__file__).resolve().with_name("fill_audit_excel_from_api.log")
-DEFAULT_BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIyZmY5ZjY0ZmYwYmZmY2I0MzhkNmQ0MWViZDA4ZTQ5MyIsImRldmljZVR5cGUiOiJERUYiLCJlZmYiOjE3Nzk4NjY2OTQ5ODksInJuU3RyIjoibUtmekx4TXBvcUhkaWJSbVRydFpJZ2dLU3dEM2RtUlIifQ.ZizZ0yrHxD3s2ZPTS59xbfS2LgdTCGniDpyhasRnVBk"
+DEFAULT_BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIyZmY5ZjY0ZmYwYmZmY2I0MzhkNmQ0MWViZDA4ZTQ5MyIsImRldmljZVR5cGUiOiJERUYiLCJlZmYiOjE3ODAwMzY0MzI2MjYsInJuU3RyIjoiMHhOdzJWaWE0VnpGYUZ1d1FoRjZ2NzFJcFVBRGp3U24ifQ.3kEteSN85ZztSIYj2UcnOgzWOFpHNq9jM-m51aG3zxM"
+DEFAULT_COOKIE = ""
 TIMEOUT_SECONDS = 60
 
 FILE_NAME_HEADER = "文件名称"
@@ -31,8 +54,8 @@ COMMON_HEADERS = {
     "Accept": "application/json, text/plain, */*",
     "Accept-Language": "zh-CN,zh;q=0.9",
     "Connection": "keep-alive",
-    "Origin": "https://dev-v3-az-mlr.nullht.com",
-    "Referer": "https://dev-v3-az-mlr.nullht.com/",
+    "Origin": "https://dev-v4-az-mlr.nullht.com",
+    "Referer": "https://dev-v4-az-mlr.nullht.com",
     "Sec-Fetch-Dest": "empty",
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Site": "same-site",
@@ -409,7 +432,7 @@ def write_row(sheet, row_index: int, column_map: Dict[str, int], task_id: str, d
     sheet.cell(row_index, column_map["reason"]).value = reason
 
 
-def test_fill_audit_excel_from_api() -> None:
+def run_fill_audit_excel_from_api() -> None:
     """执行 API 回填主流程。"""
     if not RUNTIME_CONFIG:
         configure_logger()
@@ -477,7 +500,8 @@ def main() -> int:
     args = parse_args()
     configure_logger()
     init_runtime_config(args.sheet_name)
-    return pytest.main(["-s", __file__])
+    run_fill_audit_excel_from_api()
+    return 0
 
 
 if __name__ == "__main__":
