@@ -41,6 +41,7 @@ README 只保留架构和运行说明，断言细节统一放在本目录维护�
 - `recommended_materials`
 - `visit_plan_digest.department`
 - `visit_plan_digest.rank`
+- `visit_plan_digest.level`
 - `visit_plan_digest.type`
 - `visit_plan_digest.grade`
 - `focus_branch`

@@ -8,9 +8,10 @@ smoke_case_ids:
 - P048
 cases:
 - case_id: P001
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
+  scenario: ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
   answers:
   - ICU（现版本）
+  - A
   - 既往拜访过
   - ≥50%
   - A
@@ -46,12 +47,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: A类客户
       type: 低蛋白使用者
       grade: 知道
 - case_id: P002
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
+  scenario: ICU -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
   answers:
   - ICU（现版本）
+  - B
   - 既往拜访过
   - ≥50%
   - A
@@ -93,12 +96,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: B类客户
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P003
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
+  scenario: ICU -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
   answers:
   - ICU（现版本）
+  - C
   - 既往拜访过
   - ≥50%
   - A
@@ -137,12 +142,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: C类客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P004
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
+  scenario: ICU -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
   answers:
   - ICU（现版本）
+  - D
   - 既往拜访过
   - ≥50%
   - A
@@ -174,12 +181,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: D类客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P005
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
+  scenario: ICU -> 未分级 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
   answers:
   - ICU（现版本）
+  - E
   - 既往拜访过
   - ≥50%
   - A
@@ -209,12 +218,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: 未分级
       type: 低蛋白使用者
       grade: 提倡
 - case_id: P006
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
+  scenario: ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
   answers:
   - ICU（现版本）
+  - A
   - 既往拜访过
   - ≥50%
   - A
@@ -252,12 +263,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: A类客户
       type: 低蛋白使用者
       grade: 知道
 - case_id: P007
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
+  scenario: ICU -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
   answers:
   - ICU（现版本）
+  - B
   - 既往拜访过
   - ≥50%
   - A
@@ -300,12 +313,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: B类客户
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P008
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
+  scenario: ICU -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
   answers:
   - ICU（现版本）
+  - C
   - 既往拜访过
   - ≥50%
   - A
@@ -345,12 +360,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: C类客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P009
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
+  scenario: ICU -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
   answers:
   - ICU（现版本）
+  - D
   - 既往拜访过
   - ≥50%
   - A
@@ -383,12 +400,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: D类客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P010
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
+  scenario: ICU -> 未分级 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
   answers:
   - ICU（现版本）
+  - E
   - 既往拜访过
   - ≥50%
   - B
@@ -418,12 +437,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: 未分级
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P011
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
+  scenario: ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
   answers:
   - ICU（现版本）
+  - A
   - 既往拜访过
   - ≥50%
   - B
@@ -457,12 +478,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: A类客户
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P012
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
+  scenario: ICU -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
   answers:
   - ICU（现版本）
+  - B
   - 既往拜访过
   - ≥50%
   - B
@@ -498,12 +521,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: B类客户
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P013
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
+  scenario: ICU -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
   answers:
   - ICU（现版本）
+  - C
   - 既往拜访过
   - ≥50%
   - B
@@ -528,12 +553,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: C类客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P014
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
+  scenario: ICU -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
   answers:
   - ICU（现版本）
+  - D
   - 既往拜访过
   - ≥50%
   - B
@@ -556,12 +583,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: D类客户
       type: 白蛋白笃信者
       grade: 提倡
 - case_id: P015
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
+  scenario: ICU -> 未分级 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
   answers:
   - ICU（现版本）
+  - E
   - 既往拜访过
   - ≥50%
   - B
@@ -593,12 +622,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: 未分级
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P016
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
+  scenario: ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
   answers:
   - ICU（现版本）
+  - A
   - 既往拜访过
   - ≥50%
   - B
@@ -633,12 +664,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: A类客户
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P017
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
+  scenario: ICU -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
   answers:
   - ICU（现版本）
+  - B
   - 既往拜访过
   - ≥50%
   - B
@@ -671,12 +704,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: B类客户
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P018
-  scenario: ICU -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
+  scenario: ICU -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
   answers:
   - ICU（现版本）
+  - C
   - 既往拜访过
   - ≥50%
   - B
@@ -702,12 +737,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: C类客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P019
-  scenario: ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
+  scenario: ICU -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
   answers:
   - ICU（现版本）
+  - D
   - 既往拜访过
   - ＜50%
   - A
@@ -743,12 +780,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: D类客户
       type: 品牌认知者
       grade: 知道
 - case_id: P020
-  scenario: ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
+  scenario: ICU -> 未分级 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
   answers:
   - ICU（现版本）
+  - E
   - 既往拜访过
   - ＜50%
   - B
@@ -781,12 +820,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: 未分级
       type: 品牌认知者
       grade: 尝试
 - case_id: P021
-  scenario: ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
+  scenario: ICU -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
   answers:
   - ICU（现版本）
+  - A
   - 既往拜访过
   - ＜50%
   - C
@@ -817,12 +858,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: A类客户
       type: 品牌认知者
       grade: 使用
 - case_id: P022
-  scenario: ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
+  scenario: ICU -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
   answers:
   - ICU（现版本）
+  - B
   - 既往拜访过
   - ＜50%
   - D
@@ -850,12 +893,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: B类客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P023
-  scenario: ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
+  scenario: ICU -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
   answers:
   - ICU（现版本）
+  - C
   - 既往拜访过
   - ＜50%
   - E
@@ -911,12 +956,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: C类客户
       type: 品牌认知者
       grade: 提倡
 - case_id: P024
-  scenario: ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
+  scenario: ICU -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
   answers:
   - ICU（现版本）
+  - D
   - 既往拜访过
   - ＜50%
   - 不清楚
@@ -954,12 +1001,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: D类客户
       type: 品牌认知者
       grade: 知道
 - case_id: P025
-  scenario: ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
+  scenario: ICU -> 未分级 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
   answers:
   - ICU（现版本）
+  - E
   - 既往拜访过
   - ＜50%
   - 不知道
@@ -993,12 +1042,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: 未分级
       type: 品牌认知者
       grade: 尝试
 - case_id: P026
-  scenario: ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
+  scenario: ICU -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
   answers:
   - ICU（现版本）
+  - A
   - 既往拜访过
   - ＜50%
   - 不清楚
@@ -1029,12 +1080,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: A类客户
       type: 品牌认知者
       grade: 使用
 - case_id: P027
-  scenario: ICU -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
+  scenario: ICU -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
   answers:
   - ICU（现版本）
+  - B
   - 既往拜访过
   - ＜50%
   - 不知道
@@ -1063,12 +1116,14 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: B类客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P028
-  scenario: ICU -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
+  scenario: ICU -> C类客户 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
   answers:
   - ICU（现版本）
+  - C
   - 既往拜访过
   - 不清楚
   expected:
@@ -1076,16 +1131,19 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: C类客户
 - case_id: P029
-  scenario: ICU -> 首次拜访 -> 原始 AI 问询路径
+  scenario: ICU -> D类客户 -> 首次拜访 -> 原始 AI 问询路径
   answers:
   - ICU（现版本）
+  - D
   - 首次拜访
   expected:
     route_type: first_visit_followup
     visit_plan_digest:
       department: ICU
       rank: 主任医师
+      level: D类客户
 - case_id: P030
   scenario: 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 知道
   answers:
@@ -1141,6 +1199,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 合理用药管理者
       grade: 知道
 - case_id: P031
@@ -1209,6 +1268,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 合理用药管理者
       grade: 尝试
 - case_id: P032
@@ -1286,6 +1346,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 合理用药管理者
       grade: 使用
 - case_id: P033
@@ -1341,6 +1402,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 合理用药管理者
       grade: 偏好
 - case_id: P034
@@ -1368,6 +1430,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 合理用药管理者
       grade: 提倡
 - case_id: P035
@@ -1427,6 +1490,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 合理用药管理者
       grade: 知道
 - case_id: P036
@@ -1496,6 +1560,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 合理用药管理者
       grade: 尝试
 - case_id: P037
@@ -1574,6 +1639,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 合理用药管理者
       grade: 使用
 - case_id: P038
@@ -1630,6 +1696,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 合理用药管理者
       grade: 偏好
 - case_id: P039
@@ -1671,6 +1738,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 品牌认知者
       grade: 知道
 - case_id: P040
@@ -1709,6 +1777,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P041
@@ -1746,6 +1815,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 品牌认知者
       grade: 使用
 - case_id: P042
@@ -1779,6 +1849,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P043
@@ -1841,6 +1912,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 品牌认知者
       grade: 提倡
 - case_id: P044
@@ -1884,6 +1956,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 品牌认知者
       grade: 知道
 - case_id: P045
@@ -1923,6 +1996,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P046
@@ -1960,6 +2034,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 品牌认知者
       grade: 使用
 - case_id: P047
@@ -1994,6 +2069,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P048
@@ -2007,6 +2083,7 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
 - case_id: P049
   scenario: 医院管理层/药剂科 -> 首次拜访 -> 原始 AI 问询路径
   answers:
@@ -2017,10 +2094,12 @@ cases:
     visit_plan_digest:
       department: 医院管理层/药剂科
       rank: 主任医师
+      level: M类客户
 - case_id: P050
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
+  scenario: 肝病 -> 未分级 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
   answers:
   - 肝病
+  - E
   - 既往拜访过
   - ≥50%
   - A
@@ -2057,12 +2136,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: 未分级
       type: 低蛋白使用者
       grade: 知道
 - case_id: P051
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
+  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
   answers:
   - 肝病
+  - A
   - 既往拜访过
   - ≥50%
   - A
@@ -2103,12 +2184,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: A类客户
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P052
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
+  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
   answers:
   - 肝病
+  - B
   - 既往拜访过
   - ≥50%
   - A
@@ -2147,12 +2230,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: B类客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P053
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
+  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
   answers:
   - 肝病
+  - C
   - 既往拜访过
   - ≥50%
   - A
@@ -2179,12 +2264,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: C类客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P054
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
+  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
   answers:
   - 肝病
+  - D
   - 既往拜访过
   - ≥50%
   - A
@@ -2214,12 +2301,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: D类客户
       type: 低蛋白使用者
       grade: 提倡
 - case_id: P055
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
+  scenario: 肝病 -> 未分级 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
   answers:
   - 肝病
+  - E
   - 既往拜访过
   - ≥50%
   - A
@@ -2258,12 +2347,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: 未分级
       type: 低蛋白使用者
       grade: 知道
 - case_id: P056
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
+  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
   answers:
   - 肝病
+  - A
   - 既往拜访过
   - ≥50%
   - A
@@ -2305,12 +2396,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: A类客户
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P057
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
+  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
   answers:
   - 肝病
+  - B
   - 既往拜访过
   - ≥50%
   - A
@@ -2350,12 +2443,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: B类客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P058
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
+  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
   answers:
   - 肝病
+  - C
   - 既往拜访过
   - ≥50%
   - A
@@ -2383,12 +2478,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: C类客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P059
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
+  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
   answers:
   - 肝病
+  - D
   - 既往拜访过
   - ≥50%
   - B
@@ -2418,12 +2515,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: D类客户
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P060
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
+  scenario: 肝病 -> 未分级 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
   answers:
   - 肝病
+  - E
   - 既往拜访过
   - ≥50%
   - B
@@ -2460,12 +2559,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: 未分级
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P061
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
+  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
   answers:
   - 肝病
+  - A
   - 既往拜访过
   - ≥50%
   - B
@@ -2497,12 +2598,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: A类客户
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P062
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
+  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
   answers:
   - 肝病
+  - B
   - 既往拜访过
   - ≥50%
   - B
@@ -2529,12 +2632,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: B类客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P063
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
+  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
   answers:
   - 肝病
+  - C
   - 既往拜访过
   - ≥50%
   - B
@@ -2557,12 +2662,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: C类客户
       type: 白蛋白笃信者
       grade: 提倡
 - case_id: P064
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
+  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
   answers:
   - 肝病
+  - D
   - 既往拜访过
   - ≥50%
   - B
@@ -2594,12 +2701,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: D类客户
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P065
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
+  scenario: 肝病 -> 未分级 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
   answers:
   - 肝病
+  - E
   - 既往拜访过
   - ≥50%
   - B
@@ -2637,12 +2746,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: 未分级
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P066
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
+  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
   answers:
   - 肝病
+  - A
   - 既往拜访过
   - ≥50%
   - B
@@ -2674,12 +2785,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: A类客户
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P067
-  scenario: 肝病 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
+  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
   answers:
   - 肝病
+  - B
   - 既往拜访过
   - ≥50%
   - B
@@ -2707,12 +2820,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: B类客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P068
-  scenario: 肝病 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
+  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
   answers:
   - 肝病
+  - C
   - 既往拜访过
   - ＜50%
   - A
@@ -2748,12 +2863,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: C类客户
       type: 品牌认知者
       grade: 知道
 - case_id: P069
-  scenario: 肝病 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
+  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
   answers:
   - 肝病
+  - D
   - 既往拜访过
   - ＜50%
   - B
@@ -2786,12 +2903,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: D类客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P070
-  scenario: 肝病 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
+  scenario: 肝病 -> 未分级 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
   answers:
   - 肝病
+  - E
   - 既往拜访过
   - ＜50%
   - C
@@ -2822,12 +2941,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: 未分级
       type: 品牌认知者
       grade: 使用
 - case_id: P071
-  scenario: 肝病 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
+  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
   answers:
   - 肝病
+  - A
   - 既往拜访过
   - ＜50%
   - D
@@ -2855,12 +2976,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: A类客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P072
-  scenario: 肝病 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
+  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
   answers:
   - 肝病
+  - B
   - 既往拜访过
   - ＜50%
   - E
@@ -2916,12 +3039,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: B类客户
       type: 品牌认知者
       grade: 提倡
 - case_id: P073
-  scenario: 肝病 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
+  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
   answers:
   - 肝病
+  - C
   - 既往拜访过
   - ＜50%
   - 不清楚
@@ -2959,12 +3084,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: C类客户
       type: 品牌认知者
       grade: 知道
 - case_id: P074
-  scenario: 肝病 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
+  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
   answers:
   - 肝病
+  - D
   - 既往拜访过
   - ＜50%
   - 不知道
@@ -2998,12 +3125,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: D类客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P075
-  scenario: 肝病 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
+  scenario: 肝病 -> 未分级 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
   answers:
   - 肝病
+  - E
   - 既往拜访过
   - ＜50%
   - 不清楚
@@ -3034,12 +3163,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: 未分级
       type: 品牌认知者
       grade: 使用
 - case_id: P076
-  scenario: 肝病 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
+  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
   answers:
   - 肝病
+  - A
   - 既往拜访过
   - ＜50%
   - 不知道
@@ -3068,12 +3199,14 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: A类客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P077
-  scenario: 肝病 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
+  scenario: 肝病 -> B类客户 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
   answers:
   - 肝病
+  - B
   - 既往拜访过
   - 不清楚
   expected:
@@ -3081,20 +3214,24 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: B类客户
 - case_id: P078
-  scenario: 肝病 -> 首次拜访 -> 原始 AI 问询路径
+  scenario: 肝病 -> C类客户 -> 首次拜访 -> 原始 AI 问询路径
   answers:
   - 肝病
+  - C
   - 首次拜访
   expected:
     route_type: first_visit_followup
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
+      level: C类客户
 - case_id: P079
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
+  scenario: 外科 -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
   answers:
   - 外科
+  - D
   - 既往拜访过
   - ≥50%
   - A
@@ -3143,12 +3280,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: D类客户
       type: 低蛋白使用者
       grade: 知道
 - case_id: P080
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
+  scenario: 外科 -> 未分级 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
   answers:
   - 外科
+  - E
   - 既往拜访过
   - ≥50%
   - A
@@ -3191,12 +3330,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: 未分级
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P081
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
+  scenario: 外科 -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
   answers:
   - 外科
+  - A
   - 既往拜访过
   - ≥50%
   - A
@@ -3232,12 +3373,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: A类客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P082
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
+  scenario: 外科 -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
   answers:
   - 外科
+  - B
   - 既往拜访过
   - ≥50%
   - A
@@ -3262,12 +3405,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: B类客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P083
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
+  scenario: 外科 -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
   answers:
   - 外科
+  - C
   - 既往拜访过
   - ≥50%
   - A
@@ -3302,12 +3447,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: C类客户
       type: 低蛋白使用者
       grade: 提倡
 - case_id: P084
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
+  scenario: 外科 -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
   answers:
   - 外科
+  - D
   - 既往拜访过
   - ≥50%
   - A
@@ -3358,12 +3505,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: D类客户
       type: 低蛋白使用者
       grade: 知道
 - case_id: P085
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
+  scenario: 外科 -> 未分级 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
   answers:
   - 外科
+  - E
   - 既往拜访过
   - ≥50%
   - A
@@ -3407,12 +3556,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: 未分级
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P086
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
+  scenario: 外科 -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
   answers:
   - 外科
+  - A
   - 既往拜访过
   - ≥50%
   - A
@@ -3449,12 +3600,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: A类客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P087
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
+  scenario: 外科 -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
   answers:
   - 外科
+  - B
   - 既往拜访过
   - ≥50%
   - A
@@ -3480,12 +3633,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: B类客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P088
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
+  scenario: 外科 -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
   answers:
   - 外科
+  - C
   - 既往拜访过
   - ≥50%
   - B
@@ -3520,12 +3675,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: C类客户
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P089
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
+  scenario: 外科 -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
   answers:
   - 外科
+  - D
   - 既往拜访过
   - ≥50%
   - B
@@ -3557,12 +3714,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: D类客户
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P090
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
+  scenario: 外科 -> 未分级 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
   answers:
   - 外科
+  - E
   - 既往拜访过
   - ≥50%
   - B
@@ -3601,12 +3760,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: 未分级
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P091
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
+  scenario: 外科 -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
   answers:
   - 外科
+  - A
   - 既往拜访过
   - ≥50%
   - B
@@ -3638,12 +3799,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: A类客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P092
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
+  scenario: 外科 -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
   answers:
   - 外科
+  - B
   - 既往拜访过
   - ≥50%
   - B
@@ -3666,12 +3829,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: B类客户
       type: 白蛋白笃信者
       grade: 提倡
 - case_id: P093
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
+  scenario: 外科 -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
   answers:
   - 外科
+  - C
   - 既往拜访过
   - ≥50%
   - B
@@ -3708,12 +3873,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: C类客户
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P094
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
+  scenario: 外科 -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
   answers:
   - 外科
+  - D
   - 既往拜访过
   - ≥50%
   - B
@@ -3746,12 +3913,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: D类客户
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P095
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
+  scenario: 外科 -> 未分级 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
   answers:
   - 外科
+  - E
   - 既往拜访过
   - ≥50%
   - B
@@ -3790,12 +3959,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: 未分级
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P096
-  scenario: 外科 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
+  scenario: 外科 -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
   answers:
   - 外科
+  - A
   - 既往拜访过
   - ≥50%
   - B
@@ -3828,12 +3999,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: A类客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P097
-  scenario: 外科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
+  scenario: 外科 -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
   answers:
   - 外科
+  - B
   - 既往拜访过
   - ＜50%
   - A
@@ -3869,12 +4042,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: B类客户
       type: 品牌认知者
       grade: 知道
 - case_id: P098
-  scenario: 外科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
+  scenario: 外科 -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
   answers:
   - 外科
+  - C
   - 既往拜访过
   - ＜50%
   - B
@@ -3907,12 +4082,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: C类客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P099
-  scenario: 外科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
+  scenario: 外科 -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
   answers:
   - 外科
+  - D
   - 既往拜访过
   - ＜50%
   - C
@@ -3943,12 +4120,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: D类客户
       type: 品牌认知者
       grade: 使用
 - case_id: P100
-  scenario: 外科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
+  scenario: 外科 -> 未分级 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
   answers:
   - 外科
+  - E
   - 既往拜访过
   - ＜50%
   - D
@@ -3976,12 +4155,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: 未分级
       type: 品牌认知者
       grade: 偏好
 - case_id: P101
-  scenario: 外科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
+  scenario: 外科 -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
   answers:
   - 外科
+  - A
   - 既往拜访过
   - ＜50%
   - E
@@ -4037,12 +4218,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: A类客户
       type: 品牌认知者
       grade: 提倡
 - case_id: P102
-  scenario: 外科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
+  scenario: 外科 -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
   answers:
   - 外科
+  - B
   - 既往拜访过
   - ＜50%
   - 不清楚
@@ -4080,12 +4263,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: B类客户
       type: 品牌认知者
       grade: 知道
 - case_id: P103
-  scenario: 外科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
+  scenario: 外科 -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
   answers:
   - 外科
+  - C
   - 既往拜访过
   - ＜50%
   - 不知道
@@ -4119,12 +4304,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: C类客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P104
-  scenario: 外科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
+  scenario: 外科 -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
   answers:
   - 外科
+  - D
   - 既往拜访过
   - ＜50%
   - 不清楚
@@ -4155,12 +4342,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: D类客户
       type: 品牌认知者
       grade: 使用
 - case_id: P105
-  scenario: 外科 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
+  scenario: 外科 -> 未分级 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
   answers:
   - 外科
+  - E
   - 既往拜访过
   - ＜50%
   - 不知道
@@ -4189,12 +4378,14 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: 未分级
       type: 品牌认知者
       grade: 偏好
 - case_id: P106
-  scenario: 外科 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
+  scenario: 外科 -> A类客户 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
   answers:
   - 外科
+  - A
   - 既往拜访过
   - 不清楚
   expected:
@@ -4202,13 +4393,17 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: A类客户
 - case_id: P107
-  scenario: 外科 -> 首次拜访 -> 原始 AI 问询路径
+  scenario: 外科 -> B类客户 -> 首次拜访 -> 原始 AI 问询路径
   answers:
   - 外科
+  - B
   - 首次拜访
   expected:
     route_type: first_visit_followup
     visit_plan_digest:
       department: 外科
       rank: 主任医师
+      level: B类客户
+      level: B类客户

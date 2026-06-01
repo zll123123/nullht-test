@@ -87,6 +87,7 @@ def build_validation_checks(
         build_check("recommended_materials", expected.get("recommended_materials"), get_recommended_materials(visit_plan), MATCH_CONTAINS),
         build_check("digest.department", (expected.get("visit_plan_digest") or {}).get("department"), digest.get("department")),
         build_check("digest.rank", (expected.get("visit_plan_digest") or {}).get("rank"), digest.get("rank")),
+        build_check("digest.level", (expected.get("visit_plan_digest") or {}).get("level"), digest.get("level")),
         build_check("digest.type", (expected.get("visit_plan_digest") or {}).get("type"), digest.get("type")),
         build_check("digest.grade", (expected.get("visit_plan_digest") or {}).get("grade"), digest.get("grade")),
     ]

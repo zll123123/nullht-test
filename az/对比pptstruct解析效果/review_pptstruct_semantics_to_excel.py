@@ -18,6 +18,8 @@
 3. LLM严重程度
 4. LLM判断依据
 5. 人工审核结果
+6. 原文问题
+7. pptstruct问题
 
 执行模式：
 1. all
@@ -61,6 +63,8 @@ LLM_ERROR_TYPE_HEADER = "LLM错误类型"
 LLM_SEVERITY_HEADER = "LLM严重程度"
 LLM_BASIS_HEADER = "LLM判断依据"
 LLM_RESULT_HEADER = "人工审核结果"
+SOURCE_ISSUE_HEADER = "原文问题"
+STRUCT_ISSUE_HEADER = "pptstruct问题"
 
 SENTENCE_SEPARATOR_PATTERN = re.compile(r"[。！？!?；;]+|\n+")
 WHITESPACE_PATTERN = re.compile(r"\s+")
@@ -135,11 +139,6 @@ def collect_struct_texts(value) -> List[str]:
             normalized = normalize_text(text)
             if normalized:
                 texts.append(normalized)
-        summary = value.get("ppt_summary")
-        if isinstance(summary, str):
-            normalized = normalize_text(summary)
-            if normalized:
-                texts.append(normalized)
         for child_key, child_value in value.items():
             if child_key in {"text", "ppt_summary"}:
                 continue
@@ -153,7 +152,7 @@ def collect_struct_texts(value) -> List[str]:
 def build_ppt_struct_text(ppt_struct_obj: Dict[str, object]) -> str:
     ordered_texts: List[str] = []
     seen = set()
-    # 将 pptStruct 中分散的 text / ppt_summary 按遍历顺序拼成可比对文本。
+    # 将 pptStruct 中除 ppt_summary 外的 text 按遍历顺序拼成可比对文本。
     for text in collect_struct_texts(ppt_struct_obj):
         key = compact_text(text)
         if not key or key in seen:
@@ -314,16 +313,22 @@ def review_semantics(source_text: str, ppt_struct_obj: Dict[str, object]) -> Dic
 
 def build_llm_prompt(source_text: str, struct_text: str, compare_summary: str) -> str:
     return """你是一名严格的医学内容审核助手。
-    请基于给定的PPT原文、pptStruct文本和差异摘要，判断问题类型、严重程度和依据。
+    请基于给定的PPT原文、pptStruct文本和差异摘要，判断问题类型、严重程度、依据，并分别指出原文问题和pptStruct问题。
 
 输出要求：
 1. 仅输出JSON，不要输出Markdown代码块。
-2. JSON字段固定为：error_type, severity, basis, result。
-3. error_type 从以下枚举中选一个或多个并用顿号连接：语义遗漏、语义冗余、事实错误、表述偏差、结构错位、无法判断。
-4. severity 只能是：高、中、低。
+2. JSON字段固定为：error_type, severity, basis, result, source_issue, struct_issue。
+3. error_type 只针对“pptStruct问题”进行判断，不评价原文问题；从以下枚举中选一个或多个并用顿号连接：语义遗漏、语义冗余、事实错误、表述偏差、结构错位、无、无法判断。
+4. severity 只针对“pptStruct问题”的严重程度进行判断，只能是：高、中、低。
 5. 如果审核通过或未发现明显问题，basis 必须返回空字符串。
 6. 只有判断存在不一致或风险时，basis 才填写中文简洁说明判断依据。
 7. result 用中文总结审核意见。
+8. source_issue 只填写“原文存在的问题”，没有则填“无”。
+9. struct_issue 只填写“pptStruct存在的问题”，没有则填“无”。
+10. 如果 struct_issue = 无，那么 error_type 必须是“无”，severity 必须是“低”。
+11. 如果只有原文问题、而 pptStruct 没有问题，那么 error_type 仍然填“无”，severity 仍然填“低”。
+12. “提取重复”只在“同一个字段内同一内容重复出现多次”时成立；如果同一内容出现在不同字段中（例如正文字段和声明字段各出现一次），不算提取重复。
+13. ppt_summary 是对整页 PPT 的总结，可以简单检查 summary 是否合理，但 summary 本身不参与正文对比，也不要因为 summary 和正文字段重复就判定提取重复。
 
 PPT原文：
 {source_text}
@@ -344,11 +349,20 @@ def normalize_llm_json(content: str) -> Dict[str, str]:
         if normalized.startswith("json"):
             normalized = normalized[4:].strip()
     parsed = json.loads(normalized)
+    source_issue = str(parsed.get("source_issue") or "无")
+    struct_issue = str(parsed.get("struct_issue") or "无")
+    error_type = str(parsed.get("error_type") or "无法判断")
+    severity = str(parsed.get("severity") or "无法判断")
+    if struct_issue == "无":
+        error_type = "无"
+        severity = "低"
     return {
-        "error_type": str(parsed.get("error_type") or "无法判断"),
-        "severity": str(parsed.get("severity") or "无法判断"),
+        "error_type": error_type,
+        "severity": severity,
         "basis": str(parsed.get("basis") or ""),
         "result": str(parsed.get("result") or ""),
+        "source_issue": source_issue,
+        "struct_issue": struct_issue,
     }
 
 
@@ -359,6 +373,8 @@ def call_llm_review(source_text: str, struct_text: str, compare_summary: str) ->
             "severity": "无法判断",
             "basis": "请先在代码中配置 DEFAULT_LLM_API_KEY",
             "result": "未执行LLM审核",
+            "source_issue": "无",
+            "struct_issue": "无",
         }
     payload = {
         "model": DEFAULT_LLM_MODEL,
@@ -408,6 +424,8 @@ def run_llm_compare(source_text: str, struct_text: str, diff_text: str) -> Dict[
             "severity": "低",
             "basis": "",
             "result": "未发现明显问题",
+            "source_issue": "无",
+            "struct_issue": "无",
         }
     return call_llm_review(source_text, struct_text, diff_text)
 
@@ -436,11 +454,15 @@ def main() -> int:
     llm_severity_column = ensure_output_column(sheet, header_map, LLM_SEVERITY_HEADER, max(sheet.max_column + 1, llm_error_type_column + 1))
     llm_basis_column = ensure_output_column(sheet, header_map, LLM_BASIS_HEADER, max(sheet.max_column + 1, llm_severity_column + 1))
     llm_result_column = ensure_output_column(sheet, header_map, LLM_RESULT_HEADER, max(sheet.max_column + 1, llm_basis_column + 1))
+    source_issue_column = ensure_output_column(sheet, header_map, SOURCE_ISSUE_HEADER, max(sheet.max_column + 1, llm_result_column + 1))
+    struct_issue_column = ensure_output_column(sheet, header_map, STRUCT_ISSUE_HEADER, max(sheet.max_column + 1, source_issue_column + 1))
     sheet.column_dimensions[get_column_letter(diff_column)].width = 80
     sheet.column_dimensions[get_column_letter(llm_error_type_column)].width = 20
     sheet.column_dimensions[get_column_letter(llm_severity_column)].width = 12
     sheet.column_dimensions[get_column_letter(llm_basis_column)].width = 60
     sheet.column_dimensions[get_column_letter(llm_result_column)].width = 40
+    sheet.column_dimensions[get_column_letter(source_issue_column)].width = 40
+    sheet.column_dimensions[get_column_letter(struct_issue_column)].width = 40
     processed_rows = 0
 
     for row_index in range(2, sheet.max_row + 1):
@@ -462,6 +484,8 @@ def main() -> int:
                 sheet.cell(row_index, llm_severity_column).value = "无法判断"
                 sheet.cell(row_index, llm_basis_column).value = "pptStruct 解析失败: {}".format(exc)
                 sheet.cell(row_index, llm_result_column).value = "未执行LLM审核"
+                sheet.cell(row_index, source_issue_column).value = "无"
+                sheet.cell(row_index, struct_issue_column).value = "pptStruct 解析失败: {}".format(exc)
             processed_rows += 1
             save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size)
             continue
@@ -474,6 +498,8 @@ def main() -> int:
                 "severity": "无法判断",
                 "basis": "PPT 原文为空，无法对比",
                 "result": "未执行LLM审核",
+                "source_issue": "PPT 原文为空，无法对比",
+                "struct_issue": "无",
             }
             if args.mode in {"all", "diff"}:
                 sheet.cell(row_index, diff_column).value = diff_text
@@ -482,6 +508,8 @@ def main() -> int:
                 sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
                 sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
                 sheet.cell(row_index, llm_result_column).value = llm_result["result"]
+                sheet.cell(row_index, source_issue_column).value = llm_result["source_issue"]
+                sheet.cell(row_index, struct_issue_column).value = llm_result["struct_issue"]
             processed_rows += 1
             save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size)
             continue
@@ -504,11 +532,15 @@ def main() -> int:
                         "severity": "无法判断",
                         "basis": "确定性对比失败: {}".format(exc),
                         "result": "未执行LLM审核",
+                        "source_issue": "无",
+                        "struct_issue": "无",
                     }
                     sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
                     sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
                     sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
                     sheet.cell(row_index, llm_result_column).value = llm_result["result"]
+                    sheet.cell(row_index, source_issue_column).value = llm_result["source_issue"]
+                    sheet.cell(row_index, struct_issue_column).value = llm_result["struct_issue"]
                 processed_rows += 1
                 save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size)
                 continue
@@ -520,6 +552,8 @@ def main() -> int:
                     "severity": "无法判断",
                     "basis": "diff 为空，请先运行 diff 模式",
                     "result": "未执行LLM审核",
+                    "source_issue": "无",
+                    "struct_issue": "无",
                 }
             else:
                 try:
@@ -530,12 +564,16 @@ def main() -> int:
                         "severity": "无法判断",
                         "basis": "LLM 调用失败: {}".format(exc),
                         "result": "未执行LLM审核",
+                        "source_issue": "无",
+                        "struct_issue": "无",
                     }
 
             sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
             sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
             sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
             sheet.cell(row_index, llm_result_column).value = llm_result["result"]
+            sheet.cell(row_index, source_issue_column).value = llm_result["source_issue"]
+            sheet.cell(row_index, struct_issue_column).value = llm_result["struct_issue"]
         processed_rows += 1
         save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size)
 
