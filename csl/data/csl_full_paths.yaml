@@ -6,6 +6,9 @@ smoke_case_ids:
 - P061
 - P084
 - P048
+- P077
+- P106
+- P107
 cases:
 - case_id: P001
   scenario: ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
@@ -4382,10 +4385,10 @@ cases:
       type: 品牌认知者
       grade: 偏好
 - case_id: P106
-  scenario: 外科 -> A类客户 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
+  scenario: 外科 -> 未分级 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
   answers:
   - 外科
-  - A
+  - E
   - 既往拜访过
   - 不清楚
   expected:
@@ -4393,17 +4396,16 @@ cases:
     visit_plan_digest:
       department: 外科
       rank: 主任医师
-      level: A类客户
+      level: 未分级
 - case_id: P107
-  scenario: 外科 -> B类客户 -> 首次拜访 -> 原始 AI 问询路径
+  scenario: 外科 -> 未分级 -> 首次拜访 -> 原始 AI 问询路径
   answers:
   - 外科
-  - B
+  - E
   - 首次拜访
   expected:
     route_type: first_visit_followup
     visit_plan_digest:
       department: 外科
       rank: 主任医师
-      level: B类客户
-      level: B类客户
+      level: 未分级
