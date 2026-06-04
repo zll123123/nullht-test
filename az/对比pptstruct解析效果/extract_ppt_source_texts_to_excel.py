@@ -11,11 +11,6 @@ from loguru import logger
 from openpyxl import Workbook
 from pptx import Presentation
 
-   """提取ppt原文结果到本地
-
-   
-    """
-
 
 DEFAULT_PPT_DIR = Path("/Users/layla.zhang/测试用例/测试材料/az/验证case/")
 DEFAULT_OUTPUT_PATH = Path(__file__).resolve().with_name("ppt原文抽取结果.xlsx")
@@ -53,6 +48,45 @@ def normalize_text(text: str) -> str:
     text = text.replace("\r\n", "\n").replace("\r", "\n")
     lines = [" ".join(line.split()).strip() for line in text.splitlines()]
     return "\n".join(line for line in lines if line)
+
+
+def compact_text(text: str) -> str:
+    """压缩文本用于去重比对。
+
+    Args:
+        text: 原始文本。
+
+    Returns:
+        str: 去除空白和常见符号后的文本。
+    """
+    return "".join(char for char in text.lower() if char.isalnum() or "\u4e00" <= char <= "\u9fff")
+
+
+def merge_text_blocks(texts: List[str]) -> str:
+    """合并多来源文本并做块级去重。
+
+    Args:
+        texts: 多来源文本列表。
+
+    Returns:
+        str: 去重合并后的文本。
+    """
+    merged: List[str] = []
+    seen = set()
+    for raw_text in texts:
+        normalized = normalize_text(raw_text)
+        if not normalized:
+            continue
+        for block in normalized.split("\n"):
+            block_text = normalize_text(block)
+            if not block_text:
+                continue
+            key = compact_text(block_text)
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            merged.append(block_text)
+    return "\n".join(merged)
 
 
 def list_ppt_files(ppt_dir: Path) -> List[Path]:
@@ -299,7 +333,7 @@ def extract_slide_text_by_ocr(
     texts = [extract_pdf_page_text(pdf_path, page_number)]
     image_path = render_pdf_page_to_png(pdf_path, page_number, work_dir)
     texts.append(ocr_image_text(image_path))
-    return normalize_text("\n".join(text for text in texts if text.strip()))
+    return merge_text_blocks(texts)
 
 
 def collect_shape_texts(shape) -> List[str]:
@@ -365,12 +399,18 @@ def extract_slide_source_text(
     for shape in slide.shapes:
         texts.extend(collect_shape_texts(shape))
 
-    source_text = normalize_text("\n".join(texts))
-    if source_text:
-        return source_text, "shape"
+    shape_text = merge_text_blocks(texts)
+    ocr_text = extract_slide_text_by_ocr(presentation_path, page_number, work_dir, pdf_cache)
+    merged_text = merge_text_blocks([shape_text, ocr_text])
+    if merged_text:
+        if shape_text and ocr_text:
+            return merged_text, "shape+ocr"
+        if shape_text:
+            return merged_text, "shape"
+        return merged_text, "ocr"
 
-    logger.info("page text is empty, fallback to OCR: file={} page={}", ppt_path.name, page_number)
-    return extract_slide_text_by_ocr(presentation_path, page_number, work_dir, pdf_cache), "ocr"
+    logger.info("page text is empty after shape+ocr merge: file={} page={}", ppt_path.name, page_number)
+    return "", "empty"
 
 
 def get_total_pages(

@@ -39,7 +39,7 @@ DEFAULT_LIST_PATH = "/api/audit/management/list"
 DEFAULT_DETAIL_PATH = "/api/audit/management/detail"
 DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("ppt原文抽取结果_获取pptstruct对比.xlsx")
 DEFAULT_LOG_PATH = Path(__file__).resolve().with_name("fill_audit_excel_from_api.log")
-DEFAULT_BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIyZmY5ZjY0ZmYwYmZmY2I0MzhkNmQ0MWViZDA4ZTQ5MyIsImRldmljZVR5cGUiOiJERUYiLCJlZmYiOjE3ODAwMzY0MzI2MjYsInJuU3RyIjoiMHhOdzJWaWE0VnpGYUZ1d1FoRjZ2NzFJcFVBRGp3U24ifQ.3kEteSN85ZztSIYj2UcnOgzWOFpHNq9jM-m51aG3zxM"
+DEFAULT_BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIyZmY5ZjY0ZmYwYmZmY2I0MzhkNmQ0MWViZDA4ZTQ5MyIsImRldmljZVR5cGUiOiJERUYiLCJlZmYiOjE3ODA0ODk0OTMzMzcsInJuU3RyIjoieWUyejI0a1laU0dpTUNkaGZ0SGFqNU5SaDNFWlVkU0sifQ.1z-N7ll1RYoB2SuUbwGI09_t-MBitUBcrX6nNN3GADE"
 DEFAULT_COOKIE = ""
 TIMEOUT_SECONDS = 60
 

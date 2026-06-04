@@ -114,7 +114,7 @@ def list_log_files(log_source: Path):
     if resolved.is_file():
         return [resolved]
     if resolved.is_dir():
-        return sorted(path for path in resolved.iterdir() if path.is_file() and path.name.startswith("product-audit-case-preprocessing") and path.suffix == ".log")
+        return sorted(path for path in resolved.iterdir() if path.is_file() and path.name.startswith("my-pod") and path.suffix == ".log")
     raise FileNotFoundError(f"日志路径不存在: {resolved}")
 
 
