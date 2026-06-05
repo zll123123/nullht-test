@@ -28,7 +28,7 @@
    - 只跑确定性 diff
 3. llm
    - 只跑 LLM
-   - 依赖表中已存在 diff
+   - 直接基于 `ppt原文` 与 `日志中的pptstruct` 判断
 """
 
 import argparse
@@ -311,17 +311,26 @@ def review_semantics(source_text: str, ppt_struct_obj: Dict[str, object]) -> Dic
     }
 
 
-def build_llm_prompt(source_text: str, struct_text: str, compare_summary: str) -> str:
+def build_llm_prompt(source_text: str, struct_text: str) -> str:
     return """你是一名严格的医学内容审核助手。
-    请基于给定的PPT原文、pptStruct文本和差异摘要，判断问题类型、严重程度、依据，并分别指出原文问题和pptStruct问题。
+请基于给定的PPT原文和pptStruct文本，重点检查以下医学关键信息是否在pptStruct中正确呈现，不得有任何错误：
+1. 临床与研究核心数据：研究对象(PICO)、样本量、分组/盲法；注册号(NCT)、方案版本/日期、伦理批件号；年龄/性别/种族、基线评分(如NIHSS、TNM)、关键体征/合并症；主要/次要终点(如OS、PFS)；置信区间、P值、HR/RR等统计结果；所有不良事件(AE/SAE)及其归因、严重程度、处理措施；专有名词(药品/器械名)拼写、缩写；数值单位(如mmol/L误为mol/L)。
+2. 背景与合规信息：仅检查pptStruct是否正确提取了原文中的以下内容——作者/机构、参考文献完整出处、利益冲突声明、超说明书用药等。
+3. 逻辑与结论：核心结论(Take-home message)是否准确；叙述逻辑是否一致；关键支撑数据是否被误删或扭曲。
+
+特别说明：
+- pptStruct中的`image_elements.description`字段是对图表的描述性内容，属于模型对图表的理解生成，**不需要判断其是否在原文中存在**。审核时忽略该字段与原文的匹配性检查，不将其作为遗漏或冗余的依据。
+- **不判断结构错位问题**（例如段落顺序、标题层级等结构相关错误），仅关注内容层面的语义、事实、表述等问题。
+
+判断问题类型、严重程度、依据，并分别指出原文问题和pptStruct问题。
 
 输出要求：
 1. 仅输出JSON，不要输出Markdown代码块。
 2. JSON字段固定为：error_type, severity, basis, result, source_issue, struct_issue。
-3. error_type 只针对“pptStruct问题”进行判断，不评价原文问题；从以下枚举中选一个或多个并用顿号连接：语义遗漏、语义冗余、事实错误、表述偏差、结构错位、无、无法判断。
-4. severity 只针对“pptStruct问题”的严重程度进行判断，只能是：高、中、低。
+3. error_type 只针对“pptStruct问题”进行判断，不评价原文问题；从以下枚举中选一个或多个并用顿号连接：语义遗漏、语义冗余、事实错误、表述偏差、无、无法判断。（注意：不包含“结构错位”）
+4. severity 只针对“pptStruct问题”的严重程度进行判断，只能是：高、中、低。（医学关键信息错误/遗漏 -> 高；非关键但影响理解 -> 中；轻微不影响医学判断 -> 低）
 5. 如果审核通过或未发现明显问题，basis 必须返回空字符串。
-6. 只有判断存在不一致或风险时，basis 才填写中文简洁说明判断依据。
+6. 只有判断存在不一致或风险时，basis 才填写中文简洁说明判断依据（例如：遗漏了主要终点OS值、单位错误）。
 7. result 用中文总结审核意见。
 8. source_issue 只填写“原文存在的问题”，没有则填“无”。
 9. struct_issue 只填写“pptStruct存在的问题”，没有则填“无”。
@@ -335,10 +344,7 @@ PPT原文：
 
 pptStruct文本：
 {struct_text}
-
-对比差异：
-{compare_summary}
-""".format(source_text=source_text, struct_text=struct_text, compare_summary=compare_summary)
+""".format(source_text=source_text, struct_text=struct_text)
 
 
 def normalize_llm_json(content: str) -> Dict[str, str]:
@@ -366,7 +372,7 @@ def normalize_llm_json(content: str) -> Dict[str, str]:
     }
 
 
-def call_llm_review(source_text: str, struct_text: str, compare_summary: str) -> Dict[str, str]:
+def call_llm_review(source_text: str, struct_text: str) -> Dict[str, str]:
     if not DEFAULT_LLM_API_KEY or "请在这里填写实际LLM_API_KEY" in DEFAULT_LLM_API_KEY:
         return {
             "error_type": "LLM未配置",
@@ -381,7 +387,7 @@ def call_llm_review(source_text: str, struct_text: str, compare_summary: str) ->
         "temperature": 0.1,
         "messages": [
             {"role": "system", "content": "你只返回JSON。"},
-            {"role": "user", "content": build_llm_prompt(source_text, struct_text, compare_summary)},
+            {"role": "user", "content": build_llm_prompt(source_text, struct_text)},
         ],
     }
     last_error: Optional[Exception] = None
@@ -417,17 +423,8 @@ def run_deterministic_compare(source_text: str, ppt_struct_obj: Dict[str, object
     return review_semantics(source_text, ppt_struct_obj)
 
 
-def run_llm_compare(source_text: str, struct_text: str, diff_text: str) -> Dict[str, str]:
-    if not diff_text:
-        return {
-            "error_type": "无",
-            "severity": "低",
-            "basis": "",
-            "result": "未发现明显问题",
-            "source_issue": "无",
-            "struct_issue": "无",
-        }
-    return call_llm_review(source_text, struct_text, diff_text)
+def run_llm_compare(source_text: str, struct_text: str) -> Dict[str, str]:
+    return call_llm_review(source_text, struct_text)
 
 
 def save_if_needed(workbook, excel_path: Path, processed_rows: int, batch_size: int) -> None:
@@ -445,10 +442,10 @@ def main() -> int:
     workbook = load_workbook(excel_path)
     sheet = workbook[args.sheet_name] if args.sheet_name else workbook.active
     header_map = find_header_columns(sheet)
-    required_headers = [FILE_NAME_HEADER, PAGE_NUMBER_HEADER, PPT_STRUCT_HEADER, PPT_SOURCE_HEADER]
-    if args.mode == "llm":
-        required_headers.append(DIFF_HEADER)
-    required_input_columns = require_columns(header_map, required_headers)
+    required_input_columns = require_columns(
+        header_map,
+        [FILE_NAME_HEADER, PAGE_NUMBER_HEADER, PPT_STRUCT_HEADER, PPT_SOURCE_HEADER],
+    )
     diff_column = ensure_output_column(sheet, header_map, DIFF_HEADER, sheet.max_column + 1)
     llm_error_type_column = ensure_output_column(sheet, header_map, LLM_ERROR_TYPE_HEADER, max(sheet.max_column + 1, diff_column + 1))
     llm_severity_column = ensure_output_column(sheet, header_map, LLM_SEVERITY_HEADER, max(sheet.max_column + 1, llm_error_type_column + 1))
@@ -546,27 +543,17 @@ def main() -> int:
                 continue
 
         if args.mode in {"all", "llm"}:
-            if not diff_text:
+            try:
+                llm_result = run_llm_compare(source_text, struct_text)
+            except Exception as exc:
                 llm_result = {
                     "error_type": "无法判断",
                     "severity": "无法判断",
-                    "basis": "diff 为空，请先运行 diff 模式",
+                    "basis": "LLM 调用失败: {}".format(exc),
                     "result": "未执行LLM审核",
                     "source_issue": "无",
                     "struct_issue": "无",
                 }
-            else:
-                try:
-                    llm_result = run_llm_compare(source_text, struct_text, diff_text)
-                except Exception as exc:
-                    llm_result = {
-                        "error_type": "无法判断",
-                        "severity": "无法判断",
-                        "basis": "LLM 调用失败: {}".format(exc),
-                        "result": "未执行LLM审核",
-                        "source_issue": "无",
-                        "struct_issue": "无",
-                    }
 
             sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
             sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]

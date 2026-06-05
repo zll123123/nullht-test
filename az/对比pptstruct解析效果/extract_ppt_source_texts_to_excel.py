@@ -8,13 +8,20 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from loguru import logger
-from openpyxl import Workbook
+from openpyxl import load_workbook
 from pptx import Presentation
 
 
-DEFAULT_PPT_DIR = Path("/Users/layla.zhang/测试用例/测试材料/az/验证case/")
-DEFAULT_OUTPUT_PATH = Path(__file__).resolve().with_name("ppt原文抽取结果.xlsx")
+DEFAULT_PPT_DIR = Path("/Users/layla.zhang/测试用例/测试材料/az/ppt解析验证case")
+DEFAULT_OUTPUT_PATH = Path(__file__).resolve().with_name("ppt原文抽取结果_获取pptstruct对比.xlsx")
 DEFAULT_LOG_PATH = Path(__file__).resolve().with_name("export_ppt_source_texts_to_excel.log")
+
+FILE_NAME_HEADER = "文件名称"
+TOTAL_PAGES_HEADER = "总页数"
+PAGE_NUMBER_HEADER = "页码"
+EXTRACT_MODE_HEADER = "提取方式"
+SOURCE_TEXT_HEADER = "ppt原文"
+ERROR_HEADER = "提取原文错误信息"
 
 
 def parse_args() -> argparse.Namespace:
@@ -26,6 +33,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="提取目录下 PPT/PPTX 每一页的原文并写入 Excel。")
     parser.add_argument("--ppt-dir", default=str(DEFAULT_PPT_DIR), help="待提取的 PPT 目录")
     parser.add_argument("--output-path", default=str(DEFAULT_OUTPUT_PATH), help="输出 Excel 路径")
+    parser.add_argument(
+        "--save-batch-size",
+        type=int,
+        default=10,
+        help="每处理多少行保存一次 Excel，默认 20",
+    )
     return parser.parse_args()
 
 
@@ -90,7 +103,7 @@ def merge_text_blocks(texts: List[str]) -> str:
 
 
 def list_ppt_files(ppt_dir: Path) -> List[Path]:
-    """列出目录下所有 PPT/PPTX 文件。
+    """列出目录或单文件输入下的 PPT/PPTX 文件。
 
     Args:
         ppt_dir: PPT 根目录。
@@ -98,6 +111,8 @@ def list_ppt_files(ppt_dir: Path) -> List[Path]:
     Returns:
         List[Path]: 文件列表。
     """
+    if ppt_dir.is_file() and ppt_dir.suffix.lower() in {".ppt", ".pptx"}:
+        return [ppt_dir]
     files: List[Path] = []
     for path in sorted(ppt_dir.rglob("*")):
         if path.is_file() and path.suffix.lower() in {".ppt", ".pptx"}:
@@ -438,25 +453,59 @@ def get_total_pages(
     return len(presentation.slides)
 
 
-def build_workbook() -> Workbook:
-    """构建输出工作簿。
-
-    Returns:
-        Workbook: 已初始化表头的工作簿。
-    """
-    workbook = Workbook()
-    sheet = workbook.active
-    sheet.title = "ppt原文"
-    headers = ["文件名称", "文件路径", "总页数", "页码", "提取方式", "ppt原文", "错误信息"]
-    for index, header in enumerate(headers, start=1):
-        sheet.cell(1, index).value = header
-    return workbook
+def normalize_header(value) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
 
 
-def append_row(
+def find_required_columns(sheet) -> Dict[str, int]:
+    header_map: Dict[str, int] = {}
+    for column_index in range(1, sheet.max_column + 1):
+        header_map[normalize_header(sheet.cell(1, column_index).value)] = column_index
+
+    required = {
+        "file_name": FILE_NAME_HEADER,
+        "total_pages": TOTAL_PAGES_HEADER,
+        "page_number": PAGE_NUMBER_HEADER,
+        "extract_mode": EXTRACT_MODE_HEADER,
+        "source_text": SOURCE_TEXT_HEADER,
+        "error": ERROR_HEADER,
+    }
+    result: Dict[str, int] = {}
+    for key, header in required.items():
+        column_index = header_map.get(header)
+        if not column_index:
+            raise RuntimeError("Excel 缺少表头: {}".format(header))
+        result[key] = column_index
+    return result
+
+
+def normalize_page_number(value) -> Optional[int]:
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float) and value.is_integer():
+        return int(value)
+    if isinstance(value, str) and value.strip().isdigit():
+        return int(value.strip())
+    return None
+
+
+def build_row_index(sheet, column_map: Dict[str, int]) -> Dict[Tuple[str, int], List[int]]:
+    index: Dict[Tuple[str, int], List[int]] = {}
+    for row_index in range(2, sheet.max_row + 1):
+        file_name = sheet.cell(row_index, column_map["file_name"]).value
+        page_number = normalize_page_number(sheet.cell(row_index, column_map["page_number"]).value)
+        if not file_name or page_number is None:
+            continue
+        index.setdefault((str(file_name).strip(), page_number), []).append(row_index)
+    return index
+
+
+def write_row(
     sheet,
+    column_map: Dict[str, int],
     row_index: int,
-    file_path: Path,
     total_pages: int,
     page_number: int,
     extract_mode: str,
@@ -467,21 +516,33 @@ def append_row(
 
     Args:
         sheet: 工作表。
+        column_map: 列映射。
         row_index: 行号。
-        file_path: 文件路径。
         total_pages: 总页数。
         page_number: 当前页码。
         extract_mode: 提取方式。
         source_text: 原文内容。
         error_message: 错误信息。
     """
-    sheet.cell(row_index, 1).value = file_path.name
-    sheet.cell(row_index, 2).value = str(file_path)
-    sheet.cell(row_index, 3).value = total_pages
-    sheet.cell(row_index, 4).value = page_number
-    sheet.cell(row_index, 5).value = extract_mode
-    sheet.cell(row_index, 6).value = source_text
-    sheet.cell(row_index, 7).value = error_message
+    sheet.cell(row_index, column_map["total_pages"]).value = total_pages
+    sheet.cell(row_index, column_map["page_number"]).value = page_number
+    sheet.cell(row_index, column_map["extract_mode"]).value = extract_mode
+    sheet.cell(row_index, column_map["source_text"]).value = source_text
+    sheet.cell(row_index, column_map["error"]).value = error_message
+
+
+def save_if_needed(workbook, output_path: Path, updated_rows: int, batch_size: int) -> None:
+    """按批次保存 Excel。
+
+    Args:
+        workbook: 工作簿对象。
+        output_path: 输出路径。
+        updated_rows: 当前已写入行数。
+        batch_size: 批次大小。
+    """
+    if updated_rows > 0 and updated_rows % batch_size == 0:
+        workbook.save(output_path)
+        logger.info("批量保存完成: updated_rows={} output={}", updated_rows, output_path)
 
 
 def main() -> int:
@@ -492,15 +553,19 @@ def main() -> int:
     """
     args = parse_args()
     setup_logging()
+    if args.save_batch_size <= 0:
+        raise RuntimeError("--save-batch-size 必须大于 0")
     ppt_dir = Path(args.ppt_dir).expanduser().resolve()
     output_path = Path(args.output_path).expanduser().resolve()
     if not ppt_dir.exists():
         raise RuntimeError("PPT 目录不存在: {}".format(ppt_dir))
 
     files = list_ppt_files(ppt_dir)
-    workbook = build_workbook()
+    workbook = load_workbook(output_path)
     sheet = workbook.active
-    row_index = 2
+    column_map = find_required_columns(sheet)
+    row_index_map = build_row_index(sheet, column_map)
+    updated_rows = 0
 
     with tempfile.TemporaryDirectory(prefix="ppt-source-export-") as temp_dir:
         temp_root = Path(temp_dir)
@@ -513,11 +578,13 @@ def main() -> int:
             try:
                 total_pages = get_total_pages(file_path, temp_root, converted_cache, presentation_cache)
             except Exception as exc:
-                append_row(sheet, row_index, file_path, 0, 0, "failed", "", str(exc))
-                row_index += 1
+                logger.info("skip file due to page count error: file={} error={}", file_path.name, exc)
                 continue
 
             for page_number in range(1, total_pages + 1):
+                target_rows = row_index_map.get((file_path.name, page_number), [])
+                if not target_rows:
+                    continue
                 try:
                     source_text, extract_mode = extract_slide_source_text(
                         file_path,
@@ -527,15 +594,20 @@ def main() -> int:
                         pdf_cache,
                         presentation_cache,
                     )
-                    append_row(sheet, row_index, file_path, total_pages, page_number, extract_mode, source_text, "")
+                    for target_row in target_rows:
+                        write_row(sheet, column_map, target_row, total_pages, page_number, extract_mode, source_text, "")
+                        updated_rows += 1
+                        save_if_needed(workbook, output_path, updated_rows, args.save_batch_size)
                 except Exception as exc:
-                    append_row(sheet, row_index, file_path, total_pages, page_number, "failed", "", str(exc))
-                row_index += 1
+                    for target_row in target_rows:
+                        write_row(sheet, column_map, target_row, total_pages, page_number, "failed", "", str(exc))
+                        updated_rows += 1
+                        save_if_needed(workbook, output_path, updated_rows, args.save_batch_size)
 
     workbook.save(output_path)
     logger.info("Excel 已更新: {}", output_path)
     logger.info("文件数: {}", len(files))
-    logger.info("写入记录数: {}", row_index - 2)
+    logger.info("写入记录数: {}", updated_rows)
     return 0
 
 
