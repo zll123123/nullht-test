@@ -11,6 +11,7 @@
    - 每页的 `审核点错误摘要`
 4. 按 `文件名称 + 页码` 回填到 Excel 的现有行中。
 5. 同名文件的所有行会统一写入相同的 `taskid` 和 `detailId`。
+6. 如果当前 Excel 已删除 `报错审核点` / `审核点错误摘要` 列，则脚本只回填 `taskid` 和 `detailId`。
 
 当前执行模式：
 1. 默认模式：处理 active sheet。
@@ -170,8 +171,6 @@ def find_required_columns(sheet) -> Dict[str, int]:
         "task_id": TASK_ID_HEADER,
         "detail_id": DETAIL_ID_HEADER,
         "page_number": PAGE_NUMBER_HEADER,
-        "point_name": POINT_NAME_HEADER,
-        "reason": REASON_HEADER,
     }
     columns: Dict[str, int] = {}
     for key, header in required_headers.items():
@@ -179,6 +178,8 @@ def find_required_columns(sheet) -> Dict[str, int]:
         if not column_index:
             raise AssertionError(f"Excel 缺少表头: {header}")
         columns[key] = column_index
+    columns["point_name"] = header_map.get(POINT_NAME_HEADER, 0)
+    columns["reason"] = header_map.get(REASON_HEADER, 0)
     return columns
 
 
@@ -428,8 +429,10 @@ def write_row(sheet, row_index: int, column_map: Dict[str, int], task_id: str, d
     """
     sheet.cell(row_index, column_map["task_id"]).value = task_id
     sheet.cell(row_index, column_map["detail_id"]).value = detail_id
-    sheet.cell(row_index, column_map["point_name"]).value = point_name
-    sheet.cell(row_index, column_map["reason"]).value = reason
+    if column_map.get("point_name"):
+        sheet.cell(row_index, column_map["point_name"]).value = point_name
+    if column_map.get("reason"):
+        sheet.cell(row_index, column_map["reason"]).value = reason
 
 
 def run_fill_audit_excel_from_api() -> None:

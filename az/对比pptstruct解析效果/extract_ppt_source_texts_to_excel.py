@@ -470,7 +470,6 @@ def find_required_columns(sheet) -> Dict[str, int]:
         "page_number": PAGE_NUMBER_HEADER,
         "extract_mode": EXTRACT_MODE_HEADER,
         "source_text": SOURCE_TEXT_HEADER,
-        "error": ERROR_HEADER,
     }
     result: Dict[str, int] = {}
     for key, header in required.items():
@@ -478,6 +477,7 @@ def find_required_columns(sheet) -> Dict[str, int]:
         if not column_index:
             raise RuntimeError("Excel 缺少表头: {}".format(header))
         result[key] = column_index
+    result["error"] = header_map.get(ERROR_HEADER, 0)
     return result
 
 
@@ -528,7 +528,8 @@ def write_row(
     sheet.cell(row_index, column_map["page_number"]).value = page_number
     sheet.cell(row_index, column_map["extract_mode"]).value = extract_mode
     sheet.cell(row_index, column_map["source_text"]).value = source_text
-    sheet.cell(row_index, column_map["error"]).value = error_message
+    if column_map.get("error"):
+        sheet.cell(row_index, column_map["error"]).value = error_message
 
 
 def save_if_needed(workbook, output_path: Path, updated_rows: int, batch_size: int) -> None:
