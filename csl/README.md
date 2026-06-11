@@ -85,6 +85,12 @@
 - F3：输入无效关注点，回退到固定关注点路径
 - 若开启 LLM，会优先用 LLM 做固定关注点选项匹配
 
+### LLM 对话评估
+- 对话评估 prompt 放在 [prompts/evaluations/conversation_evaluation_prompt.md](/Users/layla.zhang/workspace/nullht-test/csl/prompts/evaluations/conversation_evaluation_prompt.md)
+- 在 [config/llm_config.yaml](/Users/layla.zhang/workspace/nullht-test/csl/config/llm_config.yaml) 中将 `conversation_evaluation_enabled` 改为 `true` 后启用
+- 当前支持注入变量：`{{case_id}}`、`{{scenario}}`、`{{session_id}}`、`{{conversation}}`、`{{final_data}}`
+- 评估结果会写入 JSON、Markdown 和 Qase Report 的 `conversation_evaluation` 字段
+
 ### 异步轮询
 - 每条对话完成后先记录 `session_id`
 - 运行服务继续发起后续对话，不阻塞等待当前拜访计划生成
@@ -147,13 +153,13 @@ python3 run_csl_full_paths.py --smoke
 - ICU `＜50%` 品牌认知者路径
 - 医院管理层/药剂科路径
 - 肝病路径
-- 外科梯度未收集路径
+- 心脏外科梯度未收集路径
 - 原始 AI 问询路径
 
 ### 按科室执行
 ```bash
 python3 run_csl_full_paths.py --dept ICU
-python3 run_csl_full_paths.py --dept 外科
+python3 run_csl_full_paths.py --dept 心脏外科
 python3 run_csl_full_paths.py --dept 肝病
 python3 run_csl_full_paths.py --dept 医院管理层/药剂科
 ```

@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT_DIR / "config"
+PROMPTS_DIR = ROOT_DIR / "prompts"
 CONFIG_FILE = CONFIG_DIR / "config.yaml"
 LLM_CONFIG_FILE = CONFIG_DIR / "llm_config.yaml"
 DATA_FILE = ROOT_DIR / "data" / "csl_full_paths.yaml"

@@ -1,4 +1,4 @@
-"""对话执行服务。"""
+"""对话执行服务，负责按 case 回答问题、停止会话并触发对话评估。"""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ from clients.chat_client import (
 from config.app_config import AppConfig
 from models.case_model import CaseConfig, FocusDecision
 from models.result_model import CaseExecutionResult, ConversationExecutionResult, ConversationStep
+from services.conversation_evaluation_service import evaluate_conversation_by_llm
 from services.focus_service import choose_fallback_answer, choose_focus_answer, is_focus_question
 from utils.api_timing import ApiCallCollector
 
@@ -94,6 +95,15 @@ def run_conversation_steps(
             stop_data = stop_conversation(session, config, session_id, api_collector=api_collector)
         except Exception as exc:
             stop_error = str(exc)
+    conversation_evaluation = evaluate_conversation_by_llm(
+        config=config,
+        case_id=case.case_id,
+        scenario=case.scenario,
+        session_id=session_id,
+        steps=steps,
+        final_data=final_data,
+        api_collector=api_collector,
+    )
     return ConversationExecutionResult(
         session_id=session_id,
         steps=steps,
@@ -104,6 +114,7 @@ def run_conversation_steps(
         stop_called_step_index=stop_called_step_index,
         focus_decisions=focus_decisions,
         api_call_records=api_collector.records,
+        conversation_evaluation=conversation_evaluation,
     )
 
 def build_pending_case_result(
@@ -150,4 +161,5 @@ def build_pending_case_result(
         validation=None,
         status="PENDING_PLAN",
         api_call_records=conversation_result.api_call_records,
+        conversation_evaluation=conversation_result.conversation_evaluation,
     )

@@ -27,6 +27,7 @@
 import argparse
 import json
 import sys
+import certifi
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -35,12 +36,17 @@ from loguru import logger
 from openpyxl import load_workbook
 
 
+print("Python:", sys.executable)
+print("Requests:", requests.__version__)
+print("Certifi:", certifi.where())
+
+
 DEFAULT_BASE_URL = "https://dev-az-ai-mlr-api.nullht.com"
 DEFAULT_LIST_PATH = "/api/audit/management/list"
 DEFAULT_DETAIL_PATH = "/api/audit/management/detail"
 DEFAULT_EXCEL_PATH = Path(__file__).resolve().with_name("ppt原文抽取结果_获取pptstruct对比.xlsx")
 DEFAULT_LOG_PATH = Path(__file__).resolve().with_name("fill_audit_excel_from_api.log")
-DEFAULT_BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIyZmY5ZjY0ZmYwYmZmY2I0MzhkNmQ0MWViZDA4ZTQ5MyIsImRldmljZVR5cGUiOiJERUYiLCJlZmYiOjE3ODA0ODk0OTMzMzcsInJuU3RyIjoieWUyejI0a1laU0dpTUNkaGZ0SGFqNU5SaDNFWlVkU0sifQ.1z-N7ll1RYoB2SuUbwGI09_t-MBitUBcrX6nNN3GADE"
+DEFAULT_BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIyZmY5ZjY0ZmYwYmZmY2I0MzhkNmQ0MWViZDA4ZTQ5MyIsImRldmljZVR5cGUiOiJERUYiLCJlZmYiOjE3ODEwODI1NDkwNDQsInJuU3RyIjoiaWZ2bmdJd1dPNTF5MFVXVURKM0EzemM0dVBKVGcyMG0ifQ.E1h5hMsbh2oiOTw2jq3sD_a0BU8Owe5QZX5ohAv1yDQ"
 DEFAULT_COOKIE = ""
 TIMEOUT_SECONDS = 60
 

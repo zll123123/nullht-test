@@ -1,4 +1,4 @@
-"""应用配置加载。"""
+"""应用配置加载，统一合并 YAML 配置与环境变量覆盖项。"""
 
 from __future__ import annotations
 
@@ -20,7 +20,6 @@ class AppConfig:
     stop_path: str
     detail_path: str
     timeout_seconds: int
-    case_retry_times: int
     detail_poll_wait_seconds: int
     detail_poll_interval_seconds: int
     verify_ssl: bool
@@ -38,6 +37,9 @@ class AppConfig:
     llm_model: str
     llm_api_key: str
     llm_timeout_seconds: int
+    case_retry_times: int = 0
+    llm_conversation_eval_enabled: bool = False
+    llm_conversation_eval_prompt_file: str = ""
 
 
 def load_dotenv_file(env_path: Path) -> None:
@@ -142,5 +144,14 @@ def load_app_config(config_path: Path) -> AppConfig:
                 "CSL_LLM_TIMEOUT_SECONDS",
                 llm_config_data.get("llm_timeout_seconds", 30),
             )
+        ),
+        llm_conversation_eval_enabled=os.getenv(
+            "CSL_LLM_CONVERSATION_EVAL_ENABLED",
+            str(llm_config_data.get("conversation_evaluation_enabled", False)),
+        ).lower()
+        == "true",
+        llm_conversation_eval_prompt_file=os.getenv(
+            "CSL_LLM_CONVERSATION_EVAL_PROMPT_FILE",
+            str(llm_config_data.get("conversation_evaluation_prompt_file", "")),
         ),
     )

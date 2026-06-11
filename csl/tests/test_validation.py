@@ -1,3 +1,5 @@
+"""断言、用例加载与报告摘要相关单元测试。"""
+
 from pathlib import Path
 from config.constants import MATCH_CONTAINS, MATCH_LIST_EXACT
 from models.case_model import FocusDecision
@@ -75,7 +77,7 @@ def test_build_cases_prefer_yaml_expected() -> None:
 
 def test_build_cases_load_smoke_case_ids() -> None:
     case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
-    assert case_collection.smoke_case_ids == ["P003", "P015", "P032", "P061", "P084", "P106"]
+    assert case_collection.smoke_case_ids == ["P003", "P021", "P032", "P061", "P084", "P048", "P077", "P106", "P107"]
 
 
 def test_filter_cases_with_smoke_case_ids() -> None:

@@ -1,4 +1,4 @@
-"""执行结果相关模型。"""
+"""执行结果相关模型，集中承载对话、断言、接口耗时和 LLM 评估结果。"""
 
 from __future__ import annotations
 
@@ -83,6 +83,32 @@ class ConversationStep:
 
 
 @dataclass
+class ConversationEvaluation:
+    """LLM 对话评估结果。"""
+
+    enabled: bool = False
+    result: Dict[str, Any] = field(default_factory=dict)
+    error: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        """转换为字典。"""
+        return {
+            "enabled": self.enabled,
+            "result": self.result,
+            "error": self.error,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "ConversationEvaluation":
+        """从字典构造模型。"""
+        return cls(
+            enabled=bool(data.get("enabled", False)),
+            result=dict(data.get("result") or {}),
+            error=str(data.get("error") or ""),
+        )
+
+
+@dataclass
 class ConversationExecutionResult:
     """单个对话用例的执行结果。"""
 
@@ -95,6 +121,7 @@ class ConversationExecutionResult:
     stop_called_step_index: int
     focus_decisions: List[FocusDecision]
     api_call_records: List[ApiCallRecord]
+    conversation_evaluation: ConversationEvaluation = field(default_factory=ConversationEvaluation)
 
 
 @dataclass
@@ -111,19 +138,20 @@ class CaseExecutionResult:
     final_data: Dict[str, Any]
     visit_plan: Dict[str, Any]
     stop_data: Dict[str, Any]
-    stop_error: str
-    first_can_stop_step_index: int
-    stop_called_step_index: int
     detail_data: Dict[str, Any]
     validation: Optional[ValidationResult]
     status: str
     result_type: str = ""
     failure_reason: str = ""
     error: str = ""
+    stop_error: str = ""
+    first_can_stop_step_index: int = 0
+    stop_called_step_index: int = 0
     poll_attempts: int = 0
     next_poll_at: float = 0.0
     poll_deadline_at: float = 0.0
     api_call_records: List[ApiCallRecord] = field(default_factory=list)
+    conversation_evaluation: ConversationEvaluation = field(default_factory=ConversationEvaluation)
 
     def to_dict(self) -> Dict[str, Any]:
         """转换为字典。"""
@@ -145,6 +173,7 @@ class CaseExecutionResult:
             "validation": self.validation.to_dict() if self.validation is not None else {},
             "status": self.status,
             "api_call_records": [item.to_dict() for item in self.api_call_records],
+            "conversation_evaluation": self.conversation_evaluation.to_dict(),
             "result_type": self.result_type,
             "failure_reason": self.failure_reason,
             "error": self.error,
@@ -175,6 +204,7 @@ class CaseExecutionResult:
             validation=ValidationResult.from_dict(validation_data) if validation_data else None,
             status=str(data.get("status") or ""),
             api_call_records=[ApiCallRecord.from_dict(item) for item in data.get("api_call_records") or []],
+            conversation_evaluation=ConversationEvaluation.from_dict(data.get("conversation_evaluation") or {}),
             result_type=str(data.get("result_type") or ""),
             failure_reason=str(data.get("failure_reason") or ""),
             error=str(data.get("error") or ""),

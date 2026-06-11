@@ -1,4 +1,4 @@
-"""Qase Report 兼容结果输出。"""
+"""Qase Report 兼容结果输出，将自动化结果转换为 qase-report 可读取的结构。"""
 
 from __future__ import annotations
 
@@ -251,6 +251,9 @@ def build_qase_fields(case_result: CaseExecutionResult) -> Dict[str, Any]:
         "failed_fields": ",".join(case_result.validation.failed_fields) if case_result.validation else None,
         "failed_check_details": json.dumps(build_failed_check_dicts(case_result), ensure_ascii=False)
         if build_failed_check_dicts(case_result)
+        else None,
+        "conversation_evaluation": json.dumps(case_result.conversation_evaluation.to_dict(), ensure_ascii=False)
+        if case_result.conversation_evaluation.enabled
         else None,
     }
 

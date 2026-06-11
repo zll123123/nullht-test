@@ -1,4 +1,4 @@
-"""Markdown 执行记录输出。"""
+"""Markdown 执行记录输出，记录每轮问答、拜访计划、断言和 LLM 评估结果。"""
 
 from __future__ import annotations
 
@@ -61,6 +61,8 @@ def build_case_record_lines(case_result: CaseExecutionResult) -> List[str]:
         lines.append(f"- 测试回答：{step.answer or ''}")
     if case_result.focus_decisions:
         lines.extend(["- 关注点执行结果：", format_json_block([item.to_dict() for item in case_result.focus_decisions])])
+    if case_result.conversation_evaluation.enabled:
+        lines.extend(["- LLM对话评估：", format_json_block(case_result.conversation_evaluation.to_dict())])
     if case_result.api_call_records:
         lines.extend(["- 接口耗时记录：", format_json_block([item.to_dict() for item in case_result.api_call_records])])
     if case_result.visit_plan:

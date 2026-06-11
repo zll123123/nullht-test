@@ -1,7 +1,7 @@
 # CSL 完整对话路径执行记录
 
-- 总数：1
-- 通过：1
+- 总数：4
+- 通过：4
 - 失败：0
 - 异常：0
 - 待完成：0
@@ -11,26 +11,29 @@
 
 ## 执行明细
 
-## P019 ICU -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
+## P001 ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
 - 状态：DONE
-- session_id：82a94e99-bba6-4361-8380-4889ef0ac78a
+- session_id：6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa
 - 关注点策略：F1
 - 首次出现can_stop=true的轮次：-
 - 实际调用stop的轮次：-
 - 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
 - 测试回答：主任医师
-- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 外科[/OPTIONS][/QUESTION]
+- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 心脏外科[/OPTIONS][/QUESTION]
 - 测试回答：ICU（现版本）
 - 系统提问：[QUESTION]您计划拜访的这位医生属于什么分级？[OPTIONS]A. A类客户 B. B类客户 C. C类客户 D. D类客户 E. 未分级[/OPTIONS][/QUESTION]
-- 测试回答：D
+- 测试回答：A
 - 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
 - 测试回答：既往拜访过
 - 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
-- 测试回答：＜50%
-- 系统提问：您拜访的医生选择人血白蛋白品牌时，杰特贝林的选择占比大概是多少？主要关注哪些因素？
-[QUESTION]请选择或描述：[OPTIONS]A. 0%，不关心品牌 B. ＜20%，选择病原体安全性好的产品 C. 20%~40%，最关注安全性体系和显著的疗效 D. 40~50%，最关注产品高质量标准和较少的不良反应 E. 40~50%，并且经常在学术会议上分享经验[/OPTIONS][/QUESTION]
+- 测试回答：≥50%
+- 系统提问：您拜访的医生属于下列哪种类型？
+[QUESTION]请选择：[OPTIONS]A. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例<70% B. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例≥70%[/OPTIONS][/QUESTION]
 - 测试回答：A
-- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 杰特贝林是全球白蛋白专家，但在中国市场声音较弱，想了解其本土化策略和临床认知现状 B. 杰特贝林作为百年血浆治疗领导者，其全球血浆采集与供应能力是否能保障中国产品稳定供应 C. 杰特贝林人血白蛋白近80年持续投入，其生产工艺和质量标准相比国内主流产品有何差异化优势 D. 杰特贝林拥有2000+科研人员和多个全球研发中心，其白蛋白相关临床研究数据在中国ICU人群中的适用性如何[/OPTIONS][/QUESTION]
+- 系统提问：你所拜访的医生在低白蛋白血症的患者中，通常有多少使用人血白蛋白进行治疗？
+[QUESTION]请选择或描述：[OPTIONS]A. <20% B. 20%~40% C.  40%~60% D. ＞60% E. ＞60%，同时会向其他医生主动推荐在这类患者中优先使用白蛋白[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 人血白蛋白作为血液制品，安全性是否可靠？ B. 白蛋白在危重症患者中改善预后的具体临床证据有哪些？ C. 纠正低白蛋白血症对ICU患者死亡率、并发症和住院时间的实际影响程度？ D. 白蛋白除扩容外，还有哪些关键生理功能（如抗炎、保护内皮等）？[/OPTIONS][/QUESTION]
 - 测试回答：A
 - 关注点执行结果：
 ```json
@@ -40,13 +43,24 @@
     "actual_branch": "F1",
     "answer": "A",
     "fixed_option_label": "A",
-    "fixed_option_text": "杰特贝林是全球白蛋白专家，但在中国市场声音较弱，想了解其本土化策略和临床认知现状",
+    "fixed_option_text": "人血白蛋白作为血液制品，安全性是否可靠？",
     "selected_option_label": "A",
-    "selected_option_text": "杰特贝林是全球白蛋白专家，但在中国市场声音较弱，想了解其本土化策略和临床认知现状",
+    "selected_option_text": "人血白蛋白作为血液制品，安全性是否可靠？",
     "custom_input": "",
-    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 杰特贝林是全球白蛋白专家，但在中国市场声音较弱，想了解其本土化策略和临床认知现状 B. 杰特贝林作为百年血浆治疗领导者，其全球血浆采集与供应能力是否能保障中国产品稳定供应 C. 杰特贝林人血白蛋白近80年持续投入，其生产工艺和质量标准相比国内主流产品有何差异化优势 D. 杰特贝林拥有2000+科研人员和多个全球研发中心，其白蛋白相关临床研究数据在中国ICU人群中的适用性如何[/OPTIONS][/QUESTION]"
+    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 人血白蛋白作为血液制品，安全性是否可靠？ B. 白蛋白在危重症患者中改善预后的具体临床证据有哪些？ C. 纠正低白蛋白血症对ICU患者死亡率、并发症和住院时间的实际影响程度？ D. 白蛋白除扩容外，还有哪些关键生理功能（如抗炎、保护内皮等）？[/OPTIONS][/QUESTION]"
   }
 ]
+```
+- LLM对话评估：
+```json
+{
+  "enabled": true,
+  "result": {
+    "has_first_visit_history_question": false,
+    "skip_reason": "非首次拜访路径，跳过LLM评估"
+  },
+  "error": ""
+}
 ```
 - 接口耗时记录：
 ```json
@@ -55,10 +69,10 @@
     "api_name": "start_conversation",
     "request_method": "POST",
     "request_path": "/csl-medical-chatbot/api/sale/chat/start",
-    "request_identifier": "P019",
-    "case_id": "P019",
+    "request_identifier": "P001",
+    "case_id": "P001",
     "session_id": "",
-    "elapsed_ms": 2405.49,
+    "elapsed_ms": 140.95,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -67,10 +81,10 @@
     "api_name": "send_message",
     "request_method": "POST",
     "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 2210.53,
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 1830.65,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -79,10 +93,10 @@
     "api_name": "send_message",
     "request_method": "POST",
     "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 719.3,
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 667.3,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -91,10 +105,10 @@
     "api_name": "send_message",
     "request_method": "POST",
     "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 2220.21,
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 1841.25,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -103,10 +117,10 @@
     "api_name": "send_message",
     "request_method": "POST",
     "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 828.23,
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 686.24,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -115,10 +129,10 @@
     "api_name": "send_message",
     "request_method": "POST",
     "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 869.42,
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 874.31,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -127,10 +141,22 @@
     "api_name": "send_message",
     "request_method": "POST",
     "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 4655.99,
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 66.8,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 2151.0,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -139,10 +165,10 @@
     "api_name": "call_focus_match_llm",
     "request_method": "POST",
     "request_path": "https://api.deepseek.com/chat/completions",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 1849.63,
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 2467.58,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -151,10 +177,10 @@
     "api_name": "send_message",
     "request_method": "POST",
     "request_path": "/csl-medical-chatbot/api/sale/chat/message",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 1840.36,
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 1022.64,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -162,23 +188,11 @@
   {
     "api_name": "fetch_visit_plan_detail_once",
     "request_method": "GET",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/history/82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 74.33,
-    "success": false,
-    "status_code": 400,
-    "error": "400 Client Error: Bad Request for url: https://dmc-dev-1.nullht.com/csl-medical-chatbot/api/sale/chat/history/82a94e99-bba6-4361-8380-4889ef0ac78a"
-  },
-  {
-    "api_name": "fetch_visit_plan_detail_once",
-    "request_method": "GET",
-    "request_path": "/csl-medical-chatbot/api/sale/chat/history/82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "request_identifier": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "case_id": "P019",
-    "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
-    "elapsed_ms": 115.6,
+    "request_path": "/csl-medical-chatbot/api/sale/chat/history/6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "request_identifier": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "case_id": "P001",
+    "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
+    "elapsed_ms": 62.86,
     "success": true,
     "status_code": 200,
     "error": ""
@@ -195,17 +209,8 @@
       "type": "INNER",
       "chunk_ids": [],
       "file_name": null,
-      "research_summary": "在脓毒症及脓毒性休克的容量复苏场景中，该研究显示人血白蛋白可显著降低严重脓毒症患者28天死亡风险达29%，并结合超过35年的本土供应历史，为临床应用提供了有价值的参考依据。",
+      "research_summary": "在脓毒症液体治疗场景中，该研究显示人血白蛋白在具备长期良好病原体安全记录的同时，可显著降低严重脓毒症患者的 28 天死亡风险，为临床应用提供了有价值的参考依据。",
       "file_key": "63cdcdc0be5a8ecce8d9c9aae6f855be"
-    },
-    {
-      "id": "614d32b7c458abe70fe51c660500fc3f",
-      "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
-      "type": "INNER",
-      "chunk_ids": [],
-      "file_name": null,
-      "research_summary": "该研究针对中国本土临床实践提供了最新的专家共识，规范了人血白蛋白在危重症救治中的合理应用场景，是建立临床认知与应用信任的重要参考文献。",
-      "file_key": "24a5eb52596a20afe11ce38f7b41e094"
     },
     {
       "id": "634e50aff29c41665848f2becdfc9628",
@@ -213,39 +218,68 @@
       "type": "INNER",
       "chunk_ids": [],
       "file_name": null,
-      "research_summary": "在严重脓毒症患者的容量复苏场景中，该研究通过SAFE研究亚组分析显示人血白蛋白未增加患者的肾功能障碍风险，为ICU重症患者的安全性用药提供了有力证据。",
+      "research_summary": "该研究针对脓毒症及脓毒性休克提供了人血白蛋白的指南推荐证据，提示将血清白蛋白水平纠正至 30g/L 以上显示出降低并发症发生率的趋势，值得优先推荐。",
       "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+    },
+    {
+      "id": "bf3d5fc5f35c07e01a6d947c1e3933ef",
+      "title": "专家幻灯-《人血白蛋白在ICU重症肝硬化中的应用》-CHN-ALB-0681.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "该研究在危重症患者容量治疗中观察到应用人血白蛋白可显著降低 76% 的急性肾损伤风险，为临床应用提供了有价值的参考依据。",
+      "file_key": "b14ddd5ebddc8c6cee42cf54b6718fda"
     }
   ],
   "user_id": null,
-  "session_id": "82a94e99-bba6-4361-8380-4889ef0ac78a",
+  "session_id": "6fcd8ac7-5c16-4a96-a17e-38b44e04f6fa",
   "visit_plan_digest": {
-    "notion": "ICU主任对杰特贝林认知偏低、目前使用为0%，关注本土临床支持与供应保障。",
+    "notion": "该ICU主任当前处于低白蛋白治疗的“知道”阶段，习惯上很少在Alb<30g/L时使用白蛋白，并对人血制品的安全性有明确顾虑。",
     "doctorInfo": {
       "department": "ICU",
-      "type": "品牌认知者",
+      "type": "低蛋白使用者",
       "grade": "知道",
       "rank": "主任医师",
-      "level": "D类客户"
+      "level": "A类客户"
     },
-    "goal": "围绕“杰特贝林在血浆制品领域的全球领先地位与白蛋白专长”传递核心信息，推动医生从品牌认知者的“知道”向“尝试”进阶；其中“尝试”意味着在部分患者中开始选择杰特贝林（使用份额>20%）、重视病原体安全性与稳定供应以评估临床适用性。",
-    "strategy": "以公司全球与中国本土化积累切入，聚焦供应稳定与临床可用性疑虑，建议在少量ICU患者中试用并收集科室反馈。"
+    "goal": "围绕“白蛋白的多重生理功能及低白蛋白与不良预后关联，强调纠正低白蛋白的重要性”，推动医生从“知道”向“尝试”进阶；“尝试”意味着在部分危重患者中有选择性地开始使用人血白蛋白（使Alb<30g/L患者的使用率由<20%提升至约20%~40%），其他患者仍以营养支持为主，同时解除对血制品安全性的疑虑。",
+    "strategy": "先正面回应血制品安全性顾虑，以杰特贝林的安全记录与低白蛋白不良预后关联为学术切入，强调在明确指征和时机下于部分重症患者有选择性尝试白蛋白纠正，从而促成从“知道”到“尝试”的可执行转变。"
   },
   "comm_suggest": {
-    "literatures": null,
-    "transitional_info": [
-      "介绍杰特贝林公司在血液制品领域的全球领先地位。\n● 杰特贝林是国际血浆治疗领域的领导者\n● 杰特贝林是人血白蛋白产品专家"
+    "literatures": [
+      {
+        "id": null,
+        "title": "1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。",
+        "file_key": null
+      }
     ],
-    "support_info": "● 杰特贝林是国际血浆治疗领域的领导者\n杰特贝林拥有100余年血浆制品生产经验，1904年，首届诺贝尔医学奖获得者Emil von Behring博士建立贝林大药厂\n拥有全球最大的血浆收集网络之一CSL Plasma，包含342家血浆采集中心，可持续稳定提供血浆制品，2022年血浆采集量增长24%，2023年增长31%\n目前拥有50余款血浆蛋白等生物制剂为超过100个国家的患者提供拯救生命的治疗制剂\n在全球有多个研发中心，超过2000位科研人员持续创新研发。\n● 杰特贝林是人血白蛋白产品专家\n自1946年在欧洲首次进行大规模的人血浆分离开始\n杰特贝林在白蛋白产品领域拥有近80年的持续投入。"
+    "transitional_info": [
+      "介绍白蛋白的多种生理功能以及低白蛋白血症对患者预后的不良影响，强调纠正低白蛋白血症的重要性。"
+    ],
+    "support_info": "● 人血白蛋白具有多重生理功能。\n如结合转运、抗炎、抗氧化、维持血管内皮细胞完整性等。\n\n● 低白蛋白血症与危重症患者的不良预后密切相关{1}\n血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。"
   },
   "focus_point": {
     "items": [
       {
-        "title": "杰特贝林在国际市场上是白蛋白产品专家，但在中国市场很少听到。",
-        "content": "- 杰特贝林服务中国患者40年，是中国人血白蛋白市场的领导者\n- 1986年，杰特贝林就开始为中国患者提供人血白蛋白，已成为中国市场该产品的主要供应商之一\n- 杰特贝林人血白蛋白在中国人血白蛋白销售市场份额 NO.1。(数据来源:艾昆玮医院市场 MAT1Q/26 IQVIA Data)"
+        "title": "人血白蛋白是血液制品，安全性可靠么？",
+        "content": "● 杰特贝林的人血白蛋白拥有良好的病原体安全性记录超过数十年。\n《2021年人血白蛋白在危重症患者应用专家共识》{1}指出作为从人血中提取的成分，虽然输注高浓度的白蛋白虽然不可避免地会出现不良反应，但仅约0.1%的患者会出现潮红、荨麻疹、发热、寒战、恶心、呕吐、心动过速、低血压等过敏反应，而这些不良反应通常在降低输注速度或停止输注后消失。"
       }
     ],
-    "literatures": null
+    "literatures": [
+      {
+        "id": null,
+        "title": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）",
+        "file_key": null
+      }
+    ]
   },
   "phase3_flag": true
 }
@@ -254,14 +288,14 @@
 ```json
 {
   "passed": true,
-  "total_checks": 12,
-  "passed_checks": 12,
+  "total_checks": 16,
+  "passed_checks": 16,
   "failed_fields": [],
   "checks": [
     {
       "field_name": "doctor_type",
-      "expected": "品牌认知者",
-      "actual": "品牌认知者",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
       "passed": true,
       "match_mode": "exact"
     },
@@ -274,15 +308,1321 @@
     },
     {
       "field_name": "trans_info",
-      "expected": "介绍杰特贝林公司在血液制品领域的全球领先地位。\n● 杰特贝林是国际血浆治疗领域的领导者\n● 杰特贝林是人血白蛋白产品专家",
-      "actual": "介绍杰特贝林公司在血液制品领域的全球领先地位。\n● 杰特贝林是国际血浆治疗领域的领导者\n● 杰特贝林是人血白蛋白产品专家",
+      "expected": "介绍白蛋白的多种生理功能以及低白蛋白血症对患者预后的不良影响，强调纠正低白蛋白血症的重要性。",
+      "actual": "介绍白蛋白的多种生理功能以及低白蛋白血症对患者预后的不良影响，强调纠正低白蛋白血症的重要性。",
       "passed": true,
       "match_mode": "exact"
     },
     {
       "field_name": "support_info",
-      "expected": "● 杰特贝林是国际血浆治疗领域的领导者\n▶杰特贝林拥有100余年血浆制品生产经验，1904年，首届诺贝尔医学奖获得者Emil von Behring博士建立贝林大药厂\n▶拥有全球最大的血浆收集网络之一CSL Plasma，包含342家血浆采集中心，可持续稳定提供血浆制品，2022年血浆采集量增长24%，2023年增长31%\n▶目前拥有50余款血浆蛋白等生物制剂为超过100个国家的患者提供拯救生命的治疗制剂\n▶在全球有多个研发中心，超过2000位科研人员持续创新研发。\n● 杰特贝林是人血白蛋白产品专家\n▶自1946年在欧洲首次进行大规模的人血浆分离开始\n▶杰特贝林在白蛋白产品领域拥有近80年的持续投入。",
-      "actual": "● 杰特贝林是国际血浆治疗领域的领导者\n杰特贝林拥有100余年血浆制品生产经验，1904年，首届诺贝尔医学奖获得者Emil von Behring博士建立贝林大药厂\n拥有全球最大的血浆收集网络之一CSL Plasma，包含342家血浆采集中心，可持续稳定提供血浆制品，2022年血浆采集量增长24%，2023年增长31%\n目前拥有50余款血浆蛋白等生物制剂为超过100个国家的患者提供拯救生命的治疗制剂\n在全球有多个研发中心，超过2000位科研人员持续创新研发。\n● 杰特贝林是人血白蛋白产品专家\n自1946年在欧洲首次进行大规模的人血浆分离开始\n杰特贝林在白蛋白产品领域拥有近80年的持续投入。",
+      "expected": "● 人血白蛋白具有多重生理功能。\n▶如结合转运、抗炎、抗氧化、维持血管内皮细胞完整性等。\n\n● 低白蛋白血症与危重症患者的不良预后密切相关1\n▶血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。",
+      "actual": "● 人血白蛋白具有多重生理功能。\n如结合转运、抗炎、抗氧化、维持血管内皮细胞完整性等。\n\n● 低白蛋白血症与危重症患者的不良预后密切相关{1}\n血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "comm_literature_titles",
+      "expected": "1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）",
+      "actual": "1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）",
+      "passed": true,
+      "match_mode": "list_exact"
+    },
+    {
+      "field_name": "comm_literature_summaries",
+      "expected": "1. 一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。",
+      "actual": "一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "digest.department",
+      "expected": "ICU",
+      "actual": "ICU",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.rank",
+      "expected": "主任医师",
+      "actual": "主任医师",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.level",
+      "expected": "A类客户",
+      "actual": "A类客户",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.type",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.grade",
+      "expected": "知道",
+      "actual": "知道",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_branch",
+      "expected": "F1",
+      "actual": "F1",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_title",
+      "expected": "人血白蛋白是血液制品，安全性可靠么？",
+      "actual": "人血白蛋白是血液制品，安全性可靠么？",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "focus_content",
+      "expected": "● 杰特贝林的人血白蛋白拥有良好的病原体安全性记录超过数十年。\n▶《2021年人血白蛋白在危重症患者应用专家共识》1指出作为从人血中提取的成分，虽然输注高浓度的白蛋白虽然不可避免地会出现不良反应，但仅约0.1%的患者会出现潮红、荨麻疹、发热、寒战、恶心、呕吐、心动过速、低血压等过敏反应，而这些不良反应通常在降低输注速度或停止输注后消失。",
+      "actual": "● 杰特贝林的人血白蛋白拥有良好的病原体安全性记录超过数十年。\n《2021年人血白蛋白在危重症患者应用专家共识》{1}指出作为从人血中提取的成分，虽然输注高浓度的白蛋白虽然不可避免地会出现不良反应，但仅约0.1%的患者会出现潮红、荨麻疹、发热、寒战、恶心、呕吐、心动过速、低血压等过敏反应，而这些不良反应通常在降低输注速度或停止输注后消失。",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "focus_literature_titles",
+      "expected": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.",
+      "actual": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.",
+      "passed": true,
+      "match_mode": "list_exact"
+    },
+    {
+      "field_name": "focus_literature_summaries",
+      "expected": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）",
+      "actual": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）",
+      "passed": true,
+      "match_mode": "contains"
+    }
+  ]
+}
+```
+
+## P002 ICU -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
+- 状态：DONE
+- session_id：c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe
+- 关注点策略：F1
+- 首次出现can_stop=true的轮次：-
+- 实际调用stop的轮次：-
+- 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
+- 测试回答：主任医师
+- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 心脏外科[/OPTIONS][/QUESTION]
+- 测试回答：ICU（现版本）
+- 系统提问：[QUESTION]您计划拜访的这位医生属于什么分级？[OPTIONS]A. A类客户 B. B类客户 C. C类客户 D. D类客户 E. 未分级[/OPTIONS][/QUESTION]
+- 测试回答：B
+- 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
+- 测试回答：既往拜访过
+- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
+- 测试回答：≥50%
+- 系统提问：您拜访的医生属于下列哪种类型？
+[QUESTION]请选择：[OPTIONS]A. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例<70% B. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例≥70%[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 系统提问：你所拜访的医生在低白蛋白血症的患者中，通常有多少使用人血白蛋白进行治疗？
+[QUESTION]请选择或描述：[OPTIONS]A. <20% B. 20%~40% C.  40%~60% D. ＞60% E. ＞60%，同时会向其他医生主动推荐在这类患者中优先使用白蛋白[/OPTIONS][/QUESTION]
+- 测试回答：B
+- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 白蛋白价格较高，是否具有成本效益？ B. 人血白蛋白在降低危重症患者死亡率方面的临床证据强度如何？ C. 人血白蛋白对脓毒症休克患者90天死亡风险的具体改善数据？ D. 人血白蛋白对多器官功能（如呼吸、心血管）的改善作用是否有高质量研究支持？[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 关注点执行结果：
+```json
+[
+  {
+    "planned_branch": "F1",
+    "actual_branch": "F1",
+    "answer": "A",
+    "fixed_option_label": "A",
+    "fixed_option_text": "白蛋白价格较高，是否具有成本效益？",
+    "selected_option_label": "A",
+    "selected_option_text": "白蛋白价格较高，是否具有成本效益？",
+    "custom_input": "",
+    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 白蛋白价格较高，是否具有成本效益？ B. 人血白蛋白在降低危重症患者死亡率方面的临床证据强度如何？ C. 人血白蛋白对脓毒症休克患者90天死亡风险的具体改善数据？ D. 人血白蛋白对多器官功能（如呼吸、心血管）的改善作用是否有高质量研究支持？[/OPTIONS][/QUESTION]"
+  }
+]
+```
+- LLM对话评估：
+```json
+{
+  "enabled": true,
+  "result": {
+    "has_first_visit_history_question": false,
+    "skip_reason": "非首次拜访路径，跳过LLM评估"
+  },
+  "error": ""
+}
+```
+- 接口耗时记录：
+```json
+[
+  {
+    "api_name": "start_conversation",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/start",
+    "request_identifier": "P002",
+    "case_id": "P002",
+    "session_id": "",
+    "elapsed_ms": 67.58,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 2995.56,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 2228.42,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 3699.71,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 851.82,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 1953.75,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 65.12,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 2230.74,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "call_focus_match_llm",
+    "request_method": "POST",
+    "request_path": "https://api.deepseek.com/chat/completions",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 2264.28,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 1341.88,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/history/c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 61.11,
+    "success": false,
+    "status_code": 400,
+    "error": "400 Client Error: Bad Request for url: https://dmc-dev-1.nullht.com/csl-medical-chatbot/api/sale/chat/history/c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe"
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/history/c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "request_identifier": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "case_id": "P002",
+    "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+    "elapsed_ms": 49.45,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  }
+]
+```
+- 最终拜访计划：
+```json
+{
+  "literatures": [
+    {
+      "id": "634e50aff29c41665848f2becdfc9628",
+      "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在脓毒症治疗场景中，该研究显示将血清白蛋白水平纠正至30g/L以上可降低并发症发生风险，为临床明确白蛋白启动时机及获益提供了有价值的参考依据。",
+      "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+    },
+    {
+      "id": "e10eec6a1579a62dbefaa968dab52c67",
+      "title": "专家幻灯-重症患者ARDS的防治策略-CHN-ALB-0398.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "该研究在ARDS治疗场景中观察到人血白蛋白水平的提升与患者死亡风险的显著降低直接相关，为通过纠正低白蛋白血症改善患者预后提供了明确的临床证据。",
+      "file_key": "3515bc844a755b44468237aa1994c4ac"
+    },
+    {
+      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-1701bfebd54b4405a7da0d6ee97128db",
+      "title": "Evaluation of the \"Early\" Use of Albumin in Children with Extensive Burns: A Randomized Controlled Trial.",
+      "type": "EXTERNAL",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "该研究针对大面积烧伤场景提供了人血白蛋白早期应用的证据，提示早期干预可显著减少晶体液用量并缩短住院时间，为提升治疗的成本效益提供了有力支持。",
+      "file_key": null
+    }
+  ],
+  "user_id": null,
+  "session_id": "c64ad866-11a0-4469-9a7c-6e3fa9bc2cbe",
+  "visit_plan_digest": {
+    "notion": "ICU主任（B类，既往拜访），对杰特贝林使用比例≥50%，但在Alb<30g/L患者中白蛋白使用仅20%~40%（尝试），主要顾虑为药品成本效益。",
+    "doctorInfo": {
+      "department": "ICU",
+      "type": "低蛋白使用者",
+      "grade": "尝试",
+      "rank": "主任医师",
+      "level": "B类客户"
+    },
+    "goal": "围绕“人血白蛋白可有效纠正低白蛋白、降低死亡率并减少并发症”的核心信息，推动医生从当前“尝试”向“使用”进阶；“使用”在低蛋白使用者定义下意味着对Alb<30g/L患者的白蛋白使用率提升至40%~60%，并在更多符合指征的患者中更常启动治疗（部分病人在Alb＜25g/L时会被启动治疗）。",
+    "strategy": "以重症Alb<30g/L患者为切入，先用临床获益与成本回收逻辑回应成本顾虑，再争取医生将适应证内白蛋白使用由尝试阶段扩展至使用阶段（40%~60%），并达成小范围规范化应用观察。"
+  },
+  "comm_suggest": {
+    "literatures": [
+      {
+        "id": null,
+        "title": "1. . Caironi et al. N Engl J Med 2014; 370: 1412‒21",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "ALBIOS研究是一项多中心开放标签随机对照研究，纳入意大利100个ICU中1818例严重脓毒症患者，比较20%白蛋白+晶体液（910例）与单独晶体液（908例）的治疗效果。结果：白蛋白联合晶体液提高6小时后目标MAP的达标率（p=0.04），并提高前7天MAP（p=0.03）和CVP（p=0.001）。事后亚组分析：对脓毒性休克患者，第90天死亡风险显著降低（RR 0.87）。",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "2. Jean-Louis Vincent, et al. Crit Care Med. 2004 Oct;3 (10):2029-38.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项荟萃分析纳入71项随机对照研究（3782例急重症住院患者），评估人血白蛋白对并发症的影响。结果：使用人血白蛋白促进各类并发症风险降低：心血管合并症风险降低43%，呼吸系统合并症风险降低24%，肝肾胃肠道合并症风险降低35%，感染性合并症风险降低13%。",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "3. Dubois et al. Crit Care Med 2006 34: 2536-40",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项前瞻性随机对照研究纳入100例低白蛋白血症危重症患者（血清白蛋白≤30g/L），比较人血白蛋白治疗与未治疗对器官功能的影响。结果：人血白蛋白治疗显著改善患者心血管系统功能（P=0.01），对呼吸系统功能改善趋势明显（P=0.058）。",
+        "file_key": null
+      }
+    ],
+    "transitional_info": [
+      "介绍人血白蛋白有效纠正低白蛋白血症，降低患者死亡率、减少并发症发生的临床价值。"
+    ],
+    "support_info": "● 使用人血白蛋白纠正低白蛋白血症可显著降低危重症患者的死亡风险、合并症风险，改善器官功能。\n对脓毒症休克患者，与单用晶体液相比，联合人血白蛋白可显著降低患者90天死亡风险，降幅高13%{1}\n对危重症住院患者，与未使用人血白蛋白相比，使用人血白蛋白促进心血管、呼吸系统、肝肾胃肠道并发症风险分别降低43%、24%和35%{2}\n对危重症患者，与未用人血白蛋白相比，使用人血白蛋白可显著改善患者的呼吸系统和心血管系统器官功能{3}"
+  },
+  "focus_point": {
+    "items": [
+      {
+        "title": "白蛋白的昂贵价格，是否具有成本效益？",
+        "content": "●危重症患者通过输注白蛋白纠正患者的低蛋白血症，可以减少并发症的发生，降低死亡风险，降低后续治疗的复杂性和成本，减少住院时间与ICU停留时间，从而提高病床周转率，提高治疗效率。\n血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66% {1}\n基于ALBIOS研究亚组的结局进行的分析表明，在重度脓毒症和低白蛋白血症患者中，20%白蛋白比标准医疗实践（晶体液）更具成本效果（基于每获得一个寿命年的增量成本）{2}"
+      }
+    ],
+    "literatures": [
+      {
+        "id": null,
+        "title": "1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "2. Farrugia A, Martin G, Bult M. Ann Update Crit Care Emer Med 2013;515‒26.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项成本效果分析比较了白蛋白、晶体液和HES，该研究利用了一发表文献及其他花费相关的公开信息。 结果：经模型预测，相对晶体液，人血白蛋白治疗脓毒症可多获得0.22个生命年，而HES治疗可导致1.00个生命年的损失。",
+        "file_key": null
+      }
+    ]
+  },
+  "phase3_flag": true
+}
+```
+- 断言结果：
+```json
+{
+  "passed": true,
+  "total_checks": 16,
+  "passed_checks": 16,
+  "failed_fields": [],
+  "checks": [
+    {
+      "field_name": "doctor_type",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "doctor_grade",
+      "expected": "尝试",
+      "actual": "尝试",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "trans_info",
+      "expected": "介绍人血白蛋白有效纠正低白蛋白血症，降低患者死亡率、减少并发症发生的临床价值。",
+      "actual": "介绍人血白蛋白有效纠正低白蛋白血症，降低患者死亡率、减少并发症发生的临床价值。",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "support_info",
+      "expected": "● 使用人血白蛋白纠正低白蛋白血症可显著降低危重症患者的死亡风险、合并症风险，改善器官功能。\n▶对脓毒症休克患者，与单用晶体液相比，联合人血白蛋白可显著降低患者90天死亡风险，降幅高13%1\n▶对危重症住院患者，与未使用人血白蛋白相比，使用人血白蛋白促进心血管、呼吸系统、肝肾胃肠道并发症风险分别降低43%、24%和35%2\n▶对危重症患者，与未用人血白蛋白相比，使用人血白蛋白可显著改善患者的呼吸系统和心血管系统器官功能3",
+      "actual": "● 使用人血白蛋白纠正低白蛋白血症可显著降低危重症患者的死亡风险、合并症风险，改善器官功能。\n对脓毒症休克患者，与单用晶体液相比，联合人血白蛋白可显著降低患者90天死亡风险，降幅高13%{1}\n对危重症住院患者，与未使用人血白蛋白相比，使用人血白蛋白促进心血管、呼吸系统、肝肾胃肠道并发症风险分别降低43%、24%和35%{2}\n对危重症患者，与未用人血白蛋白相比，使用人血白蛋白可显著改善患者的呼吸系统和心血管系统器官功能{3}",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "comm_literature_titles",
+      "expected": "1. . Caironi et al. N Engl J Med 2014; 370: 1412‒21\n2. Jean-Louis Vincent, et al. Crit Care Med. 2004 Oct;3 (10):2029-38.\n3. Dubois et al. Crit Care Med 2006 34: 2536-40",
+      "actual": "1. . Caironi et al. N Engl J Med 2014; 370: 1412‒21\n2. Jean-Louis Vincent, et al. Crit Care Med. 2004 Oct;3 (10):2029-38.\n3. Dubois et al. Crit Care Med 2006 34: 2536-40",
+      "passed": true,
+      "match_mode": "list_exact"
+    },
+    {
+      "field_name": "comm_literature_summaries",
+      "expected": "1. ALBIOS研究是一项多中心开放标签随机对照研究，纳入意大利100个ICU中1818例严重脓毒症患者，比较20%白蛋白+晶体液（910例）与单独晶体液（908例）的治疗效果。结果：白蛋白联合晶体液提高6小时后目标MAP的达标率（p=0.04），并提高前7天MAP（p=0.03）和CVP（p=0.001）。事后亚组分析：对脓毒性休克患者，第90天死亡风险显著降低（RR 0.87）。\n2. 一项荟萃分析纳入71项随机对照研究（3782例急重症住院患者），评估人血白蛋白对并发症的影响。结果：使用人血白蛋白促进各类并发症风险降低：心血管合并症风险降低43%，呼吸系统合并症风险降低24%，肝肾胃肠道合并症风险降低35%，感染性合并症风险降低13%。\n3. 一项前瞻性随机对照研究纳入100例低白蛋白血症危重症患者（血清白蛋白≤30g/L），比较人血白蛋白治疗与未治疗对器官功能的影响。结果：人血白蛋白治疗显著改善患者心血管系统功能（P=0.01），对呼吸系统功能改善趋势明显（P=0.058）。",
+      "actual": "ALBIOS研究是一项多中心开放标签随机对照研究，纳入意大利100个ICU中1818例严重脓毒症患者，比较20%白蛋白+晶体液（910例）与单独晶体液（908例）的治疗效果。结果：白蛋白联合晶体液提高6小时后目标MAP的达标率（p=0.04），并提高前7天MAP（p=0.03）和CVP（p=0.001）。事后亚组分析：对脓毒性休克患者，第90天死亡风险显著降低（RR 0.87）。\n一项荟萃分析纳入71项随机对照研究（3782例急重症住院患者），评估人血白蛋白对并发症的影响。结果：使用人血白蛋白促进各类并发症风险降低：心血管合并症风险降低43%，呼吸系统合并症风险降低24%，肝肾胃肠道合并症风险降低35%，感染性合并症风险降低13%。\n一项前瞻性随机对照研究纳入100例低白蛋白血症危重症患者（血清白蛋白≤30g/L），比较人血白蛋白治疗与未治疗对器官功能的影响。结果：人血白蛋白治疗显著改善患者心血管系统功能（P=0.01），对呼吸系统功能改善趋势明显（P=0.058）。",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "digest.department",
+      "expected": "ICU",
+      "actual": "ICU",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.rank",
+      "expected": "主任医师",
+      "actual": "主任医师",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.level",
+      "expected": "B类客户",
+      "actual": "B类客户",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.type",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.grade",
+      "expected": "尝试",
+      "actual": "尝试",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_branch",
+      "expected": "F1",
+      "actual": "F1",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_title",
+      "expected": "白蛋白的昂贵价格，是否具有成本效益？",
+      "actual": "白蛋白的昂贵价格，是否具有成本效益？",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "focus_content",
+      "expected": "●危重症患者通过输注白蛋白纠正患者的低蛋白血症，可以减少并发症的发生，降低死亡风险，降低后续治疗的复杂性和成本，减少住院时间与ICU停留时间，从而提高病床周转率，提高治疗效率。\n▶血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66% 1\n▶基于ALBIOS研究亚组的结局进行的分析表明，在重度脓毒症和低白蛋白血症患者中，20%白蛋白比标准医疗实践（晶体液）更具成本效果（基于每获得一个寿命年的增量成本）2",
+      "actual": "●危重症患者通过输注白蛋白纠正患者的低蛋白血症，可以减少并发症的发生，降低死亡风险，降低后续治疗的复杂性和成本，减少住院时间与ICU停留时间，从而提高病床周转率，提高治疗效率。\n血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66% {1}\n基于ALBIOS研究亚组的结局进行的分析表明，在重度脓毒症和低白蛋白血症患者中，20%白蛋白比标准医疗实践（晶体液）更具成本效果（基于每获得一个寿命年的增量成本）{2}",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "focus_literature_titles",
+      "expected": "1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）\n\n2. Farrugia A, Martin G, Bult M. Ann Update Crit Care Emer Med 2013;515‒26.",
+      "actual": "1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）\n2. Farrugia A, Martin G, Bult M. Ann Update Crit Care Emer Med 2013;515‒26.",
+      "passed": true,
+      "match_mode": "list_exact"
+    },
+    {
+      "field_name": "focus_literature_summaries",
+      "expected": "1. 一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。\n\n2. 一项成本效果分析比较了白蛋白、晶体液和HES，该研究利用了一发表文献及其他花费相关的公开信息。 结果：经模型预测，相对晶体液，人血白蛋白治疗脓毒症可多获得0.22个生命年，而HES治疗可导致1.00个生命年的损失。",
+      "actual": "一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。\n一项成本效果分析比较了白蛋白、晶体液和HES，该研究利用了一发表文献及其他花费相关的公开信息。 结果：经模型预测，相对晶体液，人血白蛋白治疗脓毒症可多获得0.22个生命年，而HES治疗可导致1.00个生命年的损失。",
+      "passed": true,
+      "match_mode": "contains"
+    }
+  ]
+}
+```
+
+## P003 ICU -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
+- 状态：DONE
+- session_id：aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8
+- 关注点策略：F2_OPTION
+- 首次出现can_stop=true的轮次：-
+- 实际调用stop的轮次：-
+- 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
+- 测试回答：主任医师
+- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 心脏外科[/OPTIONS][/QUESTION]
+- 测试回答：ICU（现版本）
+- 系统提问：[QUESTION]您计划拜访的这位医生属于什么分级？[OPTIONS]A. A类客户 B. B类客户 C. C类客户 D. D类客户 E. 未分级[/OPTIONS][/QUESTION]
+- 测试回答：C
+- 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
+- 测试回答：既往拜访过
+- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
+- 测试回答：≥50%
+- 系统提问：您拜访的医生属于下列哪种类型？
+[QUESTION]请选择：[OPTIONS]A. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例<70% B. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例≥70%[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 系统提问：你所拜访的医生在低白蛋白血症的患者中，通常有多少使用人血白蛋白进行治疗？
+[QUESTION]请选择或描述：[OPTIONS]A. <20% B. 20%~40% C.  40%~60% D. ＞60% E. ＞60%，同时会向其他医生主动推荐在这类患者中优先使用白蛋白[/OPTIONS][/QUESTION]
+- 测试回答：C
+- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 医保报销限制：仅Alb≤25g/L患者可使用人血白蛋白报销 B. 纠正低白蛋白血症是否真能提升抗菌药物疗效、降低感染风险 C. 权威指南对Alb＜30g/L危重症患者使用人血白蛋白的具体推荐场景 D. 脓毒症患者联用高蛋白结合率抗生素时，补充白蛋白的临床获益证据[/OPTIONS][/QUESTION]
+- 测试回答：C
+- 关注点执行结果：
+```json
+[
+  {
+    "planned_branch": "F2_OPTION",
+    "actual_branch": "F2_OPTION",
+    "answer": "C",
+    "fixed_option_label": "A",
+    "fixed_option_text": "医保报销限制：仅Alb≤25g/L患者可使用人血白蛋白报销",
+    "selected_option_label": "C",
+    "selected_option_text": "权威指南对Alb＜30g/L危重症患者使用人血白蛋白的具体推荐场景",
+    "custom_input": "",
+    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 医保报销限制：仅Alb≤25g/L患者可使用人血白蛋白报销 B. 纠正低白蛋白血症是否真能提升抗菌药物疗效、降低感染风险 C. 权威指南对Alb＜30g/L危重症患者使用人血白蛋白的具体推荐场景 D. 脓毒症患者联用高蛋白结合率抗生素时，补充白蛋白的临床获益证据[/OPTIONS][/QUESTION]"
+  }
+]
+```
+- LLM对话评估：
+```json
+{
+  "enabled": true,
+  "result": {
+    "has_first_visit_history_question": false,
+    "skip_reason": "非首次拜访路径，跳过LLM评估"
+  },
+  "error": ""
+}
+```
+- 接口耗时记录：
+```json
+[
+  {
+    "api_name": "start_conversation",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/start",
+    "request_identifier": "P003",
+    "case_id": "P003",
+    "session_id": "",
+    "elapsed_ms": 67.09,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 3566.19,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 699.64,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 1668.79,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 2136.77,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 924.89,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 72.21,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 3058.84,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "call_focus_match_llm",
+    "request_method": "POST",
+    "request_path": "https://api.deepseek.com/chat/completions",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 2335.41,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 1182.91,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/history/aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 55.88,
+    "success": false,
+    "status_code": 400,
+    "error": "400 Client Error: Bad Request for url: https://dmc-dev-1.nullht.com/csl-medical-chatbot/api/sale/chat/history/aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8"
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/history/aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "request_identifier": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "case_id": "P003",
+    "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+    "elapsed_ms": 71.67,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  }
+]
+```
+- 最终拜访计划：
+```json
+{
+  "literatures": [
+    {
+      "id": "dd48f56a05d610230ac750c5fdd523c1",
+      "title": "DA-人血白蛋白--优化脓毒症和脓毒症休克患者的液体治疗-CHN-ALB-0535.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在脓毒性休克患者的液体复苏中，该研究显示人血白蛋白可显著降低患者90天死亡风险达19%，并能有效减少液体净平衡量，是证实预后获益的关键证据。",
+      "file_key": "89de8b287fbfa74b28bf9826e9efd40a"
+    },
+    {
+      "id": "614d32b7c458abe70fe51c660500fc3f",
+      "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "该研究针对危重症救治提供了权威指导，明确将血清白蛋白≤30g/L定为人血白蛋白的临床应用指征，为临床规范化使用提供了核心准则。",
+      "file_key": "24a5eb52596a20afe11ce38f7b41e094"
+    },
+    {
+      "id": "634e50aff29c41665848f2becdfc9628",
+      "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "该研究针对脓毒症液体复苏提供了明确的用药时机建议，并指出随血清白蛋白水平增加并发症风险逐渐下降，为改善患者预后提供了有价值的参考依据。",
+      "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+    }
+  ],
+  "user_id": null,
+  "session_id": "aa8cd4dc-e80e-4819-97ad-f0c55b85bdf8",
+  "visit_plan_digest": {
+    "notion": "该ICU主任为低蛋白使用者，现阶段对Alb<30 g/L患者白蛋白使用率约40%~60%（“使用”阶段），在此次沟通中明确关注权威指南对Alb≤30 g/L适应证与启动时机；可推测对循证指南证据较为重视，愿意以规范标准指导临床决策。",
+    "doctorInfo": {
+      "department": "ICU",
+      "type": "低蛋白使用者",
+      "grade": "使用",
+      "rank": "主任医师",
+      "level": "C类客户"
+    },
+    "goal": "围绕“权威指南建议在显著低白蛋白（≤30 g/L）危重患者中考虑补充人血白蛋白，纠正低白蛋白有助于改善抗菌药物疗效并降低感染风险”这一核心信息，推动医生从“使用”向“偏好”进阶；下一阶段（偏好）意味着在Alb<30 g/L时使用率升至>60%，更倾向于以30 g/L为触发点常规启动白蛋白治疗并在科室内形成稳定的适应证与启动时机标准。",
+    "strategy": "以权威指南和ALBIOS等研究设定的≥30 g/L干预目标为切入，围绕适应证与启动时机展开讨论，强调对白蛋白对高蛋白结合率抗生素药代学/疗效的临床意义，推动其同意在Alb<30 g/L情形下更常规优先使用白蛋白并试行路径化回顾以评估效果。"
+  },
+  "comm_suggest": {
+    "literatures": [
+      {
+        "id": null,
+        "title": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "2. Ibrahim, E.H., et al.,Chest, 2000. 118(1):146-155.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项前瞻性队列研究纳入492名ICU患者，评估抗菌治疗血流感染的充分性与临床结局关系。结果：院内死亡患者的血清白蛋白水平（2.6 g/dL）显著低于存活者（2.9 g/dL）；血清白蛋白每下降1 g/dL，抗菌治疗失败风险增加37%（AOR 1.37, p<0.014）。",
+        "file_key": null
+      }
+    ],
+    "transitional_info": [
+      "强调对Alb＜30 g/L的患者纠正低白蛋白血症有权威指南推荐以及纠正低白蛋白血症有助于提高抗菌药物治疗的有效性，降低感染风险等积极的临床获益。"
+    ],
+    "support_info": "●中国《人血白蛋白在危重症患者应用专家共识》{1}推荐人血白蛋白在多种危重症患者中使用，包括腹部外科手术患者、烧伤患者、创伤患者、失血性休克患者、ARDS患者等\n●低白蛋白血症会影响高蛋白结合率的抗菌药物，可致抗菌治疗失败风险升高，增加患者感染风险\n一项对危重症患者的研究显示，血清白蛋白水平每降低{1}g/dL，抗菌治疗失败风险升高37%；院内死亡患者的血清白蛋白水平（26g/L）显著低于院内存活患者（ 29g/L ）{2}\n●脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学"
+  },
+  "focus_point": {
+    "items": [
+      {
+        "title": "国家/专家文件将“显著低白蛋白血症（≤30 g/L）”列为人血白蛋白适应证",
+        "content": "多项国内管理与共识文件将显著低白蛋白血症（阈值为≤30 g/L）明示为人血白蛋白的适应证，并将其纳入临床应用范围（包括作为危重患者的治疗情形之一）。在临床路径与用药管理中，建议围绕该阈值建立院内应用标准与监测流程，以保证适应证、用量与安全监控一致性。{d7e0d1bb2a160c248bfd6fc15fde4203}{2f4af773d865b9f44be13d7893ecf30e}{5b1c18a0f6659be8598b5786b8283e58}"
+      },
+      {
+        "title": "ALBIOS 试验中的治疗目标：将血清白蛋白维持≥30 g/L 作为严重脓毒症患者的干预目标",
+        "content": "在多中心临床研究中，白蛋白联合晶体液组以将血清白蛋白维持在≥30 g/L为目标（直至出ICU或研究至28天），将该目标作为严重脓毒症患者补充白蛋白的明确干预指标。这一设计为在危重脓毒症中以30 g/L为分界的治疗决策提供了临床试验层面的参考框架。{c069cdf74a08e90317664e538661ae20}"
+      },
+      {
+        "title": "指南/共识对脓毒症/脓毒性休克液体复苏中使用白蛋白的具体情形说明",
+        "content": "权威指南与专家共识建议在脓毒症/脓毒性休克的容量替代阶段考虑使用人血白蛋白，尤其在常规晶体液复苏后仍存在血流动力学不稳定或需要大量晶体液时可加用白蛋白。实践中对“血流动力学不稳定”已给出操作性判定标准，可据此识别适合启动白蛋白治疗的患者时机。{d60559449d6ea8907e086517a37b2b75}{07e42ff5caac054e4c4600a5d7da86f5}{6fc2800d69b6faed52e08f8a4a7d5258}"
+      }
+    ],
+    "literatures": [
+      {
+        "id": "614d32b7c458abe70fe51c660500fc3f",
+        "title": "2024 人血白蛋白临床应用管理中国专家共识.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "d7e0d1bb2a160c248bfd6fc15fde4203",
+          "2f4af773d865b9f44be13d7893ecf30e",
+          "5b1c18a0f6659be8598b5786b8283e58"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "24a5eb52596a20afe11ce38f7b41e094"
+      },
+      {
+        "id": "08185186d3ec6eaa2b74b0be2c1538fa",
+        "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "c069cdf74a08e90317664e538661ae20"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "92fca00cad9674414d7882c518635033"
+      },
+      {
+        "id": "634e50aff29c41665848f2becdfc9628",
+        "title": "专家幻灯-《人血白蛋白在脓毒症及脓毒症休克中的应用》-CHN-ALB-0640.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "d60559449d6ea8907e086517a37b2b75"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "b1c93ad7d6ef30dfaa05ed9ffa900d9d"
+      },
+      {
+        "id": "e8ae87bb3367889ca7eaf1b62c43550e",
+        "title": "8_中国医师协会急诊医师分会_临床急诊杂志_2018_19(9)_567-588.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "07e42ff5caac054e4c4600a5d7da86f5"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "a93964071af3c21592cb30971bd259b4"
+      },
+      {
+        "id": "d8ec8137c09ff3f16d976d984ad9954e",
+        "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗_Final.pdf",
+        "type": "INNER",
+        "chunk_ids": [
+          "6fc2800d69b6faed52e08f8a4a7d5258"
+        ],
+        "file_name": null,
+        "research_summary": null,
+        "file_key": "63cdcdc0be5a8ecce8d9c9aae6f855be"
+      }
+    ]
+  },
+  "phase3_flag": true
+}
+```
+- 断言结果：
+```json
+{
+  "passed": true,
+  "total_checks": 14,
+  "passed_checks": 14,
+  "failed_fields": [],
+  "checks": [
+    {
+      "field_name": "doctor_type",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "doctor_grade",
+      "expected": "使用",
+      "actual": "使用",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "trans_info",
+      "expected": "强调对Alb＜30 g/L的患者纠正低白蛋白血症有权威指南推荐以及纠正低白蛋白血症有助于提高抗菌药物治疗的有效性，降低感染风险等积极的临床获益。",
+      "actual": "强调对Alb＜30 g/L的患者纠正低白蛋白血症有权威指南推荐以及纠正低白蛋白血症有助于提高抗菌药物治疗的有效性，降低感染风险等积极的临床获益。",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "support_info",
+      "expected": "●中国《人血白蛋白在危重症患者应用专家共识》1推荐人血白蛋白在多种危重症患者中使用，包括腹部外科手术患者、烧伤患者、创伤患者、失血性休克患者、ARDS患者等\n●低白蛋白血症会影响高蛋白结合率的抗菌药物，可致抗菌治疗失败风险升高，增加患者感染风险\n▶一项对危重症患者的研究显示，血清白蛋白水平每降低1g/dL，抗菌治疗失败风险升高37%；院内死亡患者的血清白蛋白水平（26g/L）显著低于院内存活患者（ 29g/L ）2\n●脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学",
+      "actual": "●中国《人血白蛋白在危重症患者应用专家共识》{1}推荐人血白蛋白在多种危重症患者中使用，包括腹部外科手术患者、烧伤患者、创伤患者、失血性休克患者、ARDS患者等\n●低白蛋白血症会影响高蛋白结合率的抗菌药物，可致抗菌治疗失败风险升高，增加患者感染风险\n一项对危重症患者的研究显示，血清白蛋白水平每降低{1}g/dL，抗菌治疗失败风险升高37%；院内死亡患者的血清白蛋白水平（26g/L）显著低于院内存活患者（ 29g/L ）{2}\n●脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "comm_literature_titles",
+      "expected": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.\n2. Ibrahim, E.H., et al.,Chest, 2000. 118(1):146-155.",
+      "actual": "1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.\n2. Ibrahim, E.H., et al.,Chest, 2000. 118(1):146-155.",
+      "passed": true,
+      "match_mode": "list_exact"
+    },
+    {
+      "field_name": "comm_literature_summaries",
+      "expected": "1. 2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）\n2. 一项前瞻性队列研究纳入492名ICU患者，评估抗菌治疗血流感染的充分性与临床结局关系。结果：院内死亡患者的血清白蛋白水平（2.6 g/dL）显著低于存活者（2.9 g/dL）；血清白蛋白每下降1 g/dL，抗菌治疗失败风险增加37%（AOR 1.37, p<0.014）。",
+      "actual": "2021 人血白蛋白在危重症患者应用专家共识推荐意见：\n● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。\n● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。\n● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。\n● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）\n● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）\n一项前瞻性队列研究纳入492名ICU患者，评估抗菌治疗血流感染的充分性与临床结局关系。结果：院内死亡患者的血清白蛋白水平（2.6 g/dL）显著低于存活者（2.9 g/dL）；血清白蛋白每下降1 g/dL，抗菌治疗失败风险增加37%（AOR 1.37, p<0.014）。",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "digest.department",
+      "expected": "ICU",
+      "actual": "ICU",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.rank",
+      "expected": "主任医师",
+      "actual": "主任医师",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.level",
+      "expected": "C类客户",
+      "actual": "C类客户",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.type",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "digest.grade",
+      "expected": "使用",
+      "actual": "使用",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_branch",
+      "expected": "F2_OPTION",
+      "actual": "F2_OPTION",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "focus_title.non_empty",
+      "expected": "非空",
+      "actual": "国家/专家文件将“显著低白蛋白血症（≤30 g/L）”列为人血白蛋白适应证\nALBIOS 试验中的治疗目标：将血清白蛋白维持≥30 g/L 作为严重脓毒症患者的干预目标\n指南/共识对脓毒症/脓毒性休克液体复苏中使用白蛋白的具体情形说明",
+      "passed": true,
+      "match_mode": "not_empty"
+    },
+    {
+      "field_name": "focus_content.non_empty",
+      "expected": "非空",
+      "actual": "多项国内管理与共识文件将显著低白蛋白血症（阈值为≤30 g/L）明示为人血白蛋白的适应证，并将其纳入临床应用范围（包括作为危重患者的治疗情形之一）。在临床路径与用药管理中，建议围绕该阈值建立院内应用标准与监测流程，以保证适应证、用量与安全监控一致性。{d7e0d1bb2a160c248bfd6fc15fde4203}{2f4af773d865b9f44be13d7893ecf30e}{5b1c18a0f6659be8598b5786b8283e58}\n在多中心临床研究中，白蛋白联合晶体液组以将血清白蛋白维持在≥30 g/L为目标（直至出ICU或研究至28天），将该目标作为严重脓毒症患者补充白蛋白的明确干预指标。这一设计为在危重脓毒症中以30 g/L为分界的治疗决策提供了临床试验层面的参考框架。{c069cdf74a08e90317664e538661ae20}\n权威指南与专家共识建议在脓毒症/脓毒性休克的容量替代阶段考虑使用人血白蛋白，尤其在常规晶体液复苏后仍存在血流动力学不稳定或需要大量晶体液时可加用白蛋白。实践中对“血流动力学不稳定”已给出操作性判定标准，可据此识别适合启动白蛋白治疗的患者时机。{d60559449d6ea8907e086517a37b2b75}{07e42ff5caac054e4c4600a5d7da86f5}{6fc2800d69b6faed52e08f8a4a7d5258}",
+      "passed": true,
+      "match_mode": "not_empty"
+    }
+  ]
+}
+```
+
+## P004 ICU -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
+- 状态：DONE
+- session_id：28b40880-bebd-41c3-8aba-047ba4e243a3
+- 关注点策略：F1
+- 首次出现can_stop=true的轮次：-
+- 实际调用stop的轮次：-
+- 系统提问：为了给您最相关的建议，我们首先从医生档案开始：您能告诉我您计划拜访的医生职称吗？
+- 测试回答：主任医师
+- 系统提问：[QUESTION]请问您本次拜访的目标科室是？[OPTIONS]A. ICU B. 医院管理层/药剂科 C. 肝病 D. 心脏外科[/OPTIONS][/QUESTION]
+- 测试回答：ICU（现版本）
+- 系统提问：[QUESTION]您计划拜访的这位医生属于什么分级？[OPTIONS]A. A类客户 B. B类客户 C. C类客户 D. D类客户 E. 未分级[/OPTIONS][/QUESTION]
+- 测试回答：D
+- 系统提问：[QUESTION]您与该医生的熟悉程度是？[OPTIONS]A. 首次拜访 B. 既往拜访过[/OPTIONS][/QUESTION]
+- 测试回答：既往拜访过
+- 系统提问：[QUESTION]您所拜访的医师，使用杰特贝林的比例？[OPTIONS]A. ≥50% B. ＜50% C. 不清楚[/OPTIONS][/QUESTION]
+- 测试回答：≥50%
+- 系统提问：您拜访的医生属于下列哪种类型？
+[QUESTION]请选择：[OPTIONS]A. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例<70% B. 临床医生，对于Alb<30g/L的患者,使用白蛋白的比例≥70%[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 系统提问：你所拜访的医生在低白蛋白血症的患者中，通常有多少使用人血白蛋白进行治疗？
+[QUESTION]请选择或描述：[OPTIONS]A. <20% B. 20%~40% C.  40%~60% D. ＞60% E. ＞60%，同时会向其他医生主动推荐在这类患者中优先使用白蛋白[/OPTIONS][/QUESTION]
+- 测试回答：D
+- 系统提问：[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 白蛋白治疗虽有临床获益，但价格高，影响DRG控费和科室绩效考核 B. 白蛋白治疗能否真正缩短ICU住院时间与降低再入院率 C. 在低白蛋白血症危重症患者中，白蛋白干预对并发症发生率的具体影响 D. 相比晶体液，20%白蛋白在重度脓毒症患者中的成本效果证据是否充分[/OPTIONS][/QUESTION]
+- 测试回答：A
+- 关注点执行结果：
+```json
+[
+  {
+    "planned_branch": "F1",
+    "actual_branch": "F1",
+    "answer": "A",
+    "fixed_option_label": "A",
+    "fixed_option_text": "白蛋白治疗虽有临床获益，但价格高，影响DRG控费和科室绩效考核",
+    "selected_option_label": "A",
+    "selected_option_text": "白蛋白治疗虽有临床获益，但价格高，影响DRG控费和科室绩效考核",
+    "custom_input": "",
+    "question": "[QUESTION]此次拜访，您预计医生可能的关注点是什么？[OPTIONS]A. 白蛋白治疗虽有临床获益，但价格高，影响DRG控费和科室绩效考核 B. 白蛋白治疗能否真正缩短ICU住院时间与降低再入院率 C. 在低白蛋白血症危重症患者中，白蛋白干预对并发症发生率的具体影响 D. 相比晶体液，20%白蛋白在重度脓毒症患者中的成本效果证据是否充分[/OPTIONS][/QUESTION]"
+  }
+]
+```
+- LLM对话评估：
+```json
+{
+  "enabled": true,
+  "result": {
+    "has_first_visit_history_question": false,
+    "skip_reason": "非首次拜访路径，跳过LLM评估"
+  },
+  "error": ""
+}
+```
+- 接口耗时记录：
+```json
+[
+  {
+    "api_name": "start_conversation",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/start",
+    "request_identifier": "P004",
+    "case_id": "P004",
+    "session_id": "",
+    "elapsed_ms": 63.5,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 1764.69,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 760.39,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 1573.68,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 859.35,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 760.14,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 63.51,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 2251.28,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "call_focus_match_llm",
+    "request_method": "POST",
+    "request_path": "https://api.deepseek.com/chat/completions",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 2288.26,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "send_message",
+    "request_method": "POST",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/message",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 1193.19,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  },
+  {
+    "api_name": "fetch_visit_plan_detail_once",
+    "request_method": "GET",
+    "request_path": "/csl-medical-chatbot/api/sale/chat/history/28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "request_identifier": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "case_id": "P004",
+    "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+    "elapsed_ms": 44.37,
+    "success": true,
+    "status_code": 200,
+    "error": ""
+  }
+]
+```
+- 最终拜访计划：
+```json
+{
+  "literatures": [
+    {
+      "id": "08185186d3ec6eaa2b74b0be2c1538fa",
+      "title": "科室会幻灯_人血白蛋白优化脓毒症和脓毒性休克患者的液体治疗-CHN-ALB-0609.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在ICU严重脓毒症患者的容量复苏中，该研究显示人血白蛋白可使28天死亡风险显著降低29%，为通过早期纠正低白蛋白改善患者预后提供了强有力的循证支持。",
+      "file_key": "92fca00cad9674414d7882c518635033"
+    },
+    {
+      "id": "e10eec6a1579a62dbefaa968dab52c67",
+      "title": "专家幻灯-重症患者ARDS的防治策略-CHN-ALB-0398.pdf",
+      "type": "INNER",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在急性呼吸窘迫综合征（ARDS）的临床管理中，该研究观察到输注人血白蛋白纠正低蛋白血症可使死亡风险显著降低，为早期干预改善危重症预后提供了明确的证据参考。",
+      "file_key": "3515bc844a755b44468237aa1994c4ac"
+    },
+    {
+      "id": "0a9c9d1e-bc8c-4a3f-9bd2-6c14cc788873-7a412ebb8ea341c1bd0aee9119be9cea",
+      "title": "Early Albumin Infusion Is Associated With Greater Survival to Discharge Among Patients With Sepsis/Septic Shock Who Develop Severe Acute Kidney Injury Among Patients With Sepsis/Septic Shock Who Develop Severe Acute Kidney Injury.",
+      "type": "EXTERNAL",
+      "chunk_ids": [],
+      "file_name": null,
+      "research_summary": "在脓毒症合并严重急性肾损伤的治疗场景中，该研究显示入院24小时内早期输注人血白蛋白可显著缩短中位出院时间并提高临床稳定出院率，为平衡临床获益与医疗资源利用提供了有价值的参考依据。",
+      "file_key": null
+    }
+  ],
+  "user_id": null,
+  "session_id": "28b40880-bebd-41c3-8aba-047ba4e243a3",
+  "visit_plan_digest": {
+    "notion": "ICU主任，作为低蛋白使用者处于偏好阶段，通常在Alb<30g/L时使用白蛋白并认可其临床获益，但对价格与DRG控费有明确顾虑（推断）。",
+    "doctorInfo": {
+      "department": "ICU",
+      "type": "低蛋白使用者",
+      "grade": "偏好",
+      "rank": "主任医师",
+      "level": "D类客户"
+    },
+    "goal": "围绕“早期纠正低白蛋白可减少并发症、缩短住院并提升病床周转”的核心信息，推动医生从当前的“偏好”向“提倡”进阶；对此类低蛋白使用者而言，成为“提倡”意味着在大多数Alb<30g/L患者常规使用白蛋白，并主动在科室内推荐和支持白蛋白的临床应用与决策推动。",
+    "strategy": "以改善临床结局和提升DRG/科室绩效为切入点，先认可成本顾虑，再用效率与病床周转角度论证白蛋白的整体价值，争取科室试点与主动推荐。"
+  },
+  "comm_suggest": {
+    "literatures": [
+      {
+        "id": null,
+        "title": "1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。",
+        "file_key": null
+      },
+      {
+        "id": null,
+        "title": "2. Farrugia A, Martin G, Bult M. Ann Update Crit Care Emer Med 2013;515‒26.",
+        "type": "CSL",
+        "chunk_ids": null,
+        "file_name": null,
+        "research_summary": "一项成本效果分析比较了白蛋白、晶体液和HES，该研究利用了一发表文献及其他花费相关的公开信息。 结果：经模型预测，相对晶体液，人血白蛋白治疗脓毒症可多获得0.22个生命年，而HES治疗可导致1.00个生命年的损失。",
+        "file_key": null
+      }
+    ],
+    "transitional_info": [
+      "介绍应用白蛋白纠正低白蛋白血症可以通过减少并发症发生、缩短住院时间、降低再入院率等方面提高临床治疗获益与效率。"
+    ],
+    "support_info": "●危重症患者通过输注白蛋白纠正患者的低蛋白血症，可以减少并发症的发生，降低死亡风险，降低后续治疗的复杂性和成本，减少住院时间与ICU停留时间，从而提高病床周转率，提高治疗效率。\n血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%{1}\n基于ALBIOS研究亚组的结局进行的分析表明，在重度脓毒症和低白蛋白血症患者中，20%白蛋白比标准医疗实践（晶体液）更具成本效果（基于每获得一个寿命年的增量成本）{2}"
+  },
+  "focus_point": {
+    "items": [
+      {
+        "title": "临床医生认可人血白蛋白的临床优势，但主要还是价格太贵，现在DRG医保控费用是医生和科室绩效考核的主要指标，也有一定的压力。",
+        "content": "现在DRG2.0更多的强调价值医疗，不是简单的考虑治疗费用成本，更是从保证医疗质量与安全的前提下同时通过精细化管理提高效率。现在很多医院绩效考核对于非预期的并发症、院感有很高的控制要求，降低平均住院天数也是绩效考核的一个重要指标。白蛋白虽然单价与使用费用不低，但是纠正低白蛋白血症为患者带来临床上的治疗获益，还能够减少并发症、缩短住院时间、降低再入院率，提高科室病床周转，从而提升科室与医院的绩效考核。"
+      }
+    ],
+    "literatures": null
+  },
+  "phase3_flag": true
+}
+```
+- 断言结果：
+```json
+{
+  "passed": true,
+  "total_checks": 14,
+  "passed_checks": 14,
+  "failed_fields": [],
+  "checks": [
+    {
+      "field_name": "doctor_type",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "doctor_grade",
+      "expected": "偏好",
+      "actual": "偏好",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "trans_info",
+      "expected": "介绍应用白蛋白纠正低白蛋白血症可以通过减少并发症发生、缩短住院时间、降低再入院率等方面提高临床治疗获益与效率。",
+      "actual": "介绍应用白蛋白纠正低白蛋白血症可以通过减少并发症发生、缩短住院时间、降低再入院率等方面提高临床治疗获益与效率。",
+      "passed": true,
+      "match_mode": "exact"
+    },
+    {
+      "field_name": "support_info",
+      "expected": "●危重症患者通过输注白蛋白纠正患者的低蛋白血症，可以减少并发症的发生，降低死亡风险，降低后续治疗的复杂性和成本，减少住院时间与ICU停留时间，从而提高病床周转率，提高治疗效率。\n▶血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%1\n▶基于ALBIOS研究亚组的结局进行的分析表明，在重度脓毒症和低白蛋白血症患者中，20%白蛋白比标准医疗实践（晶体液）更具成本效果（基于每获得一个寿命年的增量成本）2",
+      "actual": "●危重症患者通过输注白蛋白纠正患者的低蛋白血症，可以减少并发症的发生，降低死亡风险，降低后续治疗的复杂性和成本，减少住院时间与ICU停留时间，从而提高病床周转率，提高治疗效率。\n血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%{1}\n基于ALBIOS研究亚组的结局进行的分析表明，在重度脓毒症和低白蛋白血症患者中，20%白蛋白比标准医疗实践（晶体液）更具成本效果（基于每获得一个寿命年的增量成本）{2}",
+      "passed": true,
+      "match_mode": "contains"
+    },
+    {
+      "field_name": "comm_literature_titles",
+      "expected": "1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）\n\n2. Farrugia A, Martin G, Bult M. Ann Update Crit Care Emer Med 2013;515‒26.",
+      "actual": "1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）\n2. Farrugia A, Martin G, Bult M. Ann Update Crit Care Emer Med 2013;515‒26.",
+      "passed": true,
+      "match_mode": "list_exact"
+    },
+    {
+      "field_name": "comm_literature_summaries",
+      "expected": "1. 一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。\n\n2. 一项成本效果分析比较了白蛋白、晶体液和HES，该研究利用了一发表文献及其他花费相关的公开信息。 结果：经模型预测，相对晶体液，人血白蛋白治疗脓毒症可多获得0.22个生命年，而HES治疗可导致1.00个生命年的损失。",
+      "actual": "一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。\n一项成本效果分析比较了白蛋白、晶体液和HES，该研究利用了一发表文献及其他花费相关的公开信息。 结果：经模型预测，相对晶体液，人血白蛋白治疗脓毒症可多获得0.22个生命年，而HES治疗可导致1.00个生命年的损失。",
       "passed": true,
       "match_mode": "contains"
     },
@@ -309,15 +1649,15 @@
     },
     {
       "field_name": "digest.type",
-      "expected": "品牌认知者",
-      "actual": "品牌认知者",
+      "expected": "低蛋白使用者",
+      "actual": "低蛋白使用者",
       "passed": true,
       "match_mode": "exact"
     },
     {
       "field_name": "digest.grade",
-      "expected": "知道",
-      "actual": "知道",
+      "expected": "偏好",
+      "actual": "偏好",
       "passed": true,
       "match_mode": "exact"
     },
@@ -330,15 +1670,15 @@
     },
     {
       "field_name": "focus_title",
-      "expected": "杰特贝林在国际市场上是白蛋白产品专家，但在中国市场很少听到。",
-      "actual": "杰特贝林在国际市场上是白蛋白产品专家，但在中国市场很少听到。",
+      "expected": "临床医生认可人血白蛋白的临床优势，但主要还是价格太贵，现在DRG医保控费用是医生和科室绩效考核的主要指标，也有一定的压力。",
+      "actual": "临床医生认可人血白蛋白的临床优势，但主要还是价格太贵，现在DRG医保控费用是医生和科室绩效考核的主要指标，也有一定的压力。",
       "passed": true,
       "match_mode": "contains"
     },
     {
       "field_name": "focus_content",
-      "expected": "● 杰特贝林服务中国患者40年，是中国人血白蛋白市场的领导者\n● 1986年，杰特贝林就开始为中国患者提供人血白蛋白，已成为中国市场该产品的主要供应商之一\n● 杰特贝林人血白蛋白在中国人血白蛋白销售市场份额 NO.1。(数据来源:艾昆玮医院市场 MAT1Q/26 IQVIA Data)",
-      "actual": "- 杰特贝林服务中国患者40年，是中国人血白蛋白市场的领导者\n- 1986年，杰特贝林就开始为中国患者提供人血白蛋白，已成为中国市场该产品的主要供应商之一\n- 杰特贝林人血白蛋白在中国人血白蛋白销售市场份额 NO.1。(数据来源:艾昆玮医院市场 MAT1Q/26 IQVIA Data)",
+      "expected": "现在DRG2.0更多的强调价值医疗，不是简单的考虑治疗费用成本，更是从保证医疗质量与安全的前提下同时通过精细化管理提高效率。现在很多医院绩效考核对于非预期的并发症、院感有很高的控制要求，降低平均住院天数也是绩效考核的一个重要指标。白蛋白虽然单价与使用费用不低，但是纠正低白蛋白血症为患者带来临床上的治疗获益，还能够减少并发症、缩短住院时间、降低再入院率，提高科室病床周转，从而提升科室与医院的绩效考核。",
+      "actual": "现在DRG2.0更多的强调价值医疗，不是简单的考虑治疗费用成本，更是从保证医疗质量与安全的前提下同时通过精细化管理提高效率。现在很多医院绩效考核对于非预期的并发症、院感有很高的控制要求，降低平均住院天数也是绩效考核的一个重要指标。白蛋白虽然单价与使用费用不低，但是纠正低白蛋白血症为患者带来临床上的治疗获益，还能够减少并发症、缩短住院时间、降低再入院率，提高科室病床周转，从而提升科室与医院的绩效考核。",
       "passed": true,
       "match_mode": "contains"
     }

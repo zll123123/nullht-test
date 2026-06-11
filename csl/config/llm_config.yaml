@@ -1,4 +1,9 @@
+# LLM 公共配置，关注点匹配和完整对话评估共用这里的模型连接参数。
 llm_enabled: true
 llm_base_url: "https://api.deepseek.com/chat/completions"
 llm_model: "deepseek-v4-flash"
 llm_timeout_seconds: 30
+
+# 完整对话评估默认关闭，填写 prompt 后再开启，避免影响普通接口回归。
+conversation_evaluation_enabled: true
+conversation_evaluation_prompt_file: "evaluations/conversation_evaluation_prompt.md"

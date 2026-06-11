@@ -30,6 +30,10 @@
 执行模式：
 1. `llm`
    - 基于 Excel 中现有内容做 LLM 审核与原因归因。
+2. `cause-only`
+   - 不重新执行 LLM 审核。
+   - 直接复用表格里现有的 `LLM审核结果`、`pptstruct问题`，只重算
+     `问题原因标签` 和 `问题原因说明`。
 """
 
 import argparse
@@ -78,7 +82,55 @@ MAX_REPORT_ITEMS = 5
 MAX_TEXT_SNIPPET_LENGTH = 80
 PASS_KEYWORDS = ("审核通过", "未发现明显问题", "未发现问题", "无问题")
 OCR_ERROR_KEYWORDS = ("ocr", "识别", "文本块", "版面", "表格", "漏字", "错字", "文字", "字段缺失", "字段错误")
-IMAGE_ERROR_KEYWORDS = ("图片", "图表", "曲线", "柱状图", "折线图", "饼图", "示意图", "照片", "caption", "description")
+TOKEN_CHAR_CLASS = r"A-Za-z0-9\u4e00-\u9fff·\-ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫα-ωΑ-Ω"
+TERM_PATTERN = re.compile(r"[\"'“”‘’]?([" + TOKEN_CHAR_CLASS + r"]{2,})[\"'“”‘’]?")
+ISSUE_SPLIT_PATTERN = re.compile(r"[；;。]\s*|\s*(?:并且|且|同时|并)\s*")
+REPLACE_PATTERNS = (
+    re.compile(
+        r"[\"'“”‘’]?(?P<wrong>[" + TOKEN_CHAR_CLASS + r"]{2,})[\"'“”‘’]?"
+        r"与原文"
+        r"[\"'“”‘’]?(?P<correct>[" + TOKEN_CHAR_CLASS + r"]{2,})[\"'“”‘’]?"
+        r"不一致"
+    ),
+    re.compile(
+        r"(?:将|把)?[\"'“”‘’]?(?P<correct>[" + TOKEN_CHAR_CLASS + r"]{2,})[\"'“”‘’]?"
+        r"(?:错误)?(?:提取|识别|写|记|抽取)?(?:为|成)"
+        r"[\"'“”‘’]?(?P<wrong>[" + TOKEN_CHAR_CLASS + r"]{2,})[\"'“”‘’]?"
+    ),
+)
+MISSING_PATTERNS = (
+    re.compile(r"(?:遗漏(?:了)?|缺少(?:了)?|缺失(?:了)?|未提取|未识别|未保留)(?P<term>[" + TOKEN_CHAR_CLASS + r"]{2,})"),
+    re.compile(r"[\"'“”‘’]?(?P<term>[" + TOKEN_CHAR_CLASS + r"]{2,})[\"'“”‘’]?(?:未提取|未识别|被遗漏|被漏掉)"),
+)
+ROOT_CAUSE_PRIORITY = ("paddle VL识别错误", "图表或者图片错误", "pptstruct错误")
+GENERIC_ISSUE_TERMS = {
+    "pptstruct",
+    "原文",
+    "内容",
+    "文本",
+    "字段",
+    "信息",
+    "问题",
+    "错误",
+    "遗漏",
+    "冗余",
+    "重复",
+    "表述",
+    "偏差",
+    "事实",
+    "语义",
+    "图片",
+    "图表",
+    "名称",
+    "药物名称",
+    "名词",
+    "描述",
+    "摘要",
+    "总结",
+    "正文",
+    "与原文",
+    "原文错误形式",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -87,9 +139,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--sheet-name", help="可选，指定工作表名称；默认使用 active sheet")
     parser.add_argument(
         "--mode",
-        choices=("llm",),
+        choices=("llm", "cause-only"),
         default="llm",
-        help="llm: 只跑 LLM 审核与原因归因",
+        help="llm: 跑 LLM 审核与原因归因；cause-only: 仅重算归因列",
     )
     parser.add_argument(
         "--save-batch-size",
@@ -309,7 +361,7 @@ def build_llm_prompt(source_text: str, struct_text: str) -> str:
 3. 逻辑与结论：核心结论(Take-home message)是否准确；叙述逻辑是否一致；关键支撑数据是否被误删或扭曲。
 
 特别说明：
-- pptStruct中的`image_elements.description`字段是对图表的描述性内容，属于模型对图表的理解生成，**不需要判断其是否在原文中存在**。审核时忽略该字段与原文的匹配性检查，不将其作为遗漏或冗余的依据。
+- `image_elements` 下的 `text` 字段是从原文中提取出的文本，需要参与审核，并判断其内容是否正确、是否与原文一致。
 - 仅关注内容层面的语义、事实、表述等问题。
 
 判断问题类型、严重程度、依据，并分别指出原文问题和pptStruct问题。
@@ -339,13 +391,14 @@ pptStruct文本：
 
 def build_root_cause_prompt(
     llm_result_text: str,
+    struct_issue_text: str,
     paddle_ocr_text: str,
     image_parse_text: str,
     chart_parse_text: str,
 ) -> str:
     """构造多标签错误原因归因提示词。"""
     return """你是一名严格的问题归因助手。
-请根据以下信息，判断当前页问题涉及哪些错误来源。
+请先从 `pptstruct审核结果` 中提取每一条具体的 `pptstruct问题`，然后对每条问题单独归因，再汇总整体标签。
 
 可选分类只允许以下 4 个值：
 1. paddle VL识别错误
@@ -354,13 +407,34 @@ def build_root_cause_prompt(
 4. 无
 
 判断规则：
-1. 如果 `LLM审核结果` 表示未发现问题、审核通过、无明显错误，则 categories 返回 `["无"]`，reason 返回空字符串。
-2. 如果问题来自 OCR / 版面识别 / 表格识别 / 文字识别错误，可加入 `paddle VL识别错误`。
-3. 如果问题来自图片理解错误、图表理解错误、图片内容描述错误、图表内容描述错误，可加入 `图表或者图片错误`。
-4. 如果上游识别内容基本正常，但最终 `pptStruct` 组装、字段归类、内容摘要、字段取舍出现错误，可加入 `pptstruct错误`。
-5. 可以多选；如果多选，第一个元素必须是主因，后面按影响程度排序。
-6. 只有在完全没有问题时才允许返回 `无`；如果返回了 `无`，则不能再返回其他分类。
-7. 仅输出 JSON，不要输出 Markdown。
+1. 只有当 `LLM审核结果` 明确表示无问题、审核通过、未发现问题，且 `pptstruct问题` 为 `无` 时，categories 才返回 `["无"]`，reason 返回空字符串。
+2. 先把 `pptstruct问题` 拆成若干具体问题，每条问题归入以下三类之一：
+   - `遗漏`：pptStruct 少了原文应有的内容
+   - `多出内容`：pptStruct 比原文多了不该有的内容
+   - `内容错误`：pptStruct 把内容提错了、写错了、值错了、实体错了
+3. 对于 `遗漏`：
+   - 先检查被遗漏内容是否出现在 `日志paddleocr识别结果`、`日志中的图片解析内容`、`日志中的图表解析内容` 中。
+   - 若任一上游结果中已经出现该内容，而最终 pptStruct 未保留，则归因为 `pptstruct错误`。
+   - 若上游都未出现，再判断该内容理论上应来自哪里：
+     - 正文文字、表格文字、参考文献文字、页内文本 -> `paddle VL识别错误`
+     - 图片语义、图表语义、图片/图表说明 -> `图表或者图片错误`
+4. 对于 `多出内容`：
+   - 检查多出的内容最早出现在哪个上游结果中。
+   - 若 `日志paddleocr识别结果` 已出现该多余内容，则归因为 `paddle VL识别错误`。
+   - 若 `日志中的图片解析内容` 或 `日志中的图表解析内容` 已出现该多余内容，则归因为 `图表或者图片错误`。
+   - 若上游都未出现，而只有 pptStruct 出现，则归因为 `pptstruct错误`。
+5. 对于 `内容错误`：
+   - 只追踪错误版本的内容，不追踪正确版本内容。
+   - 若错误内容最早出现在 `日志paddleocr识别结果`，归因为 `paddle VL识别错误`。
+   - 若错误内容最早出现在 `日志中的图片解析内容` 或 `日志中的图表解析内容`，归因为 `图表或者图片错误`。
+   - 若上游都未出现错误内容，而 pptStruct 出现错误内容，则归因为 `pptstruct错误`。
+6. `日志中的图片解析内容`、`日志中的图表解析内容` 里大量描述性语句和多模态噪声不能直接作为证据；只有出现可直接核对的明确文本证据时，才能作为归因依据。
+7. 允许多选，但整体 `categories` 必须按固定优先级排序：`paddle VL识别错误` > `图表或者图片错误` > `pptstruct错误`。
+8. `reason` 必须逐条写清楚，每条都使用以下格式：
+   - `xxx归因为xxxx，原因是xxxx`
+   - 如果某条问题无法明确归因，写成：`xxx无法归因，原因是xxxx`
+   - 多条问题之间用 `；` 连接。
+9. 仅输出 JSON，不要输出 Markdown。
 
 JSON 字段固定为：
 - categories
@@ -368,6 +442,9 @@ JSON 字段固定为：
 
 LLM审核结果：
 {llm_result_text}
+
+pptstruct问题：
+{struct_issue_text}
 
 日志paddleocr识别结果：
 {paddle_ocr_text}
@@ -379,6 +456,7 @@ LLM审核结果：
 {chart_parse_text}
 """.format(
         llm_result_text=llm_result_text,
+        struct_issue_text=struct_issue_text,
         paddle_ocr_text=paddle_ocr_text,
         image_parse_text=image_parse_text,
         chart_parse_text=chart_parse_text,
@@ -493,6 +571,7 @@ def call_llm_review(source_text: str, struct_text: str) -> Dict[str, str]:
 
 def call_llm_root_cause(
     llm_result_text: str,
+    struct_issue_text: str,
     paddle_ocr_text: str,
     image_parse_text: str,
     chart_parse_text: str,
@@ -507,6 +586,7 @@ def call_llm_root_cause(
                 "role": "user",
                 "content": build_root_cause_prompt(
                     llm_result_text=llm_result_text,
+                    struct_issue_text=struct_issue_text,
                     paddle_ocr_text=paddle_ocr_text,
                     image_parse_text=image_parse_text,
                     chart_parse_text=chart_parse_text,
@@ -567,19 +647,287 @@ def contains_any_keyword(text: str, keywords: Tuple[str, ...]) -> bool:
     return any(keyword.lower() in normalized for keyword in keywords)
 
 
-def detect_root_cause_by_rules(
-    llm_result_text: str,
+def extract_candidate_terms(text: str) -> List[str]:
+    """从问题描述中提取候选错词，用于判断是否为 OCR 继承错误。"""
+    candidates: List[str] = []
+    for match in TERM_PATTERN.findall(normalize_text(text)):
+        normalized = match.strip()
+        if len(normalized) < 2:
+            continue
+        if normalized.lower() in GENERIC_ISSUE_TERMS:
+            continue
+        if normalized not in candidates:
+            candidates.append(normalized)
+    return candidates
+
+
+def split_issue_clauses(text: str) -> List[str]:
+    """将问题描述切分为多个子问题。"""
+    clauses: List[str] = []
+    for clause in ISSUE_SPLIT_PATTERN.split(normalize_text(text)):
+        normalized = clause.strip("，,：: ")
+        if normalized:
+            clauses.append(normalized)
+    return clauses
+
+
+def parse_struct_issue_items(struct_issue_text: str) -> List[Dict[str, object]]:
+    """把 `pptstruct问题` 解析为结构化子问题。
+
+    返回三类子问题：
+    1. `replace`: 替换型错误，只追错误词最早出现位置
+    2. `missing`: 遗漏型错误，检查目标词在哪一层被丢失
+    3. `generic`: 无法结构化时的兜底问题
+    """
+    items: List[Dict[str, object]] = []
+    for clause in split_issue_clauses(struct_issue_text):
+        matched = False
+        for pattern in REPLACE_PATTERNS:
+            result = pattern.search(clause)
+            if not result:
+                continue
+            correct_term = result.group("correct").strip()
+            wrong_term = result.group("wrong").strip()
+            if correct_term and wrong_term and correct_term != wrong_term:
+                items.append(
+                    {
+                        "type": "replace",
+                        "correct_term": correct_term,
+                        "wrong_term": wrong_term,
+                        "raw": clause,
+                    }
+                )
+                matched = True
+                break
+        if matched:
+            continue
+        for pattern in MISSING_PATTERNS:
+            result = pattern.search(clause)
+            if not result:
+                continue
+            missing_term = result.group("term").strip()
+            if missing_term and missing_term not in GENERIC_ISSUE_TERMS:
+                items.append({"type": "missing", "missing_term": missing_term, "raw": clause})
+                matched = True
+                break
+        if matched:
+            continue
+        generic_terms = extract_candidate_terms(clause)
+        if generic_terms:
+            items.append({"type": "generic", "terms": generic_terms, "raw": clause})
+
+    if items:
+        return items
+    generic_terms = extract_candidate_terms(struct_issue_text)
+    if generic_terms:
+        return [{"type": "generic", "terms": generic_terms, "raw": normalize_text(struct_issue_text)}]
+    return []
+
+
+def match_terms_in_text(terms: List[str], target_text: str) -> List[str]:
+    """返回在目标文本中命中的候选词。"""
+    target_compact = compact_text(target_text)
+    matched_terms: List[str] = []
+    for term in terms:
+        term_compact = compact_text(term)
+        if not term_compact:
+            continue
+        if term_compact in target_compact and term not in matched_terms:
+            matched_terms.append(term)
+    return matched_terms
+
+
+def append_root_cause_reason(categories: List[str], reasons: List[str], category: str, reason: str) -> None:
+    """追加归因结果，保持标签去重。"""
+    if category not in categories:
+        categories.append(category)
+    reasons.append(reason)
+
+
+def build_reason_entry(issue_text: str, category: Optional[str], detail: str) -> str:
+    """构造统一的归因说明文本。"""
+    normalized_issue = normalize_text(issue_text) or "该问题"
+    if category:
+        return "{}归因为{}，原因是{}。".format(normalized_issue, category, detail)
+    return "{}无法归因，原因是{}。".format(normalized_issue, detail)
+
+
+def classify_replace_issue(
+    issue_item: Dict[str, object],
+    categories: List[str],
+    reasons: List[str],
+    paddle_ocr_text: str,
+    image_chart_text: str,
+    struct_text: str,
+) -> None:
+    """对替换型错误做归因，只追错误词。"""
+    wrong_term = str(issue_item["wrong_term"])
+    issue_text = str(issue_item.get("raw") or wrong_term)
+    if match_terms_in_text([wrong_term], paddle_ocr_text):
+        append_root_cause_reason(
+            categories,
+            reasons,
+            "paddle VL识别错误",
+            build_reason_entry(issue_text, "paddle VL识别错误", "替换错误“{}”最早出现在日志paddleocr识别结果中".format(wrong_term)),
+        )
+        return
+    if match_terms_in_text([wrong_term], image_chart_text):
+        append_root_cause_reason(
+            categories,
+            reasons,
+            "图表或者图片错误",
+            build_reason_entry(issue_text, "图表或者图片错误", "替换错误“{}”最早出现在图片/图表解析内容中".format(wrong_term)),
+        )
+        return
+    if match_terms_in_text([wrong_term], struct_text):
+        append_root_cause_reason(
+            categories,
+            reasons,
+            "pptstruct错误",
+            build_reason_entry(issue_text, "pptstruct错误", "替换错误“{}”未在上游日志中命中，属于pptstruct阶段引入".format(wrong_term)),
+        )
+        return
+    append_root_cause_reason(
+        categories,
+        reasons,
+        "pptstruct错误",
+        build_reason_entry(issue_text, "pptstruct错误", "替换错误“{}”未找到明确上游来源，按pptstruct错误归因".format(wrong_term)),
+    )
+
+
+def classify_missing_issue(
+    issue_item: Dict[str, object],
+    categories: List[str],
+    reasons: List[str],
+    paddle_ocr_text: str,
+    image_chart_text: str,
+) -> None:
+    """对遗漏型错误做归因。"""
+    missing_term = str(issue_item["missing_term"])
+    issue_text = str(issue_item.get("raw") or missing_term)
+    if match_terms_in_text([missing_term], paddle_ocr_text):
+        append_root_cause_reason(
+            categories,
+            reasons,
+            "pptstruct错误",
+            build_reason_entry(issue_text, "pptstruct错误", "遗漏项“{}”已在日志paddleocr识别结果中出现，但最终pptStruct未保留".format(missing_term)),
+        )
+        return
+    if match_terms_in_text([missing_term], image_chart_text):
+        append_root_cause_reason(
+            categories,
+            reasons,
+            "pptstruct错误",
+            build_reason_entry(issue_text, "pptstruct错误", "遗漏项“{}”已在图片/图表解析内容中出现，但最终pptStruct未保留".format(missing_term)),
+        )
+        return
+    append_root_cause_reason(
+        categories,
+        reasons,
+        "paddle VL识别错误",
+        build_reason_entry(issue_text, "paddle VL识别错误", "遗漏项“{}”未在上游识别结果中出现，按上游识别缺失归因".format(missing_term)),
+    )
+
+
+def classify_generic_issue(
+    issue_item: Dict[str, object],
+    categories: List[str],
+    reasons: List[str],
+    paddle_ocr_text: str,
+    image_chart_text: str,
+    struct_text: str,
+) -> None:
+    """对未结构化的问题做兜底归因。"""
+    terms = [term for term in issue_item.get("terms", []) if isinstance(term, str)]
+    issue_text = str(issue_item.get("raw") or "该问题")
+    if not terms:
+        append_root_cause_reason(
+            categories,
+            reasons,
+            "pptstruct错误",
+            build_reason_entry(issue_text, "pptstruct错误", "问题描述过于泛化，按pptstruct错误归因"),
+        )
+        return
+    struct_terms = match_terms_in_text(terms, struct_text)
+    unresolved_terms = list(struct_terms or terms)
+    paddle_terms = match_terms_in_text(unresolved_terms, paddle_ocr_text)
+    if paddle_terms:
+        append_root_cause_reason(
+            categories,
+            reasons,
+            "paddle VL识别错误",
+            build_reason_entry(issue_text, "paddle VL识别错误", "日志paddleocr识别结果已出现问题词：{}".format("、".join(paddle_terms[:5]))),
+        )
+        unresolved_terms = [term for term in unresolved_terms if term not in paddle_terms]
+    image_chart_terms = match_terms_in_text(unresolved_terms, image_chart_text)
+    if image_chart_terms:
+        append_root_cause_reason(
+            categories,
+            reasons,
+            "图表或者图片错误",
+            build_reason_entry(issue_text, "图表或者图片错误", "图片/图表解析内容中出现问题词：{}".format("、".join(image_chart_terms[:5]))),
+        )
+        unresolved_terms = [term for term in unresolved_terms if term not in image_chart_terms]
+    if unresolved_terms or not categories:
+        append_root_cause_reason(
+            categories,
+            reasons,
+            "pptstruct错误",
+            build_reason_entry(issue_text, "pptstruct错误", "剩余未在上游日志中命中的问题词按pptstruct错误归因：{}".format("、".join(unresolved_terms[:5]))),
+        )
+
+
+def build_root_cause_by_terms(
+    struct_issue_text: str,
     paddle_ocr_text: str,
     image_parse_text: str,
     chart_parse_text: str,
-) -> Optional[Dict[str, str]]:
-    """优先使用规则对错误来源做粗分类。
+    struct_text: str,
+) -> Dict[str, object]:
+    """按结构化子问题构建归因结果。
 
-    规则只做一件事：
-    1. 仅当 `LLM审核结果` 明确表示无问题或审核通过时，直接返回 `无`
-    2. 其余情况全部返回 `None`，继续交给 LLM 做原因归因
+    归因顺序固定为：
+    1. `paddle VL识别错误`
+    2. `图表或者图片错误`
+    3. `pptstruct错误`
     """
+    issue_items = parse_struct_issue_items(struct_issue_text)
+    if not issue_items:
+        return {
+            "categories": ["pptstruct错误"],
+            "reason": build_reason_entry(struct_issue_text, "pptstruct错误", "未从pptstruct问题中提取到结构化子问题，剩余问题按pptstruct错误归因"),
+        }
+    categories: List[str] = []
+    reasons: List[str] = []
+    image_chart_text = "\n".join(part for part in (image_parse_text, chart_parse_text) if normalize_text(part))
+    for issue_item in issue_items:
+        issue_type = str(issue_item.get("type") or "")
+        if issue_type == "replace":
+            classify_replace_issue(issue_item, categories, reasons, paddle_ocr_text, image_chart_text, struct_text)
+            continue
+        if issue_type == "missing":
+            classify_missing_issue(issue_item, categories, reasons, paddle_ocr_text, image_chart_text)
+            continue
+        classify_generic_issue(issue_item, categories, reasons, paddle_ocr_text, image_chart_text, struct_text)
+    ordered_categories = [category for category in ROOT_CAUSE_PRIORITY if category in categories]
+    if not ordered_categories:
+        ordered_categories = ["pptstruct错误"]
+    return {"categories": ordered_categories, "reason": "；".join(reasons)}
+
+
+def detect_root_cause_by_rules(
+    llm_result_text: str,
+    struct_issue_text: str,
+    image_parse_text: str,
+    chart_parse_text: str,
+    paddle_ocr_text: str,
+    struct_text: str,
+) -> Optional[Dict[str, str]]:
+    """执行最小化规则短路，复杂情况交给归因 LLM。"""
     if looks_like_pass_result(llm_result_text):
+        return {"categories": ["无"], "reason": ""}
+
+    if normalize_text(str(struct_issue_text or "")) == "无":
         return {"categories": ["无"], "reason": ""}
 
     return None
@@ -642,10 +990,16 @@ def main() -> int:
     workbook = load_workbook(excel_path)
     sheet = workbook[args.sheet_name] if args.sheet_name else workbook.active
     header_map = find_header_columns(sheet)
-    required_input_columns = require_columns(
-        header_map,
-        [FILE_NAME_HEADER, PAGE_NUMBER_HEADER, PPT_STRUCT_HEADER, PPT_SOURCE_HEADER],
-    )
+    if args.mode == "llm":
+        required_input_columns = require_columns(
+            header_map,
+            [FILE_NAME_HEADER, PAGE_NUMBER_HEADER, PPT_STRUCT_HEADER, PPT_SOURCE_HEADER],
+        )
+    else:
+        required_input_columns = require_columns(
+            header_map,
+            [FILE_NAME_HEADER, PAGE_NUMBER_HEADER, PPT_STRUCT_HEADER, LLM_RESULT_HEADER, STRUCT_ISSUE_HEADER],
+        )
     root_cause_input_columns = require_column_aliases(
         header_map,
         {
@@ -684,13 +1038,17 @@ def main() -> int:
         file_name = sheet.cell(row_index, required_input_columns[FILE_NAME_HEADER]).value
         page_number = normalize_page_number(sheet.cell(row_index, required_input_columns[PAGE_NUMBER_HEADER]).value)
         ppt_struct_raw = sheet.cell(row_index, required_input_columns[PPT_STRUCT_HEADER]).value
-        source_text_raw = sheet.cell(row_index, required_input_columns[PPT_SOURCE_HEADER]).value
+        source_text_raw = (
+            sheet.cell(row_index, required_input_columns[PPT_SOURCE_HEADER]).value
+            if args.mode == "llm"
+            else None
+        )
         paddle_ocr_text = normalize_text(str(sheet.cell(row_index, root_cause_input_columns["paddle_ocr"]).value or ""))
         image_parse_text = normalize_text(str(sheet.cell(row_index, root_cause_input_columns["image_parse"]).value or ""))
         chart_parse_text = normalize_text(str(sheet.cell(row_index, root_cause_input_columns["chart_parse"]).value or ""))
         if not file_name or page_number is None or not ppt_struct_raw:
             continue
-        logger.info("processing row={} file={} page={}", row_index, file_name, page_number)
+        logger.info("processing row={} file={} page={} mode={}", row_index, file_name, page_number, args.mode)
 
         try:
             ppt_struct_obj = json.loads(str(ppt_struct_raw))
@@ -707,69 +1065,90 @@ def main() -> int:
             save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size, row_index, str(file_name), page_number)
             continue
 
-        source_text = normalize_text(str(source_text_raw or ""))
-        if not source_text:
+        if args.mode == "cause-only":
             llm_result = {
-                "error_type": "无法判断",
-                "severity": "无法判断",
-                "basis": "PPT 原文为空，无法对比",
-                "result": "未执行LLM审核",
-                "source_issue": "PPT 原文为空，无法对比",
-                "struct_issue": "无",
+                "error_type": str(sheet.cell(row_index, llm_error_type_column).value or ""),
+                "severity": str(sheet.cell(row_index, llm_severity_column).value or ""),
+                "basis": str(sheet.cell(row_index, llm_basis_column).value or ""),
+                "result": str(sheet.cell(row_index, header_map[LLM_RESULT_HEADER]).value or ""),
+                "source_issue": str(sheet.cell(row_index, source_issue_column).value or ""),
+                "struct_issue": str(sheet.cell(row_index, header_map[STRUCT_ISSUE_HEADER]).value or ""),
             }
+        else:
+            source_text = normalize_text(str(source_text_raw or ""))
+            if not source_text:
+                llm_result = {
+                    "error_type": "无法判断",
+                    "severity": "无法判断",
+                    "basis": "PPT 原文为空，无法对比",
+                    "result": "未执行LLM审核",
+                    "source_issue": "PPT 原文为空，无法对比",
+                    "struct_issue": "无",
+                }
+                sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
+                sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
+                sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
+                sheet.cell(row_index, llm_result_column).value = llm_result["result"]
+                sheet.cell(row_index, source_issue_column).value = llm_result["source_issue"]
+                sheet.cell(row_index, struct_issue_column).value = llm_result["struct_issue"]
+                sheet.cell(row_index, root_cause_tag_column).value = "无"
+                sheet.cell(row_index, root_cause_reason_column).value = "无"
+                processed_rows += 1
+                save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size, row_index, str(file_name), page_number)
+                continue
+
+            struct_text = build_ppt_struct_text(ppt_struct_obj)
+            try:
+                llm_result = run_llm_compare(source_text, struct_text)
+            except Exception as exc:
+                llm_result = {
+                    "error_type": "无法判断",
+                    "severity": "无法判断",
+                    "basis": "LLM 调用失败: {}".format(exc),
+                    "result": "未执行LLM审核",
+                    "source_issue": "无",
+                    "struct_issue": "无",
+                }
+
             sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
             sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
             sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
             sheet.cell(row_index, llm_result_column).value = llm_result["result"]
             sheet.cell(row_index, source_issue_column).value = llm_result["source_issue"]
             sheet.cell(row_index, struct_issue_column).value = llm_result["struct_issue"]
-            sheet.cell(row_index, root_cause_tag_column).value = "无"
-            sheet.cell(row_index, root_cause_reason_column).value = "无"
-            processed_rows += 1
-            save_if_needed(workbook, excel_path, processed_rows, args.save_batch_size, row_index, str(file_name), page_number)
-            continue
-
         struct_text = build_ppt_struct_text(ppt_struct_obj)
-        try:
-            llm_result = run_llm_compare(source_text, struct_text)
-        except Exception as exc:
-            llm_result = {
-                "error_type": "无法判断",
-                "severity": "无法判断",
-                "basis": "LLM 调用失败: {}".format(exc),
-                "result": "未执行LLM审核",
-                "source_issue": "无",
-                "struct_issue": "无",
-            }
-
-        sheet.cell(row_index, llm_error_type_column).value = llm_result["error_type"]
-        sheet.cell(row_index, llm_severity_column).value = llm_result["severity"]
-        sheet.cell(row_index, llm_basis_column).value = llm_result["basis"]
-        sheet.cell(row_index, llm_result_column).value = llm_result["result"]
-        sheet.cell(row_index, source_issue_column).value = llm_result["source_issue"]
-        sheet.cell(row_index, struct_issue_column).value = llm_result["struct_issue"]
         llm_result_text = str(llm_result["result"] or "")
         if is_empty_llm_result(llm_result_text):
             root_cause_text = "未分析"
             root_cause_reason = "LLM审核结果为空"
         else:
+            struct_issue_text = str(llm_result["struct_issue"] or "")
             root_cause = detect_root_cause_by_rules(
                 llm_result_text=llm_result_text,
-                paddle_ocr_text=paddle_ocr_text,
+                struct_issue_text=struct_issue_text,
                 image_parse_text=image_parse_text,
                 chart_parse_text=chart_parse_text,
+                paddle_ocr_text=paddle_ocr_text,
+                struct_text=struct_text,
             )
             if root_cause is None:
                 try:
                     root_cause = call_llm_root_cause(
                         llm_result_text=llm_result_text,
+                        struct_issue_text=struct_issue_text,
                         paddle_ocr_text=paddle_ocr_text,
                         image_parse_text=image_parse_text,
                         chart_parse_text=chart_parse_text,
                     )
                 except Exception as exc:
-                    root_cause = {"categories": ["未分析"], "reason": "问题原因分析调用失败"}
-                    logger.warning("问题原因分析失败: row={} file={} page={} error={}", row_index, file_name, page_number, exc)
+                    logger.warning("问题原因分析失败，回退规则归因: row={} file={} page={} error={}", row_index, file_name, page_number, exc)
+                    root_cause = build_root_cause_by_terms(
+                        struct_issue_text=struct_issue_text,
+                        paddle_ocr_text=paddle_ocr_text,
+                        image_parse_text=image_parse_text,
+                        chart_parse_text=chart_parse_text,
+                        struct_text=struct_text,
+                    )
             root_cause_text = format_root_cause_text(root_cause["categories"], root_cause["reason"])
             root_cause_reason = format_root_cause_reason(root_cause["categories"], root_cause["reason"])
         sheet.cell(row_index, root_cause_tag_column).value = root_cause_text
