@@ -55,14 +55,19 @@ def filter_cases(
     case_id: Optional[str],
     smoke_case_ids: Optional[List[str]] = None,
     department: Optional[str] = None,
+    scenario_keyword: Optional[str] = None,
 ) -> List[Any]:
-    """按编号、冒烟集和科室过滤用例。"""
+    """按编号、冒烟集、科室和场景关键字过滤用例。"""
     filtered_cases = list(cases)
     if department:
         target_department = normalize_department(department)
         filtered_cases = [case for case in filtered_cases if normalize_department(str(case.department)) == target_department]
         if not filtered_cases:
             raise ValueError(f"未找到科室为 {department} 的 case")
+    if scenario_keyword:
+        filtered_cases = [case for case in filtered_cases if scenario_keyword in str(case.scenario)]
+        if not filtered_cases:
+            raise ValueError(f"未找到场景包含 {scenario_keyword} 的 case")
     if smoke_case_ids:
         smoke_case_id_set = set(smoke_case_ids)
         filtered_cases = [case for case in filtered_cases if case.case_id in smoke_case_id_set]

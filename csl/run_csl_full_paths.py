@@ -32,6 +32,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--data", default=str(DATA_FILE), help="测试路径 YAML 路径")
     parser.add_argument("--case-id", help="只执行单个 case，例如 P017")
     parser.add_argument("--dept", "--department", dest="dept", help="只执行指定科室，例如 ICU、心脏外科、肝病、医院管理层/药剂科")
+    parser.add_argument("--scenario-keyword", help="只执行 scenario 包含指定关键字的 case，例如 首次拜访")
+    parser.add_argument("--first-visit", action="store_true", help="只执行首次拜访路径 case")
     parser.add_argument("--smoke", action="store_true", help="只执行 YAML 中配置的冒烟 case")
     parser.add_argument("--dry-run", action="store_true", help="只校验配置和用例，不发起请求")
     parser.add_argument("--seed", type=int, default=7, help="随机关注点回答的随机种子")
@@ -63,6 +65,7 @@ def main() -> int:
         args.case_id,
         case_collection.smoke_case_ids if args.smoke else None,
         args.dept,
+        "首次拜访" if args.first_visit else args.scenario_keyword,
     )
     if args.dry_run:
         logger.info(
