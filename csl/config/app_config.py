@@ -40,6 +40,9 @@ class AppConfig:
     case_retry_times: int = 0
     llm_conversation_eval_enabled: bool = False
     llm_conversation_eval_prompt_file: str = ""
+    llm_plan_review_enabled: bool = False
+    llm_plan_review_prompt_file: str = ""
+    llm_wire_api: str = "chat_completions"
 
 
 def load_dotenv_file(env_path: Path) -> None:
@@ -154,4 +157,17 @@ def load_app_config(config_path: Path) -> AppConfig:
             "CSL_LLM_CONVERSATION_EVAL_PROMPT_FILE",
             str(llm_config_data.get("conversation_evaluation_prompt_file", "")),
         ),
+        llm_plan_review_enabled=os.getenv(
+            "CSL_LLM_PLAN_REVIEW_ENABLED",
+            str(llm_config_data.get("plan_review_enabled", False)),
+        ).lower()
+        == "true",
+        llm_plan_review_prompt_file=os.getenv(
+            "CSL_LLM_PLAN_REVIEW_PROMPT_FILE",
+            str(llm_config_data.get("plan_review_prompt_file", "")),
+        ),
+        llm_wire_api=os.getenv(
+            "CSL_LLM_WIRE_API",
+            str(llm_config_data.get("wire_api", "chat_completions")),
+        ).strip().lower(),
     )

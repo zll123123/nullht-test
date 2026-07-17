@@ -208,6 +208,8 @@ def build_qase_status(case_result: CaseExecutionResult) -> str:
     """映射 Qase 状态。"""
     if case_result.status == "PENDING_PLAN":
         return "skipped"
+    if case_result.validation and not case_result.validation.passed:
+        return "failed"
     if case_result.error or case_result.result_type == "执行失败":
         return "broken"
     if case_result.validation and case_result.validation.passed:

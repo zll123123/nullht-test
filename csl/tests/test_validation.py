@@ -77,7 +77,21 @@ def test_build_cases_prefer_yaml_expected() -> None:
 
 def test_build_cases_load_smoke_case_ids() -> None:
     case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
-    assert case_collection.smoke_case_ids == ["P003", "P021", "P032", "P061", "P084", "P048", "P077", "P106", "P107"]
+    assert case_collection.smoke_case_ids == [
+        "P003",
+        "P021",
+        "P032",
+        "P061",
+        "P084",
+        "P048",
+        "P077",
+        "P106",
+        "P107",
+        "P030",
+        "P031",
+        "P036",
+        "P038",
+    ]
 
 
 def test_filter_cases_with_smoke_case_ids() -> None:

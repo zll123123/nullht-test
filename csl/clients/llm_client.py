@@ -52,9 +52,57 @@ def build_llm_request_url(config: AppConfig) -> str:
         str: 最终请求 URL。
     """
     base_url = config.llm_base_url.rstrip("/")
-    if base_url.endswith("/chat/completions"):
+    wire_api = config.llm_wire_api.strip().lower()
+    endpoint = "responses" if wire_api == "responses" else "chat/completions"
+    if base_url.endswith(f"/{endpoint}"):
         return base_url
-    return f"{base_url}/chat/completions"
+    return f"{base_url}/{endpoint}"
+
+
+def build_llm_payload(config: AppConfig, prompt: str) -> Dict[str, Any]:
+    """根据 wire_api 构建 LLM 请求体。
+
+    Args:
+        config: 运行配置。
+        prompt: 用户提示词。
+
+    Returns:
+        Dict[str, Any]: 请求体。
+    """
+    if config.llm_wire_api.strip().lower() == "responses":
+        return {
+            "model": config.llm_model,
+            "input": prompt,
+            "temperature": 0,
+        }
+    return {
+        "model": config.llm_model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0,
+    }
+
+
+def extract_llm_text(config: AppConfig, data: Dict[str, Any]) -> str:
+    """从不同 wire_api 的响应结构中提取文本。
+
+    Args:
+        config: 运行配置。
+        data: LLM 响应数据。
+
+    Returns:
+        str: 模型文本。
+    """
+    if config.llm_wire_api.strip().lower() == "responses":
+        output_text = data.get("output_text")
+        if isinstance(output_text, str) and output_text.strip():
+            return output_text.strip()
+        for item in data.get("output") or []:
+            for content in item.get("content") or []:
+                text = content.get("text")
+                if isinstance(text, str) and text.strip():
+                    return text.strip()
+        return ""
+    return str((((data.get("choices") or [{}])[0].get("message") or {}).get("content") or "")).strip()
 
 
 @timed_api_call()
@@ -116,13 +164,7 @@ def call_llm_text(
         str: 模型返回文本。
     """
     request_url = build_llm_request_url(config)
-    payload = {
-        "model": config.llm_model,
-        "messages": [
-            {"role": "user", "content": prompt},
-        ],
-        "temperature": 0,
-    }
+    payload = build_llm_payload(config, prompt)
     data = execute_llm_request(
         config=config,
         payload=payload,
@@ -132,7 +174,7 @@ def call_llm_text(
         session_id=session_id,
         api_collector=api_collector,
     )
-    content = (((data.get("choices") or [{}])[0].get("message") or {}).get("content") or "").strip()
+    content = extract_llm_text(config, data)
     if not content:
         raise RuntimeError("LLM 返回为空")
     return content

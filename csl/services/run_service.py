@@ -10,7 +10,7 @@ from typing import Dict, List
 
 from clients.chat_client import create_session
 from config.app_config import AppConfig
-from config.settings import OUTPUT_DIR
+from config.settings import OUTPUT_DIR, PLAN_REVIEW_FILE
 from loguru import logger
 from models.case_model import CaseConfig
 from models.result_model import CaseExecutionResult
@@ -24,6 +24,7 @@ from services.plan_polling_service import (
     mark_pending_metadata,
     poll_pending_case,
 )
+from services.plan_review_runner import run_local_plan_reviews
 
 QASE_REPORT_HTML_FILE = "report.html"
 
@@ -103,6 +104,12 @@ def build_retryable_result(case: CaseConfig, previous_result: CaseExecutionResul
     """
     if previous_result is None:
         return build_execution_error_result(case, error_message)
+    if previous_result.validation is not None and not previous_result.validation.passed:
+        previous_result.error = ""
+        previous_result.result_type = "断言失败"
+        previous_result.failure_reason = error_message
+        previous_result.status = "DONE"
+        return previous_result
     previous_result.error = error_message
     previous_result.failure_reason = error_message
     previous_result.result_type = "执行失败"
@@ -302,6 +309,13 @@ def run_cases(
         results.append(final_result)
         flush_outputs(results)
     drain_pending_results(session, config, results, case_index)
+    flush_outputs(results)
+    if config.llm_plan_review_enabled:
+        try:
+            review_file = run_local_plan_reviews(config, results, PLAN_REVIEW_FILE)
+            logger.info("本地拜访计划审核结果已保存: {}", review_file)
+        except Exception as exc:
+            logger.exception("本地拜访计划审核失败，不影响接口测试结果: {}", exc)
     report_html_path = generate_qase_html_report(OUTPUT_DIR / "qase-report")
     if report_html_path is not None:
         logger.info("Qase HTML 报告已生成: {}", report_html_path)

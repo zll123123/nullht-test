@@ -1,4 +1,4 @@
-"""执行结果相关模型，集中承载对话、断言、接口耗时和 LLM 评估结果。"""
+"""执行结果相关模型，集中承载对话、断言和接口耗时结果。"""
 
 from __future__ import annotations
 
@@ -106,6 +106,51 @@ class ConversationEvaluation:
             result=dict(data.get("result") or {}),
             error=str(data.get("error") or ""),
         )
+
+
+@dataclass
+class PlanReview:
+    """LLM 拜访计划审核结果。"""
+
+    enabled: bool = False
+    result: Dict[str, Any] = field(default_factory=dict)
+    error: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        """转换为字典。"""
+        return {
+            "enabled": self.enabled,
+            "result": self.result,
+            "error": self.error,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "PlanReview":
+        """从字典构造模型。"""
+        return cls(
+            enabled=bool(data.get("enabled", False)),
+            result=dict(data.get("result") or {}),
+            error=str(data.get("error") or ""),
+        )
+
+
+@dataclass
+class PlanReviewRecord:
+    """单条本地拜访计划审核记录。"""
+
+    case_id: str
+    scenario: str
+    session_id: str
+    review: PlanReview
+
+    def to_dict(self) -> Dict[str, Any]:
+        """转换为字典。"""
+        return {
+            "case_id": self.case_id,
+            "scenario": self.scenario,
+            "session_id": self.session_id,
+            "review": self.review.to_dict(),
+        }
 
 
 @dataclass

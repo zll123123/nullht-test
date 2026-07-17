@@ -48,9 +48,11 @@
 - LLM 配置文件为 [config/llm_config.yaml](/Users/layla.zhang/workspace/nullht-test/csl/config/llm_config.yaml)
 - 当前激活环境由 `config.yaml` 中的 `active_env` 控制：
   - `dev`
+  - `uat`
   - `prod`
 - 启动时会按 `active_env` 自动加载对应环境文件：
   - `dev` -> [config/dev.env](/Users/layla.zhang/workspace/nullht-test/csl/config/dev.env)
+  - `uat` -> [config/uat.env](/Users/layla.zhang/workspace/nullht-test/csl/config/uat.env)
   - `prod` -> [config/prod.env](/Users/layla.zhang/workspace/nullht-test/csl/config/prod.env)
 - 敏感信息与环境差异项放在对应的 `env` 文件中，普通运行配置放在 YAML 中
 
@@ -90,6 +92,14 @@
 - 在 [config/llm_config.yaml](/Users/layla.zhang/workspace/nullht-test/csl/config/llm_config.yaml) 中将 `conversation_evaluation_enabled` 改为 `true` 后启用
 - 当前支持注入变量：`{{case_id}}`、`{{scenario}}`、`{{session_id}}`、`{{conversation}}`、`{{final_data}}`
 - 评估结果会写入 JSON、Markdown 和 Qase Report 的 `conversation_evaluation` 字段
+
+### LLM 拜访计划审核
+- 拜访计划审核 prompt 放在 [prompts/evaluations/visit_plan_review_prompt.md](/Users/layla.zhang/workspace/nullht-test/csl/prompts/evaluations/visit_plan_review_prompt.md)
+- 在 [config/llm_config.yaml](/Users/layla.zhang/workspace/nullht-test/csl/config/llm_config.yaml) 中将 `plan_review_enabled` 改为 `true` 后启用
+- 当前支持注入变量：`{{conversation}}`、`{{visit_plan}}`、`{{doctor_profile}}`、`{{path_info}}`
+- 所有 case 的对话和拜访计划产物完成并写入常规结果后，才统一执行审核
+- 审核只在本地执行，不改变原有断言通过/失败状态，也不会写入 JSON、Markdown 或 Qase Report
+- 审核结果单独写入 [output/plan_review_results.json](/Users/layla.zhang/workspace/nullht-test/csl/output/plan_review_results.json)
 
 ### 异步轮询
 - 每条对话完成后先记录 `session_id`
@@ -187,6 +197,12 @@ active_env: dev
 active_env: prod
 ```
 
+切到 UAT 环境时改为：
+
+```yaml
+active_env: uat
+```
+
 然后正常执行：
 
 ```bash
@@ -268,6 +284,7 @@ case 级结果当前会收集：
 - `next_poll_at`
 - `poll_deadline_at`
 - `api_call_records`
+- `conversation_evaluation`
 
 ## 补充文档
 - [校验与断言说明](./docs/validation.md)

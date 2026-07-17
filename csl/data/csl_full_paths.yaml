@@ -9,9 +9,13 @@ smoke_case_ids:
 - P077
 - P106
 - P107
+- P030
+- P031
+- P036
+- P038
 cases:
 - case_id: P001
-  scenario: ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
+  scenario: ICU -> P1客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
   answers:
   - ICU（现版本）
   - A
@@ -50,11 +54,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 低蛋白使用者
       grade: 知道
 - case_id: P002
-  scenario: ICU -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
+  scenario: ICU -> P2客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
   answers:
   - ICU（现版本）
   - B
@@ -99,11 +103,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P003
-  scenario: ICU -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
+  scenario: ICU -> P3客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
   answers:
   - ICU（现版本）
   - C
@@ -145,11 +149,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P004
-  scenario: ICU -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
+  scenario: ICU -> P4客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
   answers:
   - ICU（现版本）
   - D
@@ -184,7 +188,7 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P005
@@ -225,7 +229,7 @@ cases:
       type: 低蛋白使用者
       grade: 提倡
 - case_id: P006
-  scenario: ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
+  scenario: ICU -> P1客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
   answers:
   - ICU（现版本）
   - A
@@ -266,11 +270,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 低蛋白使用者
       grade: 知道
 - case_id: P007
-  scenario: ICU -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
+  scenario: ICU -> P2客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
   answers:
   - ICU（现版本）
   - B
@@ -316,11 +320,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P008
-  scenario: ICU -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
+  scenario: ICU -> P3客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
   answers:
   - ICU（现版本）
   - C
@@ -363,11 +367,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P009
-  scenario: ICU -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
+  scenario: ICU -> P4客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
   answers:
   - ICU（现版本）
   - D
@@ -403,7 +407,7 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P010
@@ -444,7 +448,7 @@ cases:
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P011
-  scenario: ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
+  scenario: ICU -> P1客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
   answers:
   - ICU（现版本）
   - A
@@ -481,11 +485,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P012
-  scenario: ICU -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
+  scenario: ICU -> P2客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
   answers:
   - ICU（现版本）
   - B
@@ -524,11 +528,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P013
-  scenario: ICU -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
+  scenario: ICU -> P3客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
   answers:
   - ICU（现版本）
   - C
@@ -556,11 +560,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P014
-  scenario: ICU -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
+  scenario: ICU -> P4客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
   answers:
   - ICU（现版本）
   - D
@@ -574,7 +578,7 @@ cases:
     source_excel_row: 12
     doctor_type: 白蛋白笃信者
     doctor_grade: 提倡
-    trans_info: 目前，该医生已是白蛋白笃信者，使用率高且主动推荐。建议后续向该医生传递白蛋白在脓毒症、感染性休克、失代偿期肝硬化、急性呼吸窘迫综合征（ARDS）及其他危重症中的应用指征优化，并分享临床试验、机制、疗效与安全性的最新进展。
+    trans_info: 目前，该医生已是白蛋白笃信者，使用率高且主动推荐。建议后续向该医生传递白蛋白在脓毒症、感染性休克中的应用指征优化，并分享临床试验、机制、疗效与安全性的最新进展。
     support_info: null
     comm_literature_titles: null
     comm_literature_summaries: null
@@ -586,7 +590,7 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 白蛋白笃信者
       grade: 提倡
 - case_id: P015
@@ -629,7 +633,7 @@ cases:
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P016
-  scenario: ICU -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
+  scenario: ICU -> P1客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
   answers:
   - ICU（现版本）
   - A
@@ -667,11 +671,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P017
-  scenario: ICU -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
+  scenario: ICU -> P2客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
   answers:
   - ICU（现版本）
   - B
@@ -707,11 +711,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P018
-  scenario: ICU -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
+  scenario: ICU -> P3客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
   answers:
   - ICU（现版本）
   - C
@@ -740,11 +744,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P019
-  scenario: ICU -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
+  scenario: ICU -> P4客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
   answers:
   - ICU（现版本）
   - D
@@ -783,7 +787,7 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 品牌认知者
       grade: 知道
 - case_id: P020
@@ -827,7 +831,7 @@ cases:
       type: 品牌认知者
       grade: 尝试
 - case_id: P021
-  scenario: ICU -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
+  scenario: ICU -> P1客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
   answers:
   - ICU（现版本）
   - A
@@ -861,11 +865,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 品牌认知者
       grade: 使用
 - case_id: P022
-  scenario: ICU -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
+  scenario: ICU -> P2客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
   answers:
   - ICU（现版本）
   - B
@@ -896,11 +900,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P023
-  scenario: ICU -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
+  scenario: ICU -> P3客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
   answers:
   - ICU（现版本）
   - C
@@ -959,11 +963,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 品牌认知者
       grade: 提倡
 - case_id: P024
-  scenario: ICU -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
+  scenario: ICU -> P4客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
   answers:
   - ICU（现版本）
   - D
@@ -1004,7 +1008,7 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 品牌认知者
       grade: 知道
 - case_id: P025
@@ -1049,7 +1053,7 @@ cases:
       type: 品牌认知者
       grade: 尝试
 - case_id: P026
-  scenario: ICU -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
+  scenario: ICU -> P1客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
   answers:
   - ICU（现版本）
   - A
@@ -1083,11 +1087,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 品牌认知者
       grade: 使用
 - case_id: P027
-  scenario: ICU -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
+  scenario: ICU -> P2客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
   answers:
   - ICU（现版本）
   - B
@@ -1119,11 +1123,11 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P028
-  scenario: ICU -> C类客户 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
+  scenario: ICU -> P3客户 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
   answers:
   - ICU（现版本）
   - C
@@ -1134,9 +1138,9 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: C类客户
+      level: P3客户
 - case_id: P029
-  scenario: ICU -> D类客户 -> 首次拜访 -> 原始 AI 问询路径
+  scenario: ICU -> P4客户 -> 首次拜访 -> 原始 AI 问询路径
   answers:
   - ICU（现版本）
   - D
@@ -1146,7 +1150,7 @@ cases:
     visit_plan_digest:
       department: ICU
       rank: 主任医师
-      level: D类客户
+      level: P4客户
 - case_id: P030
   scenario: 医院管理层/药剂科 -> 既往拜访过 -> ≥50% -> 合理用药管理者 -> 知道
   answers:
@@ -1170,13 +1174,13 @@ cases:
       2. 人血白蛋白用于重症患者的临床价值
       人血白蛋白被各国指南推荐用于脓毒症、烧伤等危重患者，目前是临床应用最多的胶体溶液。人血白蛋白在危重症患者液体复苏治疗中的临床优势包括：
       ● 减少液体过负荷，更易促进血流动力学稳定
-      ● 对脓毒症休克患者，与晶体液相比，人血白蛋白可显著降低患者90天死亡风险，降幅高达19%，且具有良好的肾脏安全性1,2.3
+      ● 对脓毒症休克患者，与晶体液相比，人血白蛋白可显著降低患者90天死亡风险，降幅高达19%，且具有良好的肾脏安全性1,2,3
       ●对重症烧伤患者，24h内使用人血白蛋白可显著降低死亡率、减少机械通气时间，减少患者输液量，从而减少重症监护室的停留时长4
       ●此外，人血白蛋白还有潜在的维持血管完整性，改善微循环和抗氧化等益处
 
       3. 人血白蛋白用于肝病患者的临床价值
-      ●《2023 肝硬化腹水诊疗指南》11建议短期或紧急补充人血白蛋白以改善肝硬化腹水患者的预后
-      ●《2018 EASL临床实践指南》7推荐顽固型腹水患者LVP后输注人血白蛋白，可降低PCD的发生和死亡风险与单用抗菌药相比，联合使用人血白蛋白，可降低SBP患者的死亡及肾损伤风险5
+      ●《2023 肝硬化腹水诊疗指南》建议短期或紧急补充人血白蛋白以改善肝硬化腹水患者的预后
+      ●《2018 EASL临床实践指南》推荐顽固型腹水患者LVP后输注人血白蛋白，可降低PCD的发生和死亡风险与单用抗菌药相比，联合使用人血白蛋白，可降低SBP患者的死亡及肾损伤风险5
       ● 与单用特利加压素相比，联合使用人血白蛋白，可显著改善HRS患者生存率，改善肾功能23
       ● 在失代偿期肝硬化患者中长期使用人血白蛋白可显著降低死亡风险达38%，显著降低顽固型腹水发生风险达57%，降低患者SBP发生风险达67%，降低1型肝肾综合征发生风险达61%6,7
       ● 人血白蛋白联合标准医学治疗，可使全因住院率下降35%，住院时间下降45%6
@@ -1256,7 +1260,7 @@ cases:
       ●ICU内重症肝硬化伴大量腹水患者，腹腔穿刺大量放液（LVP）术后推荐输注白蛋白（Grade2+）
       ● 建议人血白蛋白联合特利加压素治疗肝肾综合征（HRS），减轻急性肾损伤（AKI）（Grade2+）
       2. 2023 人血白蛋白在成人心脏手术中的应用专家共识
-      ●推对于血容量正常的患者，输注人血白蛋白纠正术前低白蛋白血症是合理的（COR IIb, LOE B-NR）。
+      ●推荐对于血容量正常的患者，输注人血白蛋白纠正术前低白蛋白血症是合理的（COR IIb, LOE B-NR）。
       ●对于血容量正常的患者，输注人血白蛋白纠正术后低白蛋白血症是有益的（COR IIb, LOE C-EO）。
       ●对于心脏手术期间和术后需要进一步补充血容量的患者，在晶体液复苏后使用人血白蛋白以避免出现过度的正体液平衡是合理的（COR IIb,LOE B-NR）
     focus_title: 人血白蛋白目前在外科的用量过大，Alb>30g/L或术后是否应减少使用？
@@ -1439,7 +1443,7 @@ cases:
     source_excel_row: 23
     doctor_type: 合理用药管理者
     doctor_grade: 提倡
-    trans_info: null
+    trans_info: 降低危重症及大手术患者死亡率与并发症，缩短ICU及住院时间，提升CMI值与床位周转率，实现DRG/MDL下医保资金正向结余
     support_info: null
     comm_literature_titles: null
     comm_literature_summaries: null
@@ -1479,13 +1483,13 @@ cases:
       2. 人血白蛋白用于重症患者的临床价值
       人血白蛋白被各国指南推荐用于脓毒症、烧伤等危重患者，目前是临床应用最多的胶体溶液。人血白蛋白在危重症患者液体复苏治疗中的临床优势包括：
       ● 减少液体过负荷，更易促进血流动力学稳定
-      ● 对脓毒症休克患者，与晶体液相比，人血白蛋白可显著降低患者90天死亡风险，降幅高达19%，且具有良好的肾脏安全性1,2.3
+      ● 对脓毒症休克患者，与晶体液相比，人血白蛋白可显著降低患者90天死亡风险，降幅高达19%，且具有良好的肾脏安全性1,2,3
       ●对重症烧伤患者，24h内使用人血白蛋白可显著降低死亡率、减少机械通气时间，减少患者输液量，从而减少重症监护室的停留时长4
       ●此外，人血白蛋白还有潜在的维持血管完整性，改善微循环和抗氧化等益处
 
       3. 人血白蛋白用于肝病患者的临床价值
-      ●《2023 肝硬化腹水诊疗指南》11建议短期或紧急补充人血白蛋白以改善肝硬化腹水患者的预后
-      ●《2018 EASL临床实践指南》7推荐顽固型腹水患者LVP后输注人血白蛋白，可降低PCD的发生和死亡风险与单用抗菌药相比，联合使用人血白蛋白，可降低SBP患者的死亡及肾损伤风险5
+      ●《2023 肝硬化腹水诊疗指南》建议短期或紧急补充人血白蛋白以改善肝硬化腹水患者的预后
+      ●《2018 EASL临床实践指南》推荐顽固型腹水患者LVP后输注人血白蛋白，可降低PCD的发生和死亡风险与单用抗菌药相比，联合使用人血白蛋白，可降低SBP患者的死亡及肾损伤风险5
       ● 与单用特利加压素相比，联合使用人血白蛋白，可显著改善HRS患者生存率，改善肾功能23
       ● 在失代偿期肝硬化患者中长期使用人血白蛋白可显著降低死亡风险达38%，显著降低顽固型腹水发生风险达57%，降低患者SBP发生风险达67%，降低1型肝肾综合征发生风险达61%6,7
       ● 人血白蛋白联合标准医学治疗，可使全因住院率下降35%，住院时间下降45%6
@@ -1566,7 +1570,7 @@ cases:
       ●ICU内重症肝硬化伴大量腹水患者，腹腔穿刺大量放液（LVP）术后推荐输注白蛋白（Grade2+）
       ● 建议人血白蛋白联合特利加压素治疗肝肾综合征（HRS），减轻急性肾损伤（AKI）（Grade2+）
       2. 2023 人血白蛋白在成人心脏手术中的应用专家共识
-      ●推对于血容量正常的患者，输注人血白蛋白纠正术前低白蛋白血症是合理的（COR IIb, LOE B-NR）。
+      ●推荐对于血容量正常的患者，输注人血白蛋白纠正术前低白蛋白血症是合理的（COR IIb, LOE B-NR）。
       ●对于血容量正常的患者，输注人血白蛋白纠正术后低白蛋白血症是有益的（COR IIb, LOE C-EO）。
       ●对于心脏手术期间和术后需要进一步补充血容量的患者，在晶体液复苏后使用人血白蛋白以避免出现过度的正体液平衡是合理的（COR IIb,LOE B-NR）
     focus_title: 人血白蛋白目前在外科的用量过大，Alb>30g/L或术后是否应减少使用？
@@ -2179,7 +2183,7 @@ cases:
       type: 低蛋白使用者
       grade: 知道
 - case_id: P051
-  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
+  scenario: 肝病 -> P1客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 尝试
   answers:
   - 肝病
   - A
@@ -2223,11 +2227,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P052
-  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
+  scenario: 肝病 -> P2客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
   answers:
   - 肝病
   - B
@@ -2269,11 +2273,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P053
-  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
+  scenario: 肝病 -> P3客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
   answers:
   - 肝病
   - C
@@ -2303,11 +2307,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P054
-  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
+  scenario: 肝病 -> P4客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
   answers:
   - 肝病
   - D
@@ -2340,7 +2344,7 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 低蛋白使用者
       grade: 提倡
 - case_id: P055
@@ -2390,7 +2394,7 @@ cases:
       type: 低蛋白使用者
       grade: 知道
 - case_id: P056
-  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
+  scenario: 肝病 -> P1客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 尝试
   answers:
   - 肝病
   - A
@@ -2435,11 +2439,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P057
-  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
+  scenario: 肝病 -> P2客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
   answers:
   - 肝病
   - B
@@ -2482,11 +2486,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P058
-  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
+  scenario: 肝病 -> P3客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
   answers:
   - 肝病
   - C
@@ -2517,11 +2521,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P059
-  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
+  scenario: 肝病 -> P4客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
   answers:
   - 肝病
   - D
@@ -2554,7 +2558,7 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P060
@@ -2577,9 +2581,10 @@ cases:
       ● 血浆胶体渗透压降低和有效血容量不足是导致肝硬化腹水的重要因素。人血白蛋白不仅可以提高血清白蛋白水平，维持胶体渗透压，还能维持循环血容量，提高利尿剂应答反应
       ● 《2018 EASL临床实践指南：失代偿期肝硬化患者的管理》1推荐：重症肝硬化伴大量腹水患者，LVP术后首选输注人血白蛋白，可降低术后PCD发生率，提高患者生存率
       ● 《2021人血白蛋白在危重症患者应用专家共识》2：建议人血白蛋白联合特利加压素治疗肝肾综合征（HRS），减轻急性肾损伤（AKI）
-      ● 研究显示，LVP结合白蛋白输注，可预防术后循环功能障碍（P C D）发生61%，降低术后死亡风险36%36；人血白蛋白联合特利加压素可有效实现肝肾综合征的逆转，改善肾功能3
+      ● 研究显示，LVP结合白蛋白输注，可预防术后循环功能障碍（P C D）发生61%，降低术后死亡风险36%；人血白蛋白联合特利加压素可有效实现肝肾综合征的逆转，改善肾功能3
     comm_literature_titles: |-
       1. European Association for the Study of the Liver. J Hepatol, 2018, 69 (2) 406-460
+      2. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.)
       3. Ortega R, et al.Hepatology, 2002,36(1):941-948
     comm_literature_summaries: |-
       1. 2018 EASL临床实践指南：失代偿期肝硬化患者的管理
@@ -2601,7 +2606,7 @@ cases:
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P061
-  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
+  scenario: 肝病 -> P1客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 使用
   answers:
   - 肝病
   - A
@@ -2636,11 +2641,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P062
-  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
+  scenario: 肝病 -> P2客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
   answers:
   - 肝病
   - B
@@ -2670,11 +2675,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P063
-  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
+  scenario: 肝病 -> P3客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
   answers:
   - 肝病
   - C
@@ -2688,7 +2693,7 @@ cases:
     source_excel_row: 39
     doctor_type: 白蛋白笃信者
     doctor_grade: 提倡
-    trans_info: 目前，该医生已是白蛋白笃信者，使用率高且主动推荐。建议后续向该医生传递白蛋白在脓毒症、感染性休克、失代偿期肝硬化、急性呼吸窘迫综合征（ARDS）及其他危重症中的应用指征优化，并分享临床试验、机制、疗效与安全性的最新进展。
+    trans_info: 目前，该医生已是白蛋白笃信者，使用率高且主动推荐。建议后续向该医生传递白蛋白在失代偿期肝硬化中的应用指征优化，并分享临床试验、机制、疗效与安全性的最新进展。
     support_info: null
     comm_literature_titles: null
     comm_literature_summaries: null
@@ -2700,11 +2705,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 白蛋白笃信者
       grade: 提倡
 - case_id: P064
-  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
+  scenario: 肝病 -> P4客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
   answers:
   - 肝病
   - D
@@ -2739,7 +2744,7 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P065
@@ -2763,9 +2768,10 @@ cases:
       ● 血浆胶体渗透压降低和有效血容量不足是导致肝硬化腹水的重要因素。人血白蛋白不仅可以提高血清白蛋白水平，维持胶体渗透压，还能维持循环血容量，提高利尿剂应答反应
       ● 《2018 EASL临床实践指南：失代偿期肝硬化患者的管理》1推荐：重症肝硬化伴大量腹水患者，LVP术后首选输注人血白蛋白，可降低术后PCD发生率，提高患者生存率
       ● 《2021人血白蛋白在危重症患者应用专家共识》2：建议人血白蛋白联合特利加压素治疗肝肾综合征（HRS），减轻急性肾损伤（AKI）
-      ● 研究显示，LVP结合白蛋白输注，可预防术后循环功能障碍（P C D）发生61%，降低术后死亡风险36%36；人血白蛋白联合特利加压素可有效实现肝肾综合征的逆转，改善肾功能3
+      ● 研究显示，LVP结合白蛋白输注，可预防术后循环功能障碍（P C D）发生61%，降低术后死亡风险36%；人血白蛋白联合特利加压素可有效实现肝肾综合征的逆转，改善肾功能3
     comm_literature_titles: |-
       1. European Association for the Study of the Liver. J Hepatol, 2018, 69 (2) 406-460
+      2. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.)
       3. Ortega R, et al.Hepatology, 2002,36(1):941-948
     comm_literature_summaries: |-
       1. 2018 EASL临床实践指南：失代偿期肝硬化患者的管理
@@ -2787,7 +2793,7 @@ cases:
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P066
-  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
+  scenario: 肝病 -> P1客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 使用
   answers:
   - 肝病
   - A
@@ -2822,11 +2828,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P067
-  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
+  scenario: 肝病 -> P2客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
   answers:
   - 肝病
   - B
@@ -2857,11 +2863,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P068
-  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
+  scenario: 肝病 -> P3客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
   answers:
   - 肝病
   - C
@@ -2900,11 +2906,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 品牌认知者
       grade: 知道
 - case_id: P069
-  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
+  scenario: 肝病 -> P4客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
   answers:
   - 肝病
   - D
@@ -2940,7 +2946,7 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P070
@@ -2982,7 +2988,7 @@ cases:
       type: 品牌认知者
       grade: 使用
 - case_id: P071
-  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
+  scenario: 肝病 -> P1客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 偏好
   answers:
   - 肝病
   - A
@@ -3013,11 +3019,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P072
-  scenario: 肝病 -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
+  scenario: 肝病 -> P2客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
   answers:
   - 肝病
   - B
@@ -3076,11 +3082,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 品牌认知者
       grade: 提倡
 - case_id: P073
-  scenario: 肝病 -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
+  scenario: 肝病 -> P3客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
   answers:
   - 肝病
   - C
@@ -3121,11 +3127,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 品牌认知者
       grade: 知道
 - case_id: P074
-  scenario: 肝病 -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
+  scenario: 肝病 -> P4客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
   answers:
   - 肝病
   - D
@@ -3162,7 +3168,7 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P075
@@ -3204,7 +3210,7 @@ cases:
       type: 品牌认知者
       grade: 使用
 - case_id: P076
-  scenario: 肝病 -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
+  scenario: 肝病 -> P1客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 偏好
   answers:
   - 肝病
   - A
@@ -3236,11 +3242,11 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 品牌认知者
       grade: 偏好
 - case_id: P077
-  scenario: 肝病 -> B类客户 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
+  scenario: 肝病 -> P2客户 -> 既往拜访过 -> 不清楚 -> 原始 AI 问询路径
   answers:
   - 肝病
   - B
@@ -3251,9 +3257,9 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: B类客户
+      level: P2客户
 - case_id: P078
-  scenario: 肝病 -> C类客户 -> 首次拜访 -> 原始 AI 问询路径
+  scenario: 肝病 -> P3客户 -> 首次拜访 -> 原始 AI 问询路径
   answers:
   - 肝病
   - C
@@ -3263,9 +3269,9 @@ cases:
     visit_plan_digest:
       department: 肝病
       rank: 主任医师
-      level: C类客户
+      level: P3客户
 - case_id: P079
-  scenario: 心脏外科 -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
+  scenario: 心脏外科 -> P4客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 知道
   answers:
   - 心脏外科
   - D
@@ -3309,7 +3315,7 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 低蛋白使用者
       grade: 知道
 - case_id: P080
@@ -3341,19 +3347,18 @@ cases:
     comm_literature_summaries: |-
       1. 一项荟萃分析纳入20项研究（22553例心脏手术患者），评估血清白蛋白水平与预后的关系。结果：低白蛋白血症与长期全因死亡率（HR 1.95, P<0.00001）和死亡率增加（RR 1.91, P<0.00001）显著相关。低白蛋白患者术后并发症风险更高，且ICU住院时长（MD=1.18, P=0.0008）、住院时间（MD=3.34, P<0.00001）和体外循环时间（MD=12.40,P=0.03）均显著增加。
       2. 一项前瞻性观察研究纳入2818例术前血清白蛋白≥3.5 g/dL且营养正常的心脏手术患者，评估术后不同白蛋白水平对死亡率、并发症和生存率的影响。结果：血清白蛋白较低的患者中，住院死亡率、脓毒症、出血相关并发症发生率及ICU停留时间均显著较高。
-    focus_title: 白蛋白的昂贵价格，是否具有成本效益？
+    focus_title: 人血白蛋白是血液制品，安全性可靠么？
     focus_content: |-
-      ●危重症患者通过输注白蛋白纠正患者的低蛋白血症，可以减少并发症的发生，降低死亡风险，降低后续治疗的复杂性和成本，减少住院时间与ICU停留时间，从而提高病床周转率，提高治疗效率。
-      ▶血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66% 1
-      ▶基于ALBIOS研究亚组的结局进行的分析表明，在重度脓毒症和低白蛋白血症患者中，20%白蛋白比标准医疗实践（晶体液）更具成本效果（基于每获得一个寿命年的增量成本）2
-    focus_literature_titles: |-
-      1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）
-
-      2. Farrugia A, Martin G, Bult M. Ann Update Crit Care Emer Med 2013;515‒26.
+      ● 杰特贝林的人血白蛋白拥有良好的病原体安全性记录超过数十年。
+      ▶《2021年人血白蛋白在危重症患者应用专家共识》1指出作为从人血中提取的成分，虽然输注高浓度的白蛋白虽然不可避免地会出现不良反应，但仅约0.1%的患者会出现潮红、荨麻疹、发热、寒战、恶心、呕吐、心动过速、低血压等过敏反应，而这些不良反应通常在降低输注速度或停止输注后消失。
+    focus_literature_titles: 1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.
     focus_literature_summaries: |-
-      1. 一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。
-
-      2. 一项成本效果分析比较了白蛋白、晶体液和HES，该研究利用了一发表文献及其他花费相关的公开信息。 结果：经模型预测，相对晶体液，人血白蛋白治疗脓毒症可多获得0.22个生命年，而HES治疗可导致1.00个生命年的损失。
+      2021 人血白蛋白在危重症患者应用专家共识推荐意见：
+      ● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。
+      ● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。
+      ● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。
+      ● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）
+      ● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）
     recommended_materials: null
     visit_plan_digest:
       department: 心脏外科
@@ -3362,7 +3367,7 @@ cases:
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P081
-  scenario: 心脏外科 -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
+  scenario: 心脏外科 -> P1客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 使用
   answers:
   - 心脏外科
   - A
@@ -3397,11 +3402,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P082
-  scenario: 心脏外科 -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
+  scenario: 心脏外科 -> P2客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 偏好
   answers:
   - 心脏外科
   - B
@@ -3429,11 +3434,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P083
-  scenario: 心脏外科 -> C类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
+  scenario: 心脏外科 -> P3客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 提倡
   answers:
   - 心脏外科
   - C
@@ -3471,11 +3476,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 低蛋白使用者
       grade: 提倡
 - case_id: P084
-  scenario: 心脏外科 -> D类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
+  scenario: 心脏外科 -> P4客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 知道
   answers:
   - 心脏外科
   - D
@@ -3521,7 +3526,7 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 低蛋白使用者
       grade: 知道
 - case_id: P085
@@ -3554,19 +3559,18 @@ cases:
     comm_literature_summaries: |-
       1. 一项荟萃分析纳入20项研究（22553例心脏手术患者），评估血清白蛋白水平与预后的关系。结果：低白蛋白血症与长期全因死亡率（HR 1.95, P<0.00001）和死亡率增加（RR 1.91, P<0.00001）显著相关。低白蛋白患者术后并发症风险更高，且ICU住院时长（MD=1.18, P=0.0008）、住院时间（MD=3.34, P<0.00001）和体外循环时间（MD=12.40,P=0.03）均显著增加。
       2. 一项前瞻性观察研究纳入2818例术前血清白蛋白≥3.5 g/dL且营养正常的心脏手术患者，评估术后不同白蛋白水平对死亡率、并发症和生存率的影响。结果：血清白蛋白较低的患者中，住院死亡率、脓毒症、出血相关并发症发生率及ICU停留时间均显著较高。
-    focus_title: 白蛋白的昂贵价格，是否具有成本效益？
+    focus_title: 人血白蛋白是血液制品，安全性可靠么？
     focus_content: |-
-      ●危重症患者通过输注白蛋白纠正患者的低蛋白血症，可以减少并发症的发生，降低死亡风险，降低后续治疗的复杂性和成本，减少住院时间与ICU停留时间，从而提高病床周转率，提高治疗效率。
-      ▶血清白蛋白浓度每下降10 g/L，可使死亡率升高137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66% 1
-      ▶基于ALBIOS研究亚组的结局进行的分析表明，在重度脓毒症和低白蛋白血症患者中，20%白蛋白比标准医疗实践（晶体液）更具成本效果（基于每获得一个寿命年的增量成本）2
-    focus_literature_titles: |-
-      1. Vincent, J.-L., et al., Annals of surgery, 2003. 237(3): 319‒334）
-
-      2. Farrugia A, Martin G, Bult M. Ann Update Crit Care Emer Med 2013;515‒26.
+      ● 杰特贝林的人血白蛋白拥有良好的病原体安全性记录超过数十年。
+      ▶《2021年人血白蛋白在危重症患者应用专家共识》1指出作为从人血中提取的成分，虽然输注高浓度的白蛋白虽然不可避免地会出现不良反应，但仅约0.1%的患者会出现潮红、荨麻疹、发热、寒战、恶心、呕吐、心动过速、低血压等过敏反应，而这些不良反应通常在降低输注速度或停止输注后消失。
+    focus_literature_titles: 1. Yu YT,et al. Chin Med J (Engl).2021;134(14):1639-1654.
     focus_literature_summaries: |-
-      1. 一项纳入90项队列研究（291,433例患者）的荟萃分析评估了低白蛋白血症的预后意义，并分析9项前瞻性研究（535例）纠正低白蛋白血症的效果，探讨其作为急性疾病不良结局独立危险因素的作用及改善潜力。结果：血清白蛋白每下降10 g/L，死亡率增加137%，并发症发生率升高89%，住院时间延长71%，重症监护室停留时间延长28%，资源利用率增加66%。
-
-      2. 一项成本效果分析比较了白蛋白、晶体液和HES，该研究利用了一发表文献及其他花费相关的公开信息。 结果：经模型预测，相对晶体液，人血白蛋白治疗脓毒症可多获得0.22个生命年，而HES治疗可导致1.00个生命年的损失。
+      2021 人血白蛋白在危重症患者应用专家共识推荐意见：
+      ● 对当脓毒症患者的血清白蛋白水平≥30 g /L，且血流动力学稳定时，可以停止输注白蛋白 (Grade 2+)。
+      ● 脓毒症患者应用高蛋白结合率抗生素时，建议补充白蛋白，以改善这些药物的药代动力学和药效动力学(Grade 2+, 弱推荐) 。
+      ● 推荐出血已控制的失血性休克患者输注人血白蛋白，用于纠正低血容量及低蛋白血症（Grade 2+）。
+      ● 建议烧伤患者血清白蛋白浓度低于30g/L时，补充10%以上高渗人血白蛋白，以纠正低蛋白血症（Experts Opinion）
+      ● 急性呼吸窘迫综合症合并低蛋白血症患者，推荐应用人血白蛋白溶液以改善氧合状态（Grade 2+）
     recommended_materials: null
     visit_plan_digest:
       department: 心脏外科
@@ -3575,7 +3579,7 @@ cases:
       type: 低蛋白使用者
       grade: 尝试
 - case_id: P086
-  scenario: 心脏外科 -> A类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
+  scenario: 心脏外科 -> P1客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 使用
   answers:
   - 心脏外科
   - A
@@ -3611,11 +3615,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 低蛋白使用者
       grade: 使用
 - case_id: P087
-  scenario: 心脏外科 -> B类客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
+  scenario: 心脏外科 -> P2客户 -> 既往拜访过 -> ≥50% -> 低蛋白使用者 -> 梯度未收集到 -> 偏好
   answers:
   - 心脏外科
   - B
@@ -3644,11 +3648,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 低蛋白使用者
       grade: 偏好
 - case_id: P088
-  scenario: 心脏外科 -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
+  scenario: 心脏外科 -> P3客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 知道
   answers:
   - 心脏外科
   - C
@@ -3686,11 +3690,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P089
-  scenario: 心脏外科 -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
+  scenario: 心脏外科 -> P4客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 尝试
   answers:
   - 心脏外科
   - D
@@ -3725,7 +3729,7 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P090
@@ -3775,7 +3779,7 @@ cases:
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P091
-  scenario: 心脏外科 -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
+  scenario: 心脏外科 -> P1客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 偏好
   answers:
   - 心脏外科
   - A
@@ -3810,11 +3814,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P092
-  scenario: 心脏外科 -> B类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
+  scenario: 心脏外科 -> P2客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 提倡
   answers:
   - 心脏外科
   - B
@@ -3828,7 +3832,7 @@ cases:
     source_excel_row: 55
     doctor_type: 白蛋白笃信者
     doctor_grade: 提倡
-    trans_info: 目前，该医生已是白蛋白笃信者，使用率高且主动推荐。建议后续向该医生传递白蛋白在脓毒症、感染性休克、失代偿期肝硬化、急性呼吸窘迫综合征（ARDS）及其他危重症中的应用指征优化，并分享临床试验、机制、疗效与安全性的最新进展。
+    trans_info: 目前，该医生已是白蛋白笃信者，使用率高且主动推荐。建议后续向该医生传递白蛋白在心外科术前、术后中的应用指征优化，并分享临床试验、机制、疗效与安全性的最新进展。
     support_info: null
     comm_literature_titles: null
     comm_literature_summaries: null
@@ -3840,11 +3844,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 白蛋白笃信者
       grade: 提倡
 - case_id: P093
-  scenario: 心脏外科 -> C类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
+  scenario: 心脏外科 -> P3客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 知道
   answers:
   - 心脏外科
   - C
@@ -3884,11 +3888,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 白蛋白笃信者
       grade: 知道
 - case_id: P094
-  scenario: 心脏外科 -> D类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
+  scenario: 心脏外科 -> P4客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 尝试
   answers:
   - 心脏外科
   - D
@@ -3924,7 +3928,7 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 白蛋白笃信者
       grade: 尝试
 - case_id: P095
@@ -3974,7 +3978,7 @@ cases:
       type: 白蛋白笃信者
       grade: 使用
 - case_id: P096
-  scenario: 心脏外科 -> A类客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
+  scenario: 心脏外科 -> P1客户 -> 既往拜访过 -> ≥50% -> 白蛋白笃信者 -> 梯度未收集到 -> 偏好
   answers:
   - 心脏外科
   - A
@@ -4010,11 +4014,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 白蛋白笃信者
       grade: 偏好
 - case_id: P097
-  scenario: 心脏外科 -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
+  scenario: 心脏外科 -> P2客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 知道
   answers:
   - 心脏外科
   - B
@@ -4053,11 +4057,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 品牌认知者
       grade: 知道
 - case_id: P098
-  scenario: 心脏外科 -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
+  scenario: 心脏外科 -> P3客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 尝试
   answers:
   - 心脏外科
   - C
@@ -4093,11 +4097,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P099
-  scenario: 心脏外科 -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
+  scenario: 心脏外科 -> P4客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 使用
   answers:
   - 心脏外科
   - D
@@ -4131,7 +4135,7 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 品牌认知者
       grade: 使用
 - case_id: P100
@@ -4170,7 +4174,7 @@ cases:
       type: 品牌认知者
       grade: 偏好
 - case_id: P101
-  scenario: 心脏外科 -> A类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
+  scenario: 心脏外科 -> P1客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 提倡
   answers:
   - 心脏外科
   - A
@@ -4229,11 +4233,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: A类客户
+      level: P1客户
       type: 品牌认知者
       grade: 提倡
 - case_id: P102
-  scenario: 心脏外科 -> B类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
+  scenario: 心脏外科 -> P2客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 知道
   answers:
   - 心脏外科
   - B
@@ -4274,11 +4278,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: B类客户
+      level: P2客户
       type: 品牌认知者
       grade: 知道
 - case_id: P103
-  scenario: 心脏外科 -> C类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
+  scenario: 心脏外科 -> P3客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 尝试
   answers:
   - 心脏外科
   - C
@@ -4315,11 +4319,11 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: C类客户
+      level: P3客户
       type: 品牌认知者
       grade: 尝试
 - case_id: P104
-  scenario: 心脏外科 -> D类客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
+  scenario: 心脏外科 -> P4客户 -> 既往拜访过 -> ＜50% -> 品牌认知者 -> 梯度未收集到 -> 使用
   answers:
   - 心脏外科
   - D
@@ -4353,7 +4357,7 @@ cases:
     visit_plan_digest:
       department: 心脏外科
       rank: 主任医师
-      level: D类客户
+      level: P4客户
       type: 品牌认知者
       grade: 使用
 - case_id: P105

@@ -59,7 +59,11 @@ def should_poll(case_result: CaseExecutionResult, now_ts: float) -> bool:
     return case_result.status == PENDING_STATUS and now_ts >= float(case_result.next_poll_at or 0)
 
 
-def finalize_case_result(case: CaseConfig, case_result: CaseExecutionResult, detail_data: Dict[str, Any]) -> None:
+def finalize_case_result(
+    case: CaseConfig,
+    case_result: CaseExecutionResult,
+    detail_data: Dict[str, Any],
+) -> None:
     """用详情数据补全结果并执行断言。
 
     Args:

@@ -1,4 +1,4 @@
-"""Markdown 执行记录输出，记录每轮问答、拜访计划、断言和 LLM 评估结果。"""
+"""Markdown 执行记录输出，记录每轮问答、拜访计划和断言结果。"""
 
 from __future__ import annotations
 
