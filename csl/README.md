@@ -153,6 +153,14 @@ python3 run_csl_full_paths.py --dry-run
 python3 run_csl_full_paths.py --case-id P017
 ```
 
+### 执行多个 case
+```bash
+python3 run_csl_full_paths.py --case-id P017 P021 P030
+python3 run_csl_full_paths.py --case-id P017,P021,P030
+```
+
+多个 case 编号会按传入顺序执行，重复编号会自动去重；不存在的编号会直接报错。
+
 ### 执行冒烟用例
 ```bash
 python3 run_csl_full_paths.py --smoke

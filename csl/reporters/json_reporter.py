@@ -52,7 +52,7 @@ def save_results(results: List[CaseExecutionResult]) -> Path:
 
 def filter_cases(
     cases: List[Any],
-    case_id: Optional[str],
+    case_ids: Optional[List[str]],
     smoke_case_ids: Optional[List[str]] = None,
     department: Optional[str] = None,
     scenario_keyword: Optional[str] = None,
@@ -73,9 +73,27 @@ def filter_cases(
         filtered_cases = [case for case in filtered_cases if case.case_id in smoke_case_id_set]
         if not filtered_cases:
             raise ValueError("未找到任何冒烟 case")
-    if not case_id:
+    if not case_ids:
         return filtered_cases
-    filtered_cases = [case for case in filtered_cases if case.case_id == case_id]
-    if not filtered_cases:
-        raise ValueError(f"未找到 case: {case_id}")
+    normalized_case_ids = _normalize_case_ids(case_ids)
+    available_case_ids = {case.case_id for case in filtered_cases}
+    missing_case_ids = [case_id for case_id in normalized_case_ids if case_id not in available_case_ids]
+    if missing_case_ids:
+        raise ValueError(f"未找到 case: {', '.join(missing_case_ids)}")
+    case_id_order = {case_id: index for index, case_id in enumerate(normalized_case_ids)}
+    filtered_cases = [case for case in filtered_cases if case.case_id in case_id_order]
+    filtered_cases.sort(key=lambda case: case_id_order[case.case_id])
     return filtered_cases
+
+
+def _normalize_case_ids(case_ids: List[str]) -> List[str]:
+    """拆分、清理并去重 case 编号。"""
+    normalized_case_ids: List[str] = []
+    for item in case_ids:
+        for case_id in item.split(","):
+            case_id = case_id.strip()
+            if case_id and case_id not in normalized_case_ids:
+                normalized_case_ids.append(case_id)
+    if not normalized_case_ids:
+        raise ValueError("--case-id 至少需要传入一个有效 case 编号")
+    return normalized_case_ids

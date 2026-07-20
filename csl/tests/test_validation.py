@@ -1,6 +1,7 @@
 """断言、用例加载与报告摘要相关单元测试。"""
 
 from pathlib import Path
+import pytest
 from config.constants import MATCH_CONTAINS, MATCH_LIST_EXACT
 from models.case_model import FocusDecision
 from models.result_model import CaseExecutionResult, ConversationStep
@@ -96,15 +97,32 @@ def test_build_cases_load_smoke_case_ids() -> None:
 
 def test_filter_cases_with_smoke_case_ids() -> None:
     case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
-    filtered_cases = filter_cases(case_collection.cases, case_id=None, smoke_case_ids=["P009", "P029"])
+    filtered_cases = filter_cases(case_collection.cases, case_ids=None, smoke_case_ids=["P009", "P029"])
     assert [case.case_id for case in filtered_cases] == ["P009", "P029"]
 
 
 def test_filter_cases_with_department() -> None:
     case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
-    filtered_cases = filter_cases(case_collection.cases, case_id=None, department="药剂科")
+    filtered_cases = filter_cases(case_collection.cases, case_ids=None, department="药剂科")
     assert filtered_cases
     assert all(case.department == "医院管理层/药剂科" for case in filtered_cases)
+
+
+def test_filter_cases_with_multiple_case_ids() -> None:
+    """验证空格和逗号混合的多个 case 编号可以按传入顺序筛选。"""
+    case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
+    filtered_cases = filter_cases(
+        case_collection.cases,
+        case_ids=["P029,P009", "P009"],
+    )
+    assert [case.case_id for case in filtered_cases] == ["P029", "P009"]
+
+
+def test_filter_cases_with_missing_case_id() -> None:
+    """验证不存在的 case 编号会明确报错。"""
+    case_collection = build_cases(Path("/Users/layla.zhang/workspace/nullht-test/csl/data/csl_full_paths.yaml"))
+    with pytest.raises(ValueError, match="P999"):
+        filter_cases(case_collection.cases, case_ids=["P009", "P999"])
 
 def test_load_yaml_file() -> None:
     data = load_yaml_file(CASE_DATA_FILE)

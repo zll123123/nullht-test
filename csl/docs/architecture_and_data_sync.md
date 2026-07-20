@@ -241,11 +241,15 @@ python3 run_csl_full_paths.py --smoke
 
 ```bash
 python3 run_csl_full_paths.py --case-id P048
+python3 run_csl_full_paths.py --case-id P017 P021 P030
+python3 run_csl_full_paths.py --case-id P017,P021,P030
 python3 run_csl_full_paths.py --dept ICU
 python3 run_csl_full_paths.py --dept 心脏外科 --smoke
 python3 run_csl_full_paths.py --first-visit
 python3 run_csl_full_paths.py --dry-run
 ```
+
+`--case-id` 支持空格或逗号分隔的多个 case，按传入顺序执行并自动去重；不存在的 case 会直接报错。
 
 主要产物：
 
